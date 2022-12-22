@@ -1,7 +1,7 @@
-package com.sangeng.mapper;
+package org.eie.fyp.sods.security.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.sangeng.domain.User;
+import org.eie.fyp.sods.security.domain.User;
 
 public interface UserMapper extends BaseMapper<User> {
 }

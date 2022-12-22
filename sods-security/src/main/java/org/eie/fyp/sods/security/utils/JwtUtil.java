@@ -1,4 +1,4 @@
-package com.sangeng.utils;
+package org.eie.fyp.sods.security.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;

@@ -1,4 +1,4 @@
-package org.sods.application;
+package org.eie.fyp.sods.security;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

@@ -1,6 +1,7 @@
-package com.sangeng.config;
+package org.eie.fyp.sods.security.config;
 
-import com.sangeng.utils.FastJsonRedisSerializer;
+
+import org.eie.fyp.sods.security.utils.FastJsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

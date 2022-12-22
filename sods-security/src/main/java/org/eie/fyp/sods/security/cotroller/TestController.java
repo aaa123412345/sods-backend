@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class TestCotroller {
+public class TestController {
     @Autowired
     @GetMapping("/hi")
     public String hi(){

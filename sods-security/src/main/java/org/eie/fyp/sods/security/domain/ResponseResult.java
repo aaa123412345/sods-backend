@@ -1,4 +1,4 @@
-package com.sangeng.domain;
+package org.eie.fyp.sods.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
