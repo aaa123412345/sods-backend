@@ -19,6 +19,8 @@
     <modules>
         <module>sods-security</module>
         <module>sods-application</module>
+        <module>sods-test</module>
+        <module>sods-common</module>
     </modules>
 
     <properties>

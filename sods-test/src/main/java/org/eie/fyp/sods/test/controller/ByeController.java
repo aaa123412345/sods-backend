@@ -1,4 +1,4 @@
-package org.sods.controller;
+package org.eie.fyp.sods.test.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

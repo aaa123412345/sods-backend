@@ -10,8 +10,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EntityScan(basePackages = {"org.eie.fyp.sods.security"})
 @ComponentScan(basePackages = {"org.eie.fyp.sods.security"})
 @MapperScan("org.eie.fyp.sods.security.mapper")
-public class SODSMainApplication {
+public class SODSSecTestApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SODSMainApplication.class,args);
+        SpringApplication.run(SODSSecTestApplication.class,args);
     }
 }
