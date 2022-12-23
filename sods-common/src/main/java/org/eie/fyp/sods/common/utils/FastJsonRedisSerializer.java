@@ -1,4 +1,4 @@
-package org.eie.fyp.sods.security.utils;
+package org.eie.fyp.sods.common.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;

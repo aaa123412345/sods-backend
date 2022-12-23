@@ -1,4 +1,4 @@
-package org.eie.fyp.sods.security.utils;
+package org.eie.fyp.sods.common.utils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
