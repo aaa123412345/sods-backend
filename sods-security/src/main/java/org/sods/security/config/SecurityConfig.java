@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // Allow Anonymous Visit
                 .antMatchers("/user/login").anonymous()
+                .antMatchers("/user/register").anonymous()
                 //Template Add new page
 //                .antMatchers("/testCors").hasAuthority("system:dept:list222")
                 // Other need to perform authentication

@@ -11,6 +11,11 @@ public class TestController {
     @PreAuthorize("hasAuthority('system:dept:list')")
     @GetMapping("/hi")
     public String hi(){
-        return  "hi";
+        return  "private hi";
+    }
+
+    @GetMapping("/public/hi")
+    public String publicHi(){
+        return  "public hi";
     }
 }

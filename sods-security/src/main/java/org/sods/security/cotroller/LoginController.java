@@ -18,6 +18,12 @@ public class LoginController {
         return loginService.login(user);
     }
 
+
+    @RequestMapping("/user/register")
+    public ResponseResult register(@RequestBody User user){
+        return loginService.register(user);
+    }
+
     @RequestMapping("/user/logout")
     public ResponseResult logout(){
         return loginService.logout();

@@ -18,7 +18,7 @@ import java.io.IOException;
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        ResponseResult result = new ResponseResult(HttpStatus.UNAUTHORIZED.value(),"Login failed");
+        ResponseResult result = new ResponseResult(HttpStatus.UNAUTHORIZED.value(),"Validation failed");
         String json = JSON.toJSONString(result);
         //处理异常
         WebUtils.renderString(response,json);
