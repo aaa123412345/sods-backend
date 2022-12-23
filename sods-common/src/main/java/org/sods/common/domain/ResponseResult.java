@@ -1,4 +1,4 @@
-package org.sods.security.domain;
+package org.sods.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

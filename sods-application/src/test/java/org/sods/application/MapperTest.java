@@ -1,6 +1,7 @@
 package org.sods.application;
 
 import org.sods.security.domain.User;
+import org.sods.security.mapper.MenuMapper;
 import org.sods.security.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,17 @@ public class MapperTest {
         System.out.println(encode2);
     }
 
+    @Autowired
+    private MenuMapper menuMapper;
     @Test
     public void testUserMapper(){
         List<User> users = userMapper.selectList(null);
         System.out.println(users);
+    }
+
+    @Test
+    public  void testSelectPermsByUserId(){
+        List<String> list = menuMapper.selectPermsByUserId(2L);
+        System.out.println(list);
     }
 }
