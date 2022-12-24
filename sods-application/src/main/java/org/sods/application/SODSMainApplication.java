@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 //@MapperScan("org.eie.fyp.sods.security.mapper")
-@MapperScan("org.sods.security.mapper")
+@MapperScan({"org.sods.security.mapper","org.sods.test.mapper"})
 public class SODSMainApplication {
     public static void main(String[] args) {
         SpringApplication.run(SODSMainApplication.class,args);

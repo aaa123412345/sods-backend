@@ -15,6 +15,7 @@ public class LoginController {
 
     @RequestMapping("/user/login")
     public ResponseResult login(@RequestBody User user){
+        System.out.println("the service is called");
         return loginService.login(user);
     }
 

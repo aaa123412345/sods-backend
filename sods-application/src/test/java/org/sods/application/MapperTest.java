@@ -4,6 +4,8 @@ import org.sods.security.domain.User;
 import org.sods.security.mapper.MenuMapper;
 import org.sods.security.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
+import org.sods.test.domain.Page;
+import org.sods.test.mapper.PageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +25,14 @@ public class MapperTest {
         String encode2 = passwordEncoder.encode("1234");
         System.out.println(encode1);
         System.out.println(encode2);
+    }
+
+    @Autowired
+    private PageMapper pageMapper;
+    @Test
+    public void tesPageMapper(){
+        Page s = pageMapper.selectById("about");
+        System.out.println(s);
     }
 
     @Autowired
