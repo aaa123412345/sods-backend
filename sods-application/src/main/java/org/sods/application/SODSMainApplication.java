@@ -9,10 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EntityScan(basePackages = {"org.sods.*"})
 @ComponentScan(basePackages = {"org.sods.*"})
-
-
-//@MapperScan("org.eie.fyp.sods.security.mapper")
-@MapperScan({"org.sods.security.mapper","org.sods.test.mapper"})
+@MapperScan({"org.sods.security.mapper","org.sods.resource.mapper"})
 public class SODSMainApplication {
     public static void main(String[] args) {
         SpringApplication.run(SODSMainApplication.class,args);

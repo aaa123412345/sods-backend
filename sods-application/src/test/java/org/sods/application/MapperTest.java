@@ -1,14 +1,17 @@
 package org.sods.application;
 
+import org.sods.resource.domain.PageData;
+import org.sods.resource.mapper.PageDataMapper;
+import org.sods.resource.mapper.PageRouterMapper;
 import org.sods.security.domain.User;
 import org.sods.security.mapper.MenuMapper;
 import org.sods.security.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
-import org.sods.test.domain.Page;
-import org.sods.test.mapper.PageMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
@@ -28,10 +31,10 @@ public class MapperTest {
     }
 
     @Autowired
-    private PageMapper pageMapper;
+    private PageDataMapper pageDataMapper;
     @Test
     public void tesPageMapper(){
-        Page s = pageMapper.selectById("about");
+        PageData s = pageDataMapper.selectById("1");
         System.out.println(s);
     }
 
@@ -43,9 +46,24 @@ public class MapperTest {
         System.out.println(users);
     }
 
+    @Autowired
+    private PageRouterMapper pageRouterMapper;
+    @Test
+    public void testSelectPageDataByURLAndLan(){
+        String js = pageRouterMapper.selectPageDataByURLAndLan("public/about","eng");
+        System.out.println(js);
+    }
+
     @Test
     public  void testSelectPermsByUserId(){
-        List<String> list = menuMapper.selectPermsByUserId(2L);
+        List<String> list = menuMapper.selectPermsByUserId(1606651715013095425L);
         System.out.println(list);
     }
+
+    @Test
+    public  void aa(){
+
+        System.out.println(1);
+    }
+
 }

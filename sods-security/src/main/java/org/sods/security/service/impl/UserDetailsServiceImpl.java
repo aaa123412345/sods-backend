@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(Objects.isNull(user)){
             throw new RuntimeException("user or password wrong");
         }
-        //TODO Get the right of user
+        //Get the right of user
         //List<String> list= new ArrayList<>(Arrays.asList("test","admin"));
         List<String> list = menuMapper.selectPermsByUserId(user.getId());
         //Return UserDetails
