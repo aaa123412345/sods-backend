@@ -7,7 +7,9 @@ import org.sods.common.utils.JwtUtil;
 import org.sods.common.utils.RedisCache;
 import org.sods.security.domain.LoginUser;
 import org.sods.security.domain.User;
+import org.sods.security.domain.UserRole;
 import org.sods.security.mapper.UserMapper;
+import org.sods.security.mapper.UserRoleMapper;
 import org.sods.security.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -33,6 +37,9 @@ public class LoginServiceImpl implements LoginService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
     @Override
     public ResponseResult login(User user) {
 
@@ -71,6 +78,8 @@ public class LoginServiceImpl implements LoginService {
         return new ResponseResult(200,"Logout Success");
     }
 
+
+
     @Override
     public ResponseResult register(User user) {
         //check user syntax
@@ -86,7 +95,16 @@ public class LoginServiceImpl implements LoginService {
             //Encode the password for saving in sql
             String encode1 = passwordEncoder.encode(user.getPassword());
             user.setPassword(encode1);
+            //Get the current data
+            LocalDateTime currentDate = LocalDateTime.now();
+            user.setCreateTime(currentDate);
+            user.setUpdateTime(currentDate);
+            user.setCreateBy(0L);
+            user.setUpdateBy(0L);
+            //Insert database
             userMapper.insert(user);
+            //Role id = 2 => Visitor
+            userRoleMapper.insert(new UserRole(user.getId(), 2L));
             return new ResponseResult(200,"Registration Success");
         }else{
             return new ResponseResult(400,"Registration Failed, The user name exist.");

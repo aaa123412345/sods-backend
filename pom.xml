@@ -21,7 +21,7 @@
         <module>sods-application</module>
         <module>sods-test</module>
         <module>sods-common</module>
-        <module>sods-resourceprovider</module>
+        <module>sods-resource</module>
     </modules>
 
     <properties>

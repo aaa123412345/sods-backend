@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sods-resourceprovider</artifactId>
+    <artifactId>sods-resource</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

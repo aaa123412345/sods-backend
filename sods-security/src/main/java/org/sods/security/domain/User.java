@@ -7,7 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 
 /**
@@ -47,18 +48,15 @@ public class User implements Serializable {
     private String sex;
 
     private String avatar;
-    /**
-    * User Type
-    */
-    private String userType;
+
 
     private Long createBy;
 
-    private Date createTime;
+    private LocalDateTime createTime;
 
     private Long updateBy;
 
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     private Integer delFlag;
 
