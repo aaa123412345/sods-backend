@@ -28,14 +28,6 @@ public class Menu implements Serializable {
     private Long id;
 
     private String menuName;
-
-    //for route
-
-    private String path;
-
-    //for frontend
-
-    private String component;
     /**
      * o display 1 hidden
      */

@@ -8,6 +8,7 @@ import org.sods.common.utils.RedisCache;
 import org.sods.security.domain.LoginUser;
 import org.sods.security.domain.User;
 import org.sods.security.domain.UserRole;
+import org.sods.security.mapper.MenuMapper;
 import org.sods.security.mapper.UserMapper;
 import org.sods.security.mapper.UserRoleMapper;
 import org.sods.security.service.LoginService;
@@ -21,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -38,6 +36,8 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private MenuMapper menuMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
     @Override
@@ -57,12 +57,19 @@ public class LoginServiceImpl implements LoginService {
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         String userid = loginUser.getUser().getId().toString();
         String jwt = JwtUtil.createJWT(userid);
+
         //save complete info of user to redis
-        Map<String,String> map = new HashMap<>();
-        map.put("token",jwt);
         redisCache.setCacheObject("login:"+userid,loginUser);
 
-        return new ResponseResult(200,"login success",jwt);
+        //Ready the response
+        List<String> list = menuMapper.selectPermsByUserId(Long.parseLong(userid));
+        Map<String,Object> map = new HashMap<>();
+        map.put("token",jwt);
+        map.put("userID",userid);
+        map.put("rolePermission",list);
+        map.put("userType",loginUser.getUser().getUserType());
+
+        return new ResponseResult(200,"login success",map);
 
     }
 
@@ -103,7 +110,7 @@ public class LoginServiceImpl implements LoginService {
             user.setUpdateBy(0L);
             //Insert database
             userMapper.insert(user);
-            //Role id = 2 => Visitor
+            //Role id = 2 => Visitor (Default)
             userRoleMapper.insert(new UserRole(user.getId(), 2L));
             return new ResponseResult(200,"Registration Success");
         }else{
