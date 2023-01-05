@@ -50,16 +50,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // Allow Anonymous Visit
-                //.antMatchers("/user/login").anonymous()
-                //.antMatchers("/user/register").anonymous()
-                //.antMatchers("rest/public/*").anonymous()
-                //.antMatchers("rest/public/*/*").anonymous()
+                .antMatchers("/user/login").anonymous()
+                .antMatchers("/user/register").anonymous()
+                .antMatchers("rest/public/*").anonymous()
+                .antMatchers("rest/public/*/*").anonymous()
 
                 //Template Add new page
 //                .antMatchers("/testCors").hasAuthority("system:dept:list222")
                 // Other need to perform authentication
-                //.anyRequest().authenticated();
-                .anyRequest().anonymous();
+                .anyRequest().authenticated();
+                //.anyRequest().anonymous();
         //add filter
         http.addFilterBefore(jwtAuthenticationTokenFilter,UsernamePasswordAuthenticationFilter.class);
 

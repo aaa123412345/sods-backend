@@ -47,12 +47,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             throw new RuntimeException("User do not login.");
         }
         //save to SecurityContextHolder
-       //TODO Get the info of user right
+       //TODO Get the info of user permission
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUser, null,loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-        //Allow to visit
+        //do futher filter
         filterChain.doFilter(request,response);
     }
 }

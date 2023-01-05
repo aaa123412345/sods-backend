@@ -65,7 +65,6 @@ public class LoginServiceImpl implements LoginService {
         List<String> list = menuMapper.selectPermsByUserId(Long.parseLong(userid));
         Map<String,Object> map = new HashMap<>();
         map.put("token",jwt);
-        map.put("userID",userid);
         map.put("rolePermission",list);
         map.put("userType",loginUser.getUser().getUserType());
 

@@ -8,11 +8,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @PreAuthorize("@ex.hasAuthority('system:root')")
-    @GetMapping("/hi")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/private/hi")
     public String hi(){
-        return  "private hi";
+        return  "permission system root";
     }
+
+    @PreAuthorize("@ex.hasAuthority('system:abc')")
+    @GetMapping("/permissionTest")
+    public String t1(){
+        return  "permission abc";
+    }
+
 
     @GetMapping("/public/hi")
     public String publicHi(){

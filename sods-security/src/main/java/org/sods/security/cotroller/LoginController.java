@@ -4,6 +4,7 @@ import org.sods.common.domain.ResponseResult;
 import org.sods.security.domain.User;
 import org.sods.security.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ public class LoginController {
         return loginService.register(user);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/user/logout")
     public ResponseResult logout(){
         return loginService.logout();

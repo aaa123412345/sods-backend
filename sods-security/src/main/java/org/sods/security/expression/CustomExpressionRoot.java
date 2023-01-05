@@ -7,14 +7,24 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+
 @Component("ex")
 public class CustomExpressionRoot {
     public boolean hasAuthority(String authority){
-        //获取当前用户的权限
+
+        //get the user login data
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //If user is anonymous but the request require any permission, return false
+        if(authentication.getPrincipal().equals("anonymousUser")){
+            return false;
+        }
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+
         List<String> permissions = loginUser.getPermissions();
-        //判断用户权限集合中是否存在authority
+
+
+        //check related authority
         return permissions.contains(authority);
     }
 }
