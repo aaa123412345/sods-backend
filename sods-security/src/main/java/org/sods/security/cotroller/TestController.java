@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("@ex.hasAuthority('system:root')")
     @GetMapping("/private/hi")
     public String hi(){
         return  "permission system root";
@@ -21,7 +21,7 @@ public class TestController {
     }
 
 
-    @GetMapping("/public/hi")
+    @GetMapping("test/public/hi")
     public String publicHi(){
         return  "public hi";
     }
