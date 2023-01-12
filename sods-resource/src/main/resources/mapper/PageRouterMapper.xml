@@ -7,5 +7,6 @@
         where PageData.page_id = PageMapper.page_id
         and PageMapper.url = #{url}
         and PageMapper.language = #{lang}
+        and PageMapper.delFlag = 0
     </select>
 </mapper>

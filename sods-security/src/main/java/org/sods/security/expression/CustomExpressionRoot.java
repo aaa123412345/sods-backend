@@ -22,7 +22,9 @@ public class CustomExpressionRoot {
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
 
         List<String> permissions = loginUser.getPermissions();
-
+        //If user is system root, user can use any service
+        if(permissions.contains("system:root"))
+            return true;
 
         //check related authority
         return permissions.contains(authority);

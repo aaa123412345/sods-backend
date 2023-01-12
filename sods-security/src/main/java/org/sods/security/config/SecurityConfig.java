@@ -52,9 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Allow Anonymous Visit
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/user/register").anonymous()
-                .antMatchers("/rest/public/*").anonymous()
                 .antMatchers("/rest/public/*/*").anonymous()
                 .antMatchers("/test/public/hi").anonymous()
+
 
                 //Template Add new page
 //                .antMatchers("/testCors").hasAuthority("system:dept:list222")
