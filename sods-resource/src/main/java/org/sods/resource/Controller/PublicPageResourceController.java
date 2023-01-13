@@ -44,7 +44,7 @@ public class PublicPageResourceController {
     @GetMapping("/{language}/{pathVariable}")
     public ResponseResult test(@PathVariable("pathVariable")String pathVariable,
                                @PathVariable("language")String language) {
-        return resourceService.getResource("public",language,pathVariable);
+        return resourceService.get("public",language,pathVariable);
     }
 
 

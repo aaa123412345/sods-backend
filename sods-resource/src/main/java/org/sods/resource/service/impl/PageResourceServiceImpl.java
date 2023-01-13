@@ -14,7 +14,7 @@ public class PageResourceServiceImpl implements PageResourceService {
     private PageRouterMapper pageRouterMapper;
 
     @Override
-    public ResponseResult getResource(String subDomain, String language, String pageName) {
+    public ResponseResult get(String subDomain, String language, String pageName) {
         String s = pageRouterMapper.selectPageDataByURLAndLan(subDomain+"/"+pageName,language);
         if(StringUtils.hasText(s)) {
             return new ResponseResult(200, "ready", JSONObject.parseObject(s));
@@ -24,17 +24,17 @@ public class PageResourceServiceImpl implements PageResourceService {
     }
 
     @Override
-    public ResponseResult deleteResource(String subDomain, String language, String pageName) {
+    public ResponseResult delete(String subDomain, String language, String pageName) {
         return null;
     }
 
     @Override
-    public ResponseResult createResource(String subDomain, String language, String pageName, String JsonData) {
+    public ResponseResult post(String subDomain, String language, String pageName, String JsonData) {
         return null;
     }
 
     @Override
-    public ResponseResult updateResource(String subDomain, String language, String pageName, String JsonData) {
+    public ResponseResult put(String subDomain, String language, String pageName, String JsonData) {
         return null;
     }
 }
