@@ -1,91 +1,52 @@
 package org.sods.resource.Controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.FloorPlan;
-import org.sods.resource.domain.Marker;
-import org.sods.resource.mapper.BoothMapper;
-import org.sods.resource.mapper.FloorPlanMapper;
-import org.sods.resource.mapper.MarkerMapper;
+import org.sods.resource.service.FloorPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/tourguide-floorplans")
+@RequestMapping("/tourguide/floorplans")
 public class FloorPlanController {
 
     @Autowired
-    FloorPlanMapper floorPlanMapper;
+    FloorPlanService floorPlanService;
 
-    @Autowired
-    MarkerMapper markerMapper;
-
-    @Autowired
-    BoothMapper boothMapper;
-
+    @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PostMapping
     public ResponseResult createFloorPlan(@RequestParam("floorplan") String floorPlanString, @RequestParam("image") MultipartFile imageFile) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         FloorPlan floorPlan = mapper.readValue(floorPlanString, FloorPlan.class);
-        // upload file to aws
-        // get url from cdn
-        // floorPlan.setImageUrl(cdn);
-        floorPlanMapper.insert(floorPlan);
-        return new ResponseResult(200, "OK", floorPlan);
+        return floorPlanService.createFloorPlan(floorPlan, imageFile);
     }
 
     @GetMapping
     public ResponseResult getAllFloorPlan(){
-        List<FloorPlan> result = floorPlanMapper.selectList(null);
-        return new ResponseResult(200, "OK", result);
+        return floorPlanService.getAllFloorPlan();
     }
 
     @GetMapping("/{id}")
     public ResponseResult getFloorPlanById(@PathVariable Integer id){
-        FloorPlan floorPlan = floorPlanMapper.selectById(id);
-        return new ResponseResult(200, "OK", floorPlan);
+        return floorPlanService.getFloorPlanById(id);
     }
 
+    @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PutMapping("/{id}")
     public ResponseResult updateFloorPlanById(@PathVariable Integer id, @RequestParam("floorplan") String floorPlanString, @RequestParam("image") MultipartFile imageFile) throws JsonProcessingException {
-
         ObjectMapper mapper = new ObjectMapper();
         FloorPlan floorPlan = mapper.readValue(floorPlanString, FloorPlan.class);
-        floorPlan.setId(id);
-        // upload file to aws
-        // get url from cdn
-        //floorPlan.setImageUrl("http://sim-aws-cdn.com/testing-image-"+num+".png");
-        floorPlanMapper.updateById(floorPlan);
-        return new ResponseResult(200, "OK", floorPlan);
+        return floorPlanService.updateFloorPlanById(id, floorPlan, imageFile);
     }
 
+    @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @DeleteMapping("/{id}")
     public ResponseResult deleteFloorPlanById(@PathVariable Integer id){
-
-        int result = floorPlanMapper.deleteById(id);
-
-        if(result == 1){
-
-            QueryWrapper query = new QueryWrapper<>();
-            query.eq("fk_floorplan_id", id);
-
-            List<Marker> markerList = markerMapper.selectList(query);
-            for(int i = 0; i < markerList.size(); i++){
-                Marker marker = markerList.get(i);
-                if(marker.getBoothID() != null)
-                    boothMapper.deleteById(marker.getBoothID());
-                markerMapper.deleteMarkerByCID(marker.getY(), marker.getX(), marker.getFloorPlanID());
-            }
-
-        }
-
-        return new ResponseResult(200, "OK", null);
-
+        return floorPlanService.deleteFloorPlanById(id);
     }
 
 }
