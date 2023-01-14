@@ -66,6 +66,30 @@ public class BoothServiceImpl implements BoothService {
             //booth.setImageUrl(cdn);
         }
 
+        if(booth.getTitleEN() != null)
+            booth.setTitleEN(newBooth.getTitleEN());
+
+        if(booth.getTitleZH() != null)
+            booth.setTitleZH(newBooth.getTitleZH());
+
+        if(booth.getVenueEN() != null)
+            booth.setVenueEN(newBooth.getVenueEN());
+
+        if(booth.getVenueZH() != null)
+            booth.setVenueZH(newBooth.getVenueZH());
+
+        if(booth.getDescriptionEN() != null)
+            booth.setDescriptionEN(newBooth.getDescriptionEN());
+
+        if(booth.getDescriptionZH() != null)
+            booth.setDescriptionZH(newBooth.getDescriptionZH());
+
+        if(booth.getSpeechEN() != null)
+            booth.setSpeechEN(newBooth.getSpeechEN());
+
+        if(booth.getSpeechZH() != null)
+            booth.setSpeechZH(newBooth.getSpeechZH());
+
         boothMapper.updateById(booth);
 
         return new ResponseResult(200, "Booth (id: " + id + ") is updated successfully. ");

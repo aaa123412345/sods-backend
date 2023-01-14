@@ -40,7 +40,6 @@ public class FloorPlanController {
     public ResponseResult updateFloorPlanById(@PathVariable Integer id, @RequestParam("floorplan") String floorPlanString, @RequestParam("image") MultipartFile imageFile) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         FloorPlan floorPlan = mapper.readValue(floorPlanString, FloorPlan.class);
-        floorPlan.setId(id);
         return floorPlanService.updateFloorPlanById(id, floorPlan, imageFile);
     }
 
