@@ -15,7 +15,9 @@ public class PageResourceServiceImpl implements PageResourceService {
 
     @Override
     public ResponseResult get(String subDomain, String language, String pageName) {
-        String s = pageRouterMapper.selectPageDataByURLAndLan(subDomain+"/"+pageName,language);
+        String url = subDomain+"/"+pageName;
+        System.out.println(url);
+        String s = pageRouterMapper.selectPageDataByURLAndLan(url,language);
         if(StringUtils.hasText(s)) {
             return new ResponseResult(200, "ready", JSONObject.parseObject(s));
         }else{
