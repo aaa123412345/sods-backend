@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EntityScan(basePackages = {"org.sods.*"})
 @ComponentScan(basePackages = {"org.sods.*"})
-@MapperScan({"org.sods.security.mapper","org.sods.resource.mapper"})
+@MapperScan(basePackages = {"org.sods.security.mapper","org.sods.resource.mapper"})
 @EnableMPP
 public class SODSMainApplication {
     public static void main(String[] args) {

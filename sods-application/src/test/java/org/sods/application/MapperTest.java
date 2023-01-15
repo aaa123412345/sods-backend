@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.sods.resource.domain.PageData;
 import org.sods.resource.domain.Survey;
 import org.sods.resource.mapper.PageDataMapper;
-import org.sods.resource.mapper.PageRouterMapper;
 import org.sods.resource.mapper.SurveyMapper;
 import org.sods.security.domain.User;
 import org.sods.security.mapper.MenuMapper;
@@ -16,12 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @SpringBootTest
 public class MapperTest {
@@ -54,13 +53,7 @@ public class MapperTest {
         System.out.println(users);
     }
 
-    @Autowired
-    private PageRouterMapper pageRouterMapper;
-    @Test
-    public void testSelectPageDataByURLAndLan(){
-        String js = pageRouterMapper.selectPageDataByURLAndLan("public/about","eng");
-        System.out.println(js);
-    }
+
 
     @Test
     public  void testSelectPermsByUserId(){
@@ -127,5 +120,76 @@ public class MapperTest {
         //save to database
         surveyMapper.insert(s);
         System.out.println("Survey is added");
+    }
+
+    @Test
+    public void testGetPageDataMapper(){
+        String domain = "public";
+        String path = "about1";
+        String language = "eng";
+
+        //Set the searching requirement
+        QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
+        pageDataQueryWrapper.eq("domain",domain);
+        pageDataQueryWrapper.eq("path",path);
+        pageDataQueryWrapper.eq("language",language);
+        pageDataQueryWrapper.eq("delFlag",0);
+
+        PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
+        if(Objects.isNull(p)){
+            System.out.println("no data");
+        }else{
+            System.out.println(p);
+        }
+
+    }
+
+    @Test
+    public void testCreatePageDataMapper(){
+        String domain = "public";
+        String path = "about";
+        String language = "eng";
+        String payload = "abc";
+
+        //Set the searching requirement
+        QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
+        pageDataQueryWrapper.eq("domain",domain);
+        pageDataQueryWrapper.eq("path",path);
+        pageDataQueryWrapper.eq("language",language);
+        pageDataQueryWrapper.eq("delFlag",0);
+        PageData ex = pageDataMapper.selectOne(pageDataQueryWrapper);
+
+        if(!Objects.isNull(ex)){
+            System.out.println("Object exist");
+        }else{
+            PageData p = new PageData();
+            p.setDomain(domain);
+            p.setPath(path);
+            p.setLanguage(language);
+            p.setPageData(payload);
+            pageDataMapper.insert(p);
+            System.out.println("Object upload");
+        }
+
+
+    }
+
+    @Test
+    public void testUpdatePageDataMapper(){
+        String domain = "public";
+        String path = "about";
+        String language = "eng";
+        QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
+        pageDataQueryWrapper.eq("domain",domain);
+        pageDataQueryWrapper.eq("path",path);
+        pageDataQueryWrapper.eq("language",language);
+        pageDataQueryWrapper.eq("delFlag",0);
+        PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
+
+        p.setDomain(domain);
+        p.setPath(path);
+        p.setLanguage(language);
+        p.setPageData("ras");
+        pageDataMapper.updateById(p);
     }
 }
