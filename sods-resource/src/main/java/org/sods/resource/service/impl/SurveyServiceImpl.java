@@ -33,7 +33,8 @@ public class SurveyServiceImpl implements SurveyService {
             return new ResponseResult(404,"Failed to get: Survey is not find");
         }
 
-        return new ResponseResult(200,"Survey: "+target.getSurveyId()+" is returned",target);
+        return new ResponseResult(200,"Survey: "+target.getSurveyId()+" is returned"
+                ,JSONObject.parseObject(target.getSurveyFormat()));
     }
 
     @Override
@@ -82,7 +83,6 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public ResponseResult post(String payload) {
-
 
         //set survey object
         Survey s = new Survey();

@@ -3,6 +3,8 @@ package org.sods.resource.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.sods.security.domain.LoginUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,7 @@ import java.util.Objects;
 
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
+
     @Override
     public void insertFill(MetaObject metaObject) {
 
@@ -28,8 +31,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
             userid = loginUser.getUser().getId();
         }
 
-        this.setFieldValByName("updateUserId", -1L, metaObject);
-        this.setFieldValByName("createUserId", -1L, metaObject);
+        this.setFieldValByName("updateUserId", userid, metaObject);
+        this.setFieldValByName("createUserId", userid, metaObject);
         this.setFieldValByName("createTime", LocalDateTime.now(),metaObject);
         this.setFieldValByName("updateTime", LocalDateTime.now(),metaObject);
     }
@@ -52,6 +55,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
 
         this.setFieldValByName("updateTime", LocalDateTime.now(),metaObject);
-        this.setFieldValByName("updateUserId", -1L, metaObject);
+        this.setFieldValByName("updateUserId", userid, metaObject);
     }
 }

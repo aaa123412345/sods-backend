@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Allow Anonymous Visit
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/user/register").anonymous()
-                .antMatchers(HttpMethod.GET,"/rest/public/*/*").permitAll()
+                .antMatchers(HttpMethod.GET,"/rest/*/*/*").permitAll()
                 .antMatchers("/test/public/hi").anonymous()
                 .antMatchers(HttpMethod.GET,"/tourguide/*").permitAll()
                 .antMatchers(HttpMethod.GET,"/tourguide/*/*").permitAll()

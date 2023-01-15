@@ -16,7 +16,6 @@ public class Survey {
     @TableId
     private Long surveyId;
 
-    @TableField(typeHandler = FastjsonTypeHandler.class)
     private String surveyFormat;
 
     @TableField(fill = FieldFill.INSERT)

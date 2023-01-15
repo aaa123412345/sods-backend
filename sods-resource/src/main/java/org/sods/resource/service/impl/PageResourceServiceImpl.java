@@ -30,7 +30,8 @@ public class PageResourceServiceImpl implements PageResourceService {
             return  new ResponseResult<>(404,"Get Error: Page is not exist");
         }
 
-        return  new ResponseResult<>(200,"Get Success: Page data is returned", JSONObject.parseObject(p.getPageData()));
+        return  new ResponseResult<>(200,"Get Success: Page data is returned",
+                JSONObject.parseObject(p.getPageData()));
     }
 
     @Override
@@ -41,7 +42,7 @@ public class PageResourceServiceImpl implements PageResourceService {
         pageDataQueryWrapper.eq("language",language);
         PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
 
-        if(!Objects.isNull(p)){
+        if(Objects.isNull(p)){
             return new ResponseResult<>(400,"Delete Error: Page is not exist");
         }
 
@@ -79,7 +80,7 @@ public class PageResourceServiceImpl implements PageResourceService {
         pageDataQueryWrapper.eq("language",language);
         PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
 
-        if(!Objects.isNull(p)){
+        if(Objects.isNull(p)){
             return new ResponseResult<>(400,"Put Error: Page is not exist");
         }
 

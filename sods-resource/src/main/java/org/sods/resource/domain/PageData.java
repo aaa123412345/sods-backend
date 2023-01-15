@@ -23,7 +23,7 @@ public class PageData {
 
     private String language;
 
-    @TableField(typeHandler = FastjsonTypeHandler.class)
+
     private String pageData;
 
     @TableField(fill = FieldFill.INSERT)

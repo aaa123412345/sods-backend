@@ -1,5 +1,6 @@
 package org.sods.application;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -98,13 +99,20 @@ public class MapperTest {
 
     @Test
     public void getAllSurvey(){
-        QueryWrapper<Survey> surveyQueryWrapper = new QueryWrapper<>();
-        surveyQueryWrapper.eq("delflag",0);
-        List<Survey> surveyList = surveyMapper.selectList(surveyQueryWrapper);
+
+        List<Survey> surveyList = surveyMapper.selectList(null);
         for (int i = 0; i < surveyList.size(); i++) {
             surveyList.get(i).setSurveyFormat("");
         }
         System.out.println(surveyList);
+    }
+
+    @Test
+    public void testJson(){
+
+        JSONObject g = JSONObject.parseObject( "{\"a\": \"xxxxxx\"}");
+        System.out.println(g);
+
     }
 
     @Test
