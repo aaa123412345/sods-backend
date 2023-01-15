@@ -1,9 +1,6 @@
 package org.sods.resource.domain;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,12 +23,17 @@ public class PageData {
 
     private String language;
 
-    private String createUserId;
+    @TableField(fill = FieldFill.INSERT)
+    private Long createUserId;
 
-    private String modifyUserId;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Long modifyUserId;
 
+
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime modifyTime;
 
     private Integer delflag;

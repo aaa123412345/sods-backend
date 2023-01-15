@@ -189,7 +189,7 @@ public class MapperTest {
         p.setDomain(domain);
         p.setPath(path);
         p.setLanguage(language);
-        p.setPageData("ras");
+        p.setPageData("d");
         pageDataMapper.updateById(p);
     }
 }
