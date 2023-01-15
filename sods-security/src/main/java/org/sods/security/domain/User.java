@@ -1,7 +1,6 @@
 package org.sods.security.domain;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,15 +49,22 @@ public class User implements Serializable {
     private String avatar;
 
 
-    private Long createBy;
+    @TableField(fill = FieldFill.INSERT)
+    private Long createUserId;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Long updateUserId;
+
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    private Long updateBy;
-
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     private Integer delFlag;
+
+    @Version
+    private Integer version;
 
     private String userType;
 

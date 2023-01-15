@@ -27,6 +27,7 @@ public class MarkerController {
         return markerService.getMarkerByFloorPlanIdOrBoothId(floorPlanID, boothID);
     }
 
+
     @GetMapping("/{y}/{x}/{floorPlanID}")
     public ResponseResult getMarkerById(@PathVariable Double y, @PathVariable Double x, @PathVariable Integer floorPlanID){
         return markerService.getMarkerByIds(y, x, floorPlanID);

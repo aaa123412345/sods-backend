@@ -1,13 +1,13 @@
 package org.sods.security.domain;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -43,17 +43,24 @@ public class Menu implements Serializable {
 
     private String icon;
 
-    private Long createBy;
+    @TableField(fill = FieldFill.INSERT)
+    private Long createUserId;
 
-    private Date createTime;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Long updateUserId;
 
-    private Long updateBy;
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
-    private Date updateTime;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
     /**
      *  delfag 0 = false 1=true
      */
     private Integer delFlag;
+
+    @Version
+    private Integer version;
     /**
      *
      */

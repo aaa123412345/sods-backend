@@ -26,12 +26,9 @@ public class SurveyServiceImpl implements SurveyService {
     private SurveyMapper surveyMapper;
     @Override
     public ResponseResult get(Long id) {
-        //Set query wrapper
-        QueryWrapper<Survey> surveyQueryWrapper = new QueryWrapper<>();
-        surveyQueryWrapper.eq("delflag",0);
-        surveyQueryWrapper.eq("survey_id",id);
 
-        Survey target = surveyMapper.selectOne(surveyQueryWrapper);
+
+        Survey target = surveyMapper.selectById(id);
         if(Objects.isNull(target)){
             return new ResponseResult(404,"Failed to get: Survey is not find");
         }
@@ -41,10 +38,8 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public ResponseResult listAll() {
-        //Set query wrapper
-        QueryWrapper<Survey> surveyQueryWrapper = new QueryWrapper<>();
-        surveyQueryWrapper.eq("delflag",0);
-        List<Survey> surveyList = surveyMapper.selectList(surveyQueryWrapper);
+
+        List<Survey> surveyList = surveyMapper.selectList(null);
         for (int i = 0; i < surveyList.size(); i++) {
             surveyList.get(i).setSurveyFormat("");
         }
@@ -54,98 +49,44 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public ResponseResult delete(Long id) {
-        //Get user info
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        Long userid = loginUser.getUser().getId();
 
-        //Set query wrapper
-        QueryWrapper<Survey> surveyQueryWrapper = new QueryWrapper<>();
-        surveyQueryWrapper.eq("delflag",0);
-        surveyQueryWrapper.eq("survey_id",id);
-        //get old survey object
-        Survey old = surveyMapper.selectOne(surveyQueryWrapper);
+        //get target survey object
+        Survey target = surveyMapper.selectById(id);
 
         //Check if survey is not exist
-        if(Objects.isNull(old)){
-            return new ResponseResult(404,"Failed to delete: Survey is not find");
+        if(Objects.isNull(target)){
+            return new ResponseResult(400,"Failed to delete: Survey is not find");
         }
 
-
-        //update survey object
-        LocalDateTime current = LocalDateTime.now();
-
-        old.setUpdateUserId(userid);
-        old.setUpdateTime(current);
-        old.setDelflag(1);
-
-        //update wrapper
-        UpdateWrapper<Survey> surveyUpdateWrapper = new UpdateWrapper<>();
-        surveyUpdateWrapper.eq("delflag",0);
-        surveyUpdateWrapper.eq("survey_id",id);
-
         //save to database
-        surveyMapper.update(old,surveyUpdateWrapper);
-
-
+        surveyMapper.deleteById(target.getSurveyId());
 
         return new ResponseResult(200,"Survey is deleted");
     }
 
     @Override
     public ResponseResult put(Long id, String payload) {
-        //Get user info
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        Long userid = loginUser.getUser().getId();
-        //Set query wrapper
-        QueryWrapper<Survey> surveyQueryWrapper = new QueryWrapper<>();
-        surveyQueryWrapper.eq("delflag",0);
-        surveyQueryWrapper.eq("survey_id",id);
-        //get old survey object
-        Survey old = surveyMapper.selectOne(surveyQueryWrapper);
+
+        //get target survey object
+        Survey target = surveyMapper.selectById(id);
 
         //Check if survey is not exist
-        if(Objects.isNull(old)){
-            return new ResponseResult(404,"Failed to update: Survey is not find");
+        if(Objects.isNull(target)){
+            return new ResponseResult(400,"Failed to update: Survey is not find");
         }
-
-        //update survey object
-        LocalDateTime current = LocalDateTime.now();
-
-        old.setSurveyFormat(payload);
-        old.setUpdateUserId(userid);
-        old.setUpdateTime(current);
-
-        //update wrapper
-        UpdateWrapper<Survey> surveyUpdateWrapper = new UpdateWrapper<>();
-        surveyUpdateWrapper.eq("delflag",0);
-        surveyUpdateWrapper.eq("survey_id",id);
-
+        target.setSurveyFormat(payload);
         //save to database
-        surveyMapper.update(old,surveyUpdateWrapper);
-
+        surveyMapper.updateById(target);
         return new ResponseResult(200,"Survey is update");
     }
 
     @Override
     public ResponseResult post(String payload) {
-        //Get user info
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        Long userid = loginUser.getUser().getId();
+
 
         //set survey object
-        LocalDateTime current = LocalDateTime.now();
         Survey s = new Survey();
         s.setSurveyFormat(payload);
-        s.setCreateUserId(userid);
-        s.setUpdateUserId(userid);
-        s.setCreateTime(current);
-        s.setUpdateTime(current);
 
         //save to database
         surveyMapper.insert(s);

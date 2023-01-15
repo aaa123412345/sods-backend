@@ -125,7 +125,7 @@ public class MapperTest {
     @Test
     public void testGetPageDataMapper(){
         String domain = "public";
-        String path = "about1";
+        String path = "about";
         String language = "eng";
 
         //Set the searching requirement
@@ -133,9 +133,10 @@ public class MapperTest {
         pageDataQueryWrapper.eq("domain",domain);
         pageDataQueryWrapper.eq("path",path);
         pageDataQueryWrapper.eq("language",language);
-        pageDataQueryWrapper.eq("delFlag",0);
 
         PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
+
+        //if data not exist, show the error
         if(Objects.isNull(p)){
             System.out.println("no data");
         }else{
@@ -182,7 +183,6 @@ public class MapperTest {
         pageDataQueryWrapper.eq("domain",domain);
         pageDataQueryWrapper.eq("path",path);
         pageDataQueryWrapper.eq("language",language);
-        pageDataQueryWrapper.eq("delFlag",0);
         PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
 
         p.setDomain(domain);
@@ -197,6 +197,7 @@ public class MapperTest {
         String domain = "public";
         String path = "about";
         String language = "eng";
+
         QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
         pageDataQueryWrapper.eq("domain",domain);
         pageDataQueryWrapper.eq("path",path);

@@ -7,6 +7,7 @@ import org.sods.security.handler.AuthenticationEntryPointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -52,8 +53,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Allow Anonymous Visit
                 .antMatchers("/user/login").anonymous()
                 .antMatchers("/user/register").anonymous()
-                .antMatchers("/rest/public/*/*").anonymous()
+                .antMatchers(HttpMethod.GET,"/rest/public/*/*").permitAll()
                 .antMatchers("/test/public/hi").anonymous()
+                .antMatchers(HttpMethod.GET,"/tourguide/*").permitAll()
+                .antMatchers(HttpMethod.GET,"/tourguide/*/*").permitAll()
+                .antMatchers(HttpMethod.GET,"/tourguide/*/*/*").permitAll()
+                .antMatchers(HttpMethod.GET,"/tourguide/*/*/*/*").permitAll()
 
 
                 //Template Add new page

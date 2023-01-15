@@ -15,10 +15,11 @@ public class CustomExpressionRoot {
         //get the user login data
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        /*
         //If user is anonymous but the request require any permission, return false
         if(authentication.getPrincipal().equals("anonymousUser")){
             return false;
-        }
+        }*/
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
 
         List<String> permissions = loginUser.getPermissions();

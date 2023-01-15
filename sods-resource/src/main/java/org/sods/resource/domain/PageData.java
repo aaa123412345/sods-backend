@@ -23,24 +23,25 @@ public class PageData {
 
     private String language;
 
+    @TableField(typeHandler = FastjsonTypeHandler.class)
+    private String pageData;
+
     @TableField(fill = FieldFill.INSERT)
     private Long createUserId;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long modifyUserId;
-
+    private Long updateUserId;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime modifyTime;
+    private LocalDateTime updateTime;
 
     private Integer delFlag;
 
     @Version
     private Integer version;
 
-    @TableField(typeHandler = FastjsonTypeHandler.class)
-    private String pageData;
+
 }

@@ -101,12 +101,7 @@ public class LoginServiceImpl implements LoginService {
             //Encode the password for saving in sql
             String encode1 = passwordEncoder.encode(user.getPassword());
             user.setPassword(encode1);
-            //Get the current data
-            LocalDateTime currentDate = LocalDateTime.now();
-            user.setCreateTime(currentDate);
-            user.setUpdateTime(currentDate);
-            user.setCreateBy(0L);
-            user.setUpdateBy(0L);
+
             //Insert database
             userMapper.insert(user);
             //Role id = 2 => Visitor (Default)

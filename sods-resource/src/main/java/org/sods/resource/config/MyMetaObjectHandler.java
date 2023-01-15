@@ -28,10 +28,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
             userid = loginUser.getUser().getId();
         }
 
-        this.setFieldValByName("modifyUserId", -1L, metaObject);
+        this.setFieldValByName("updateUserId", -1L, metaObject);
         this.setFieldValByName("createUserId", -1L, metaObject);
         this.setFieldValByName("createTime", LocalDateTime.now(),metaObject);
-        this.setFieldValByName("modifyTime", LocalDateTime.now(),metaObject);
+        this.setFieldValByName("updateTime", LocalDateTime.now(),metaObject);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
 
 
-        this.setFieldValByName("modifyTime", LocalDateTime.now(),metaObject);
-        this.setFieldValByName("modifyUserId", -1L, metaObject);
+        this.setFieldValByName("updateTime", LocalDateTime.now(),metaObject);
+        this.setFieldValByName("updateUserId", -1L, metaObject);
     }
 }
