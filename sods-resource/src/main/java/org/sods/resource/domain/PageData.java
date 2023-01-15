@@ -36,7 +36,7 @@ public class PageData {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime modifyTime;
 
-    private Integer delflag;
+    private Integer delFlag;
 
     @Version
     private Integer version;

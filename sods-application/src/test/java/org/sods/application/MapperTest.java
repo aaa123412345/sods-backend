@@ -156,7 +156,6 @@ public class MapperTest {
         pageDataQueryWrapper.eq("domain",domain);
         pageDataQueryWrapper.eq("path",path);
         pageDataQueryWrapper.eq("language",language);
-        pageDataQueryWrapper.eq("delFlag",0);
         PageData ex = pageDataMapper.selectOne(pageDataQueryWrapper);
 
         if(!Objects.isNull(ex)){
@@ -168,7 +167,7 @@ public class MapperTest {
             p.setLanguage(language);
             p.setPageData(payload);
             pageDataMapper.insert(p);
-            System.out.println("Object upload");
+            System.out.println("Object create");
         }
 
 
@@ -191,5 +190,19 @@ public class MapperTest {
         p.setLanguage(language);
         p.setPageData("d");
         pageDataMapper.updateById(p);
+    }
+
+    @Test
+    public void testDeletePageDataMapper(){
+        String domain = "public";
+        String path = "about";
+        String language = "eng";
+        QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
+        pageDataQueryWrapper.eq("domain",domain);
+        pageDataQueryWrapper.eq("path",path);
+        pageDataQueryWrapper.eq("language",language);
+        PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
+
+        pageDataMapper.deleteById(p.getPageId());
     }
 }
