@@ -15,7 +15,13 @@ public class SurveyController {
     @PreAuthorize("@ex.hasAuthority('system:survey:editor:read')")
     @GetMapping("/survey")
     public ResponseResult getAllSurvey(){
-        return surveyService.listAll();
+        return surveyService.listAll(false);
+    }
+
+    @PreAuthorize("@ex.hasAuthority('system:survey:editor:read')")
+    @GetMapping("/survey_with_format")
+    public ResponseResult getAllSurveyWithFormat(){
+        return surveyService.listAll(true);
     }
 
     @PreAuthorize("@ex.hasAuthority('system:survey:editor:read')")
@@ -27,7 +33,7 @@ public class SurveyController {
     @PreAuthorize("@ex.hasAuthority('system:survey:editor:create')")
     @PostMapping("/survey")
     public ResponseResult postSurvey(@RequestBody String payload){
-        System.out.println(payload);
+
         return surveyService.post(payload);
     }
 

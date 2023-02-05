@@ -3,7 +3,6 @@ package org.sods.resource.Controller;
 import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.ActiveSurvey;
 import org.sods.resource.service.ActiveSurveyService;
-import org.sods.resource.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -45,4 +44,11 @@ public class ActiveSurveyController {
     public ResponseResult removeOneSurvey(@PathVariable("active_survey_id")String active_survey_id){
         return activeSurveyService.deleteDataWithActiveSurveyID(Long.parseLong(active_survey_id));
     }
+
+
+    @GetMapping("/active_survey_current")
+    public ResponseResult getAllSurveyWhichCurrentActive(){
+        return activeSurveyService.getAllActiveSurveyIDWhichCurrentActive();
+    }
+
 }

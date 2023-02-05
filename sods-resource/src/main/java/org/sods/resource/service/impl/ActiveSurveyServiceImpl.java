@@ -9,10 +9,13 @@ import org.sods.resource.domain.Survey;
 import org.sods.resource.mapper.ActiveSurveyMapper;
 import org.sods.resource.service.ActiveSurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Service
 public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
     @Autowired
@@ -33,7 +36,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
     public ResponseResult getDatasWithSurveyID(Long id) {
         QueryWrapper<ActiveSurvey> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("survey_id",id);
-        List<ActiveSurvey> surveyActiveList = activeSurveyMapper.selectList(null);
+        List<ActiveSurvey> surveyActiveList = activeSurveyMapper.selectList(queryWrapper);
         return new ResponseResult(200,"Get All Active Survey with Survey ID : "+id,surveyActiveList);
     }
 
@@ -42,6 +45,15 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
         List<ActiveSurvey> surveyActiveList = activeSurveyMapper.selectList(null);
 
         return new ResponseResult(200,"Get All Active Survey",surveyActiveList);
+    }
+
+    @Override
+    public ResponseResult getAllActiveSurveyIDWhichCurrentActive() {
+        QueryWrapper<ActiveSurvey> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("end_time",LocalDateTime.now());
+        queryWrapper.le("start_time",LocalDateTime.now());
+        List<ActiveSurvey> surveyActiveList = activeSurveyMapper.selectList(queryWrapper);
+        return new ResponseResult(200,"Get All current Active Survey ",surveyActiveList);
     }
 
     @Override

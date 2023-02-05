@@ -17,6 +17,8 @@ public class ActiveSurvey {
 
     private Long surveyId;
 
+    private String information;
+
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;

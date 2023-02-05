@@ -38,11 +38,13 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public ResponseResult listAll() {
+    public ResponseResult listAll(Boolean withFormat) {
 
         List<Survey> surveyList = surveyMapper.selectList(null);
-        for (int i = 0; i < surveyList.size(); i++) {
-            surveyList.get(i).setSurveyFormat("");
+        if(!withFormat) {
+            for (int i = 0; i < surveyList.size(); i++) {
+                surveyList.get(i).setSurveyFormat("");
+            }
         }
 
         return new ResponseResult(200,"Get All",surveyList);
@@ -83,10 +85,15 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public ResponseResult post(String payload) {
-
+        //get specific data from json
+        JSONObject tmp = JSONObject.parseObject(payload);
+        JSONObject info = tmp.getJSONObject("info");
         //set survey object
         Survey s = new Survey();
         s.setSurveyFormat(payload);
+        s.setSurveyTitle(info.getString("title"));
+        s.setSurveyType(info.getString("type"));
+
 
         //save to database
         surveyMapper.insert(s);

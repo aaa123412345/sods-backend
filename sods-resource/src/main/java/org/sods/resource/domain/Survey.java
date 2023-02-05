@@ -16,6 +16,10 @@ public class Survey {
     @TableId
     private Long surveyId;
 
+    private String surveyTitle;
+
+    private String surveyType;
+
     private String surveyFormat;
 
     @TableField(fill = FieldFill.INSERT)

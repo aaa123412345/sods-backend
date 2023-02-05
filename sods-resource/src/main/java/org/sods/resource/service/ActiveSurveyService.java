@@ -7,6 +7,8 @@ public interface ActiveSurveyService {
     ResponseResult getDataWithActiveSurveyID(Long id);
     ResponseResult getDatasWithSurveyID(Long id);
     ResponseResult getAllActiveSurveyID();
+
+    ResponseResult getAllActiveSurveyIDWhichCurrentActive();
     ResponseResult deleteDataWithActiveSurveyID(Long id);
     ResponseResult deleteDatasWithSurveyID(Long id);
     ResponseResult updateDataWithActiveSurveyID(Long id, ActiveSurvey payload);
