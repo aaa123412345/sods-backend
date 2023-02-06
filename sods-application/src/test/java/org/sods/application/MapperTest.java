@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.sods.resource.domain.ActiveSurvey;
 import org.sods.resource.domain.PageData;
 import org.sods.resource.domain.Survey;
+import org.sods.resource.mapper.ActiveSurveyMapper;
 import org.sods.resource.mapper.PageDataMapper;
 import org.sods.resource.mapper.SurveyMapper;
 import org.sods.security.domain.User;
@@ -97,6 +99,9 @@ public class MapperTest {
     @Autowired
     private SurveyMapper surveyMapper;
 
+    @Autowired
+    private ActiveSurveyMapper activeSurveyMapper;
+
     @Test
     public void getAllSurvey(){
 
@@ -104,6 +109,14 @@ public class MapperTest {
         for (int i = 0; i < surveyList.size(); i++) {
             surveyList.get(i).setSurveyFormat("");
         }
+        System.out.println(surveyList);
+    }
+
+    @Test
+    public void getAllActiveSurvey(){
+
+        List<ActiveSurvey> surveyList = activeSurveyMapper.selectList(null);
+
         System.out.println(surveyList);
     }
 

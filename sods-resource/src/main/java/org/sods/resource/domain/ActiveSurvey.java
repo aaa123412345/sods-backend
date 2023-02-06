@@ -39,4 +39,10 @@ public class ActiveSurvey {
     private Integer version;
 
     private Integer delFlag;
+
+    private Boolean allowAnonymous;
+
+    private Boolean allowPublicSearch;
+
+    private String passCode;
 }

@@ -3,6 +3,7 @@ package org.sods.resource.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.ActiveSurvey;
 import org.sods.resource.domain.Survey;
@@ -110,6 +111,19 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
     @Override
     public ResponseResult createNewActiveSurvey(ActiveSurvey payload) {
+        //Generate a random pass code
+        QueryWrapper<ActiveSurvey> queryWrapper = new QueryWrapper<>();
+        String passcode = "";
+        do {
+            passcode = RandomStringUtils.randomAlphabetic(6).toUpperCase();
+            queryWrapper.eq("pass_code", passcode);
+            queryWrapper.and(wrapper -> wrapper.ge("end_time",
+                    payload.getStartTime()).or().le("start_time", payload.getEndTime()));
+        }while (!Objects.isNull(activeSurveyMapper.selectOne(queryWrapper)));
+
+        //Set the pass code for activated survey (Unique passcode in this survey period)
+        payload.setPassCode(passcode);
+
         //save to database
         activeSurveyMapper.insert(payload);
 
