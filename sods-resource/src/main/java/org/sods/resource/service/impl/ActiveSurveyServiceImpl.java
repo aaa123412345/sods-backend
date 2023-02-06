@@ -10,8 +10,11 @@ import org.sods.resource.domain.Survey;
 import org.sods.resource.mapper.ActiveSurveyMapper;
 import org.sods.resource.mapper.SurveyMapper;
 import org.sods.resource.service.ActiveSurveyService;
+import org.sods.security.domain.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -52,12 +55,16 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
         if(Objects.isNull( activeSurvey)){
             return new ResponseResult(404,"Failed to get: Passcode is not valid");
         }
+
         //If not Allow Anonymous, check the user
         if(!activeSurvey.getAllowAnonymous()){
             //Get user info
-            UsernamePasswordAuthenticationToken authentication =
-                    (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-            if(Objects.isNull(authentication)){
+            SecurityContext securityContext = SecurityContextHolder.getContext();
+            Authentication authentication = securityContext.getAuthentication();
+            Object principal = authentication.getPrincipal();
+
+            //Get User ID => if (No login, userid:-1)
+            if(!(principal instanceof LoginUser)){
                 return new ResponseResult(403,"Failed to get: Permission is not enough for these survey");
             }
         }

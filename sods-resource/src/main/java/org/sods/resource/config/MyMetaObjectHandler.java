@@ -6,6 +6,8 @@ import org.sods.security.domain.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -20,16 +22,19 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
         Long userid;
         //Get user info
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        Object principal = authentication.getPrincipal();
 
-
-        if(Objects.isNull(authentication)){
-            userid = -1L;
-        }else{
-            LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        //Get User ID => if (No login, userid:-1)
+        if(principal instanceof LoginUser){
+            LoginUser loginUser = ((LoginUser)principal);
             userid = loginUser.getUser().getId();
+        }else{
+            userid = -1L;
         }
+
+
 
         this.setFieldValByName("updateUserId", userid, metaObject);
         this.setFieldValByName("createUserId", userid, metaObject);
@@ -42,14 +47,16 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
         Long userid;
         //Get user info
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        Object principal = authentication.getPrincipal();
 
-        if(Objects.isNull(authentication)){
-            userid = -1L;
-        }else{
-            LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        //Get User ID => if (No login, userid:-1)
+        if(principal instanceof LoginUser){
+            LoginUser loginUser = ((LoginUser)principal);
             userid = loginUser.getUser().getId();
+        }else{
+            userid = -1L;
         }
 
 

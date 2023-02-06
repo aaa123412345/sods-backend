@@ -13,7 +13,11 @@ import java.time.LocalDateTime;
 @TableName("surveyResponse")
 public class SurveyResponse {
     @TableId
+    private Long responseSurveyId;
+
     private Long activeSurveyId;
+
+    private String responseData;
 
     @TableField(fill = FieldFill.INSERT)
     private Long createUserId;

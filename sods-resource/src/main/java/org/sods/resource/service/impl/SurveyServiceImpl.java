@@ -102,40 +102,5 @@ public class SurveyServiceImpl implements SurveyService {
         return new ResponseResult(200,"New survey is created");
     }
 
-    public boolean formatChecker(String payload){
-        //TODO format checker
-        //init the format dictionary
-        JSONObject s = JSONObject.parseObject(payload);
-        //check basic format
-        ArrayList<String> basicformat = formatCondition("basic");
-        for(int i=0; i<basicformat.size();i++){
-            if(!s.containsKey(basicformat.get(i))){
-                return false;
-            }
-        }
-        //check specific data format
 
-        return true;
-    }
-
-    public ArrayList<String> formatCondition(String check_key){
-        JSONObject condition = JSONObject.parseObject("{\"basic\":[{\"name\":\"qid\",\"type\":\"number\"}," + "{\"name\":\"type\",\"type\":\"string\"}," + "{\"name\":\"msg\",\"type\":\"string\"}]," +
-                "\"sparttips\":[],\"stext\":[{\"name\":\"required\",\"type\":\"boolean\"}]," +
-                "\"sselect\":[{\"name\":\"required\",\"type\":\"boolean\"},{\"name\":\"option\",\"type\":\"object\"}]," +
-                "\"sradio\":[{\"name\":\"required\",\"type\":\"boolean\"},{\"name\":\"option\",\"type\":\"object\"}]," +
-                "\"schecker\":[{\"name\":\"required\",\"type\":\"boolean\"},{\"name\":\"option\",\"type\":\"object\"},{\"name\":\"maxSelect\",\"type\":\"number\"},{\"name\":\"minSelect\",\"type\":\"number\"}]," +
-                "\"srange\":[{\"name\":\"min\",\"type\":\"number\"},{\"name\":\"max\",\"type\":\"number\"},{\"name\":\"step\",\"type\":\"number\"}]}");
-
-        ArrayList<String> name = new ArrayList<String>();
-
-
-        JSONArray j = (JSONArray) condition.get(check_key);
-        for(int i=0;i<j.size();i++){
-            JSONObject sub = (JSONObject)j.get(i);
-            name.add(sub.get("name").toString());
-
-        }
-
-        return name;
-    }
 }
