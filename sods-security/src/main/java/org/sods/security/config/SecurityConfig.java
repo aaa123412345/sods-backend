@@ -59,6 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/tourguide/*/*").permitAll()
                 .antMatchers(HttpMethod.GET,"/tourguide/*/*/*").permitAll()
                 .antMatchers(HttpMethod.GET,"/tourguide/*/*/*/*").permitAll()
+                .antMatchers(HttpMethod.GET,"/rest/SurveySystem/active_survey_current").permitAll()
+                .antMatchers(HttpMethod.GET,"/rest/SurveySystem/survey/passcode/*").permitAll()
 
 
                 //Template Add new page

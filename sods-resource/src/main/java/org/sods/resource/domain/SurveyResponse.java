@@ -15,17 +15,11 @@ public class SurveyResponse {
     @TableId
     private Long activeSurveyId;
 
-
-
     @TableField(fill = FieldFill.INSERT)
     private Long createUserId;
 
-
-
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-
-   
 
     @Version
     private Integer version;

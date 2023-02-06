@@ -8,12 +8,17 @@ import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.ActiveSurvey;
 import org.sods.resource.domain.Survey;
 import org.sods.resource.mapper.ActiveSurveyMapper;
+import org.sods.resource.mapper.SurveyMapper;
 import org.sods.resource.service.ActiveSurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -21,6 +26,9 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
     @Autowired
     private ActiveSurveyMapper activeSurveyMapper;
+
+    @Autowired
+    private SurveyMapper surveyMapper;
 
     @Override
     public ResponseResult getDataWithActiveSurveyID(Long id) {
@@ -31,6 +39,48 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
         return new ResponseResult(200,"Active Survey Data: "+target.getSurveyId()+" is returned"
                 , target);
+    }
+
+    @Override
+    public ResponseResult getSurveyWithPassCode(String passcode) {
+        //Search current ActiveSurvey with passcode
+        QueryWrapper<ActiveSurvey> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("end_time",LocalDateTime.now());
+        queryWrapper.le("start_time",LocalDateTime.now());
+        queryWrapper.eq("pass_code",passcode);
+        ActiveSurvey activeSurvey = activeSurveyMapper.selectOne(queryWrapper);
+        if(Objects.isNull( activeSurvey)){
+            return new ResponseResult(404,"Failed to get: Passcode is not valid");
+        }
+        //If not Allow Anonymous, check the user
+        if(!activeSurvey.getAllowAnonymous()){
+            //Get user info
+            UsernamePasswordAuthenticationToken authentication =
+                    (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+            if(Objects.isNull(authentication)){
+                return new ResponseResult(403,"Failed to get: Permission is not enough for these survey");
+            }
+        }
+        //Get Survey with the previous result id
+        Survey target = surveyMapper.selectById(activeSurvey.getSurveyId());
+
+        if(Objects.isNull(target)){
+            return new ResponseResult(404,"Failed to get: Survey is not find");
+        }
+
+        Map<String,Object> result = new HashMap<>();
+        result.put("surveyID",target.getSurveyId().toString());
+        result.put("surveyTitle",target.getSurveyTitle());
+        result.put("surveyType",target.getSurveyType());
+        result.put("surveyFormat",JSONObject.parseObject(target.getSurveyFormat()));
+        result.put("activeSurveyID",activeSurvey.getActiveSurveyId().toString());
+        result.put("information",activeSurvey.getInformation());
+
+
+
+        return new ResponseResult(200,"Result with Passcode: "+passcode+" is returned"
+                ,result);
+
     }
 
     @Override
@@ -53,6 +103,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
         QueryWrapper<ActiveSurvey> queryWrapper = new QueryWrapper<>();
         queryWrapper.ge("end_time",LocalDateTime.now());
         queryWrapper.le("start_time",LocalDateTime.now());
+        queryWrapper.eq("allow_public_search",true);
         List<ActiveSurvey> surveyActiveList = activeSurveyMapper.selectList(queryWrapper);
         return new ResponseResult(200,"Get All current Active Survey ",surveyActiveList);
     }

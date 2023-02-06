@@ -5,6 +5,8 @@ import org.sods.resource.domain.ActiveSurvey;
 
 public interface ActiveSurveyService {
     ResponseResult getDataWithActiveSurveyID(Long id);
+
+    ResponseResult getSurveyWithPassCode(String passcode);
     ResponseResult getDatasWithSurveyID(Long id);
     ResponseResult getAllActiveSurveyID();
 

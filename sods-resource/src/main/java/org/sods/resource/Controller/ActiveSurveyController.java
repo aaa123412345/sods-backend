@@ -51,4 +51,9 @@ public class ActiveSurveyController {
         return activeSurveyService.getAllActiveSurveyIDWhichCurrentActive();
     }
 
+    @GetMapping("/survey/passcode/{pass_code}")
+    public ResponseResult getSurveyWithPassCode(@PathVariable("pass_code")String pass_code){
+        return activeSurveyService.getSurveyWithPassCode(pass_code);
+    }
+
 }
