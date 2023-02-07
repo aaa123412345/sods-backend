@@ -10,9 +10,11 @@ import lombok.*;
 @Setter
 @ToString
 public class Message {
+
     private String senderName;
     private String receiverName;
     private String message;
-    private String date;
+    private Action action;
+    private String data;
     private Status status;
 }
