@@ -23,6 +23,7 @@
         <module>sods-common</module>
         <module>sods-resource</module>
         <module>sods-ftpS3</module>
+        <module>sods-websocket</module>
     </modules>
 
     <properties>
