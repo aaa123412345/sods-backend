@@ -13,6 +13,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
+
 
 @Controller
 
@@ -35,7 +37,9 @@ public class VoteController {
     }
 
     @MessageMapping("/private-message")
-    public Message recMessage(@Payload Message message){
+    public Message recMessage(@Payload Message message, Principal principal){
+        message.setSenderName(principal.getName());
+
         switch (message.getStatus()){
             case JOIN: return votingService.join(message);
             case MESSAGE:return votingService.message(message);
