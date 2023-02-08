@@ -1,5 +1,6 @@
 package org.sods.websocket.Interceptor;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 import org.sods.security.domain.LoginUser;
@@ -14,6 +15,7 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -63,13 +65,17 @@ public Message<?> preSend(Message<?> message, MessageChannel channel) {
         Principal user = null;
         LoginUser loginUser = jwtAuthCheckerService.checkWithJWT(token);
         if (!Objects.isNull(loginUser)) {
-            user = () -> loginUser.getUsername();
+            Map<String,Object> userData = new HashMap<>();
+            userData.put("UserName",loginUser.getUsername());
+            userData.put("Permission",loginUser.getPermissions());
+
+            user = () -> JSONObject.toJSONString(userData);
 
         } else {
             user = () -> "Anonymous";
         }
         accessor.setUser(user);
-        System.out.println(loginUser.getUsername());
+
     }
 
     return message;

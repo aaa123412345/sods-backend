@@ -1,16 +1,11 @@
 package org.sods.websocket.controller;
 
-import org.sods.common.utils.RedisCache;
-import org.sods.security.domain.LoginUser;
-import org.sods.security.service.JWTAuthCheckerService;
 import org.sods.websocket.domain.Message;
-import org.sods.websocket.domain.Status;
 import org.sods.websocket.service.VotingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -39,14 +34,22 @@ public class VoteController {
     @MessageMapping("/private-message")
     public Message recMessage(@Payload Message message, Principal principal){
         message.setSenderName(principal.getName());
+        //Websocket require user to login
+        if(principal.getName()!="Anonymous") {
+            switch (message.getStatus()) {
+                case JOIN:
+                    return votingService.joinChannel(message, principal);
+                case MESSAGE:
+                    return votingService.messageChannel(message, principal);
+                case LEAVE:
+                    return votingService.leaveChannel(message, principal);
+                case COMMAND:
+                    return votingService.commandForChannel(message,principal);
 
-        switch (message.getStatus()){
-            case JOIN: return votingService.join(message);
-            case MESSAGE:return votingService.message(message);
-            case LEAVE:return votingService.leave(message);
+            }
         }
 
-        return message;
+        return null;
 
 
 

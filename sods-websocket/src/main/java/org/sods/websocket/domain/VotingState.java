@@ -2,6 +2,7 @@ package org.sods.websocket.domain;
 
 import lombok.*;
 
+import java.util.List;
 
 
 @Data
@@ -9,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 public class VotingState {
     private String Passcode; //Room name
-    private Integer Participant;
+    private List<String> Participant;
     private Integer ClickCount;
 
 }
