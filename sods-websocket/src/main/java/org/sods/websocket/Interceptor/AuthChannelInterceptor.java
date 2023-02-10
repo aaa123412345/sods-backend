@@ -61,22 +61,29 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
 public Message<?> preSend(Message<?> message, MessageChannel channel) {
     StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
     String token = getToken(message);
+
     if (token != null && accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
         Principal user = null;
         LoginUser loginUser = jwtAuthCheckerService.checkWithJWT(token);
-        if (!Objects.isNull(loginUser)) {
-            Map<String,Object> userData = new HashMap<>();
-            userData.put("UserName",loginUser.getUsername());
-            userData.put("Permission",loginUser.getPermissions());
 
-            user = () -> JSONObject.toJSONString(userData);
 
-        } else {
-            user = () -> "Anonymous";
+        Map<String,Object> userData = new HashMap<>();
+        userData.put("UserName",loginUser.getUsername());
+        userData.put("Permission",loginUser.getPermissions());
+
+        if(Objects.isNull(loginUser.getUsername())){
+            System.out.println("Connect Fail");
+
+            return null;
         }
+        System.out.println("Connect OK");
+        user = () -> JSONObject.toJSONString(userData);
         accessor.setUser(user);
 
+
     }
+
+
 
     return message;
 }

@@ -3,9 +3,12 @@ package org.sods.websocket.service.Impl;
 import com.alibaba.fastjson.JSONObject;
 import org.sods.common.utils.RedisCache;
 import org.sods.security.service.JWTAuthCheckerService;
+import org.sods.websocket.domain.Action;
 import org.sods.websocket.domain.Message;
+import org.sods.websocket.domain.Status;
 import org.sods.websocket.domain.VotingState;
-import org.sods.websocket.service.MessageActionService;
+import org.sods.websocket.service.WSAdminActionService;
+import org.sods.websocket.service.WSUserActionService;
 import org.sods.websocket.service.VotingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -25,27 +28,29 @@ public class VotingServiceImpl implements VotingService {
     private JWTAuthCheckerService jwtAuthCheckerService;
 
     @Autowired
-    private MessageActionService messageActionService;
+    private WSUserActionService wsUserActionService;
+
+    @Autowired
+    private WSAdminActionService wsAdminActionService;
 
     @Autowired
     private RedisCache redisCache;
     @Override
     public Message joinChannel(Message message, Principal principal) {
 
-        System.out.println("Join");
-        String passcode = "Voting:" + message.getReceiverName();
-        VotingState votingState = redisCache.getCacheObject(passcode);
-        if(Objects.isNull(votingState)){
-            votingState = new VotingState();
-            List<String> participant = new ArrayList<>();
-            participant.add(principal.getName());
-            votingState.setParticipant(participant);
-            votingState.setPasscode(message.getReceiverName());
-            votingState.setClickCount(0);
-            redisCache.setCacheObject(passcode,votingState);
-            System.out.println("Voting:"+message.getReceiverName() +" is created");
-        }else{
 
+        String rawPassCode = message.getReceiverName();
+        String passcode = "Voting:" + rawPassCode;
+        VotingState votingState = redisCache.getCacheObject(passcode);
+        System.out.println(votingState);
+        if(Objects.isNull(votingState)){
+            message.setStatus(Status.COMMAND);
+            message.setAction(Action.FORCEUNSUBSCRIBE);
+            simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",message);
+            return message;
+
+        }else{
+            System.out.println("Join");
             List<String> participant = votingState.getParticipant();
             participant.add(principal.getName());
             redisCache.setCacheObject(passcode,votingState);
@@ -61,17 +66,12 @@ public class VotingServiceImpl implements VotingService {
 
         System.out.println("Message");
         switch (message.getAction()){
-            case ADD: return messageActionService.addAction(message, principal);
-            case MINUS: return messageActionService.minusAction(message, principal);
-            case CLEAR:return messageActionService.clearAction(message, principal);
+            case ADD: return wsUserActionService.addAction(message, principal);
+            case MINUS: return wsUserActionService.minusAction(message, principal);
+
         }
 
-        String passcode = "Voting:" + message.getReceiverName();
-        VotingState votingState = redisCache.getCacheObject(passcode);
-        votingState.setClickCount(votingState.getClickCount()+1);
-        redisCache.setCacheObject(passcode,votingState);
-        message.setData(JSONObject.toJSONString(votingState));
-        simpMessagingTemplate.convertAndSendToUser(message.getReceiverName(),"/private",message);
+
         return message;
     }
 
@@ -85,6 +85,12 @@ public class VotingServiceImpl implements VotingService {
 
     @Override
     public Message commandForChannel(Message message, Principal principal) {
+        System.out.println("Command");
+        switch (message.getAction()){
+            case CREATEGROUP: return  wsAdminActionService.CreateGroup(message, principal);
+            case REMOVEGROUP: return wsAdminActionService.RemoveGroup(message, principal);
+            case CLEAR:return wsAdminActionService.CLEAR(message, principal);
+        }
         return null;
     }
 

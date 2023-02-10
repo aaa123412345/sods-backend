@@ -19,6 +19,9 @@ public class WebSocketSecurityServiceImpl implements WebSocketSecurityService {
     public Boolean checkPermission(String jsonString, String requirement) {
         JSONObject userObject = JSON.parseObject(jsonString);
         List<String> permission = (List<String>) userObject.get("Permission");
+        if(permission.contains("System:root")){
+            return  true;
+        }
         return permission.contains(requirement);
     }
 }

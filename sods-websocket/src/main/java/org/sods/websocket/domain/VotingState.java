@@ -13,4 +13,6 @@ public class VotingState {
     private List<String> Participant;
     private Integer ClickCount;
 
+
+
 }
