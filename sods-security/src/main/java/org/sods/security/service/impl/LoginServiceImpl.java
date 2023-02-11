@@ -23,6 +23,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -59,7 +60,7 @@ public class LoginServiceImpl implements LoginService {
         String jwt = JwtUtil.createJWT(userid);
 
         //save complete info of user to redis
-        redisCache.setCacheObject("login:"+userid,loginUser);
+        redisCache.setCacheObject("login:"+userid,loginUser,3, TimeUnit.HOURS);
 
         //Ready the response
         List<String> list = menuMapper.selectPermsByUserId(Long.parseLong(userid));
