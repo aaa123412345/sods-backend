@@ -9,6 +9,9 @@ public enum Action {
     CREATEGROUP,
     REMOVEGROUP,
     FORCEUNSUBSCRIBE,
+    SHOWRESULT,
+    NEXTQUESTION,
+    VOTINGEND,
     NONE
 
 }

@@ -66,9 +66,15 @@ public class WSUserActionServiceImpl implements WSUserActionService {
         userVotingResponse.addDataToMap(message.getData());
         redisCache.setCacheObject(userKey,userVotingResponse);
 
-        //Update Global Data (Add submit count)
-        String globalVotingData = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
-        VotingState votingState = redisCache.getCacheObject(globalVotingData);
+        //Update Global Data (Add submitted User List)
+        String globalVotingDataKey = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
+        VotingState votingState = redisCache.getCacheObject(globalVotingDataKey);
+        votingState.addParticipantSubmitIfNotExist(userName);
+        redisCache.setCacheObject(globalVotingDataKey,votingState);
+
+        //Synchronization
+        simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
+                Message.getSynchronizationMessage(rawPassCode, votingState.getJSONResponse()));
 
 
         return null;

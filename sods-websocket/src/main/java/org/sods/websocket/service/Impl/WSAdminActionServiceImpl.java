@@ -95,4 +95,29 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
         return message;
     }
 
+    @Override
+    public Message showResultOfCurrentQuestion(Message message, Principal principal) {
+        //Collect All User Response In Cache (Current question)
+        //Do the data analysis
+        //Share the result with user
+        return null;
+    }
+
+    @Override
+    public Message setNextQuestion(Message message, Principal principal) {
+        //Clear analysis data in previous votingState
+        //Set the voting state to next question
+        //Syn the new question for all user in this voting
+        return null;
+    }
+
+    @Override
+    public Message endVotingAndCollectData(Message message, Principal principal) {
+        //Get the user response in Redis
+        //create the response record in database
+        //Clear all data of these voting in Redis Cache
+        //Send Message to user to let them know the voting is ended
+        return null;
+    }
+
 }
