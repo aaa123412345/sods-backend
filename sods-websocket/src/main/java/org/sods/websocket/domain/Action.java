@@ -1,6 +1,7 @@
 package org.sods.websocket.domain;
 
 public enum Action {
+    SUBMIT,
     ADD,
     MINUS,
     CLEAR,
