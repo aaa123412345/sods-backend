@@ -26,4 +26,30 @@ public class WebSocketRedisServiceImpl implements WebSocketRedisService {
         
         return null;
     }
+
+    @Override
+    public Boolean setObjectIfKeyNotExist(String key, Object object) {
+        if(Objects.isNull(redisCache.getCacheObject(key))){
+            redisCache.setCacheObject(key,object);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean deleteObjectIfKeyExist(String key) {
+        if(!Objects.isNull(redisCache.getCacheObject(key))){
+            redisCache.deleteObject(key);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean checkIfKeyExist(String key) {
+        if(!Objects.isNull(redisCache.getCacheObject(key))){
+            return true;
+        }
+        return false;
+    }
 }

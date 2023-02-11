@@ -34,8 +34,9 @@ public class VoteController {
     @MessageMapping("/private-message")
     public Message recMessage(@Payload Message message, Principal principal){
         message.setSenderName(principal.getName());
+
         //Websocket require user to login
-        if(principal.getName()!="Anonymous") {
+
             switch (message.getStatus()) {
                 case JOIN:
                     return votingService.joinChannel(message, principal);
@@ -47,7 +48,7 @@ public class VoteController {
                     return votingService.commandForChannel(message,principal);
 
             }
-        }
+
 
         return null;
 

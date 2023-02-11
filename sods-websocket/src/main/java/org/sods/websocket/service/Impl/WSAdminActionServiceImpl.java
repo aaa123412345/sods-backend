@@ -3,12 +3,10 @@ package org.sods.websocket.service.Impl;
 import com.alibaba.fastjson.JSONObject;
 import org.sods.common.utils.RedisCache;
 import org.sods.security.service.JWTAuthCheckerService;
-import org.sods.websocket.domain.Action;
-import org.sods.websocket.domain.Message;
-import org.sods.websocket.domain.Status;
-import org.sods.websocket.domain.VotingState;
+import org.sods.websocket.domain.*;
 import org.sods.websocket.service.WSAdminActionService;
 import org.sods.websocket.service.WSUserActionService;
+import org.sods.websocket.service.WebSocketRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -30,22 +28,25 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
     private WSUserActionService messageActionService;
 
     @Autowired
+    private WebSocketRedisService webSocketRedisService;
+
+    @Autowired
     private RedisCache redisCache;
     @Override
     public Message CLEAR(Message message, Principal principal) {
-        String rawPasscode = message.getReceiverName();
-        System.out.println("Clear Group:" + rawPasscode);
+        String rawPassCode = message.getReceiverName();
+        System.out.println("Clear Group:" + rawPassCode);
         String passcode = "Voting:" + message.getReceiverName();
 
-        VotingState votingState = new VotingState();
-        votingState.setPasscode(rawPasscode);
-        votingState.setParticipant(new ArrayList<>());
-        votingState.setClickCount(0);
+        //init the voting
+        VotingState votingState = redisCache.getCacheObject(passcode);
+
+        //Save to redis
         redisCache.setCacheObject(passcode,votingState);
-        message.setStatus(Status.COMMAND);
-        message.setAction(Action.SYNCHRONIZATION);
-        message.setData(JSONObject.toJSONString(votingState));
-        simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private", message);
+
+        //Synchronization
+        simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
+                Message.getSynchronizationMessage(rawPassCode, votingState.getJSONResponse()));
         return message;
     }
 
@@ -54,16 +55,18 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
         String rawPasscode = message.getReceiverName();
         System.out.println("Remove Group");
         String passcode = "Voting:" + message.getReceiverName();
-        try {
-            redisCache.deleteObject(passcode);
-        }catch (Error e){
-            System.out.println(e.toString());
+
+        //Try to Remove
+        Boolean success = webSocketRedisService.deleteObjectIfKeyExist(passcode);
+        if(success){
+            simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private",
+                    Message.getServerMessage(rawPasscode,Action.NONE,Status.MESSAGE,
+                            JsonDataResponse.getStringWithKey("msg","Create Group Success:" + rawPasscode)));
+        }else{
+            simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private",
+                    Message.getServerMessage(rawPasscode,Action.NONE,Status.MESSAGE,
+                            JsonDataResponse.getStringWithKey("msg","Create Group Failed (Group is exist):" + rawPasscode)));
         }
-        message.setData("Group is removed:"+rawPasscode);
-        message.setStatus(Status.COMMAND);
-        message.setAction(Action.FORCEUNSUBSCRIBE);
-        message.setData("Removed Group:"+ rawPasscode);
-        simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private", message);
 
 
         return message;
@@ -73,17 +76,22 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
     public Message CreateGroup(Message message, Principal principal) {
         String rawPasscode = message.getReceiverName();
         System.out.println("Create Group:" + rawPasscode);
-        String passcode = "Voting:" + message.getReceiverName();
+        String passcode1 = "VotingState:" + rawPasscode;
 
-        VotingState votingState = new VotingState();
-        votingState.setPasscode(rawPasscode);
-        votingState.setParticipant(new ArrayList<>());
-        votingState.setClickCount(0);
-        redisCache.setCacheObject(passcode,votingState);
-        message.setStatus(Status.MESSAGE);
-        message.setAction(Action.NONE);
-        message.setData("Created Group:"+ rawPasscode);
-        simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private", message);
+
+        //Try to get
+        Boolean success1 = webSocketRedisService.setObjectIfKeyNotExist(passcode1,new VotingState(rawPasscode));
+
+        if(success1){
+            simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private",
+                    Message.getServerMessage(rawPasscode,Action.NONE,Status.MESSAGE,
+                    JsonDataResponse.getStringWithKey("msg","Create Group Success:" + rawPasscode)));
+        }else{
+            simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private",
+                    Message.getServerMessage(rawPasscode,Action.NONE,Status.MESSAGE,
+                    JsonDataResponse.getStringWithKey("msg","Create Group Failed (Group is exist):" + rawPasscode)));
+        }
+
         return message;
     }
 

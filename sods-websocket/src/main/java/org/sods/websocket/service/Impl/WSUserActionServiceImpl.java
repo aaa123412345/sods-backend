@@ -2,11 +2,9 @@ package org.sods.websocket.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
 import org.sods.common.utils.RedisCache;
-import org.sods.websocket.domain.Action;
-import org.sods.websocket.domain.Message;
-import org.sods.websocket.domain.Status;
-import org.sods.websocket.domain.VotingState;
+import org.sods.websocket.domain.*;
 import org.sods.websocket.service.WSUserActionService;
+import org.sods.websocket.service.WebSocketSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -19,24 +17,23 @@ public class WSUserActionServiceImpl implements WSUserActionService {
     @Autowired
     private RedisCache redisCache;
 
+    private WebSocketSecurityService webSocketSecurityService;
+
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     @Override
     public Message addAction(Message message, Principal principal) {
 
-        String rawPasscode = message.getReceiverName();
-        String passcode = "Voting:" + rawPasscode;
+        String rawPassCode = message.getReceiverName();
+        String passcode = "Voting:" + rawPassCode;
         VotingState votingState = redisCache.getCacheObject(passcode);
         if(!Objects.isNull(votingState)) {
-            votingState.setClickCount(votingState.getClickCount() + 1);
+            //votingState.setClickCount(votingState.getClickCount() + 1);
             redisCache.setCacheObject(passcode, votingState);
 
-            message.setData(JSONObject.toJSONString(votingState));
-            message.setStatus(Status.COMMAND);
-            message.setAction(Action.SYNCHRONIZATION);
-            message.setSenderName("Server");
-            message.setReceiverName("Group:"+rawPasscode);
-            simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private", message);
+            //Synchronization
+            simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
+                    Message.getSynchronizationMessage(rawPassCode, votingState.getJSONResponse()));
 
         }
         return message;
@@ -44,21 +41,37 @@ public class WSUserActionServiceImpl implements WSUserActionService {
 
     @Override
     public Message minusAction(Message message, Principal principal) {
-        String rawPasscode = message.getReceiverName();
-        String passcode = "Voting:" + rawPasscode;
+        String rawPassCode = message.getReceiverName();
+        String passcode = "Voting:" + rawPassCode;
         VotingState votingState = redisCache.getCacheObject(passcode);
         if(!Objects.isNull(votingState)) {
-            votingState.setClickCount(votingState.getClickCount() - 1);
+           // votingState.setClickCount(votingState.getClickCount() - 1);
             redisCache.setCacheObject(passcode, votingState);
 
-            message.setData(JSONObject.toJSONString(votingState));
-            message.setStatus(Status.COMMAND);
-            message.setAction(Action.SYNCHRONIZATION);
-            message.setSenderName("Server");
-            message.setReceiverName("Group:"+rawPasscode);
-            simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private", message);
+            //Synchronization
+            simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
+                    Message.getSynchronizationMessage(rawPassCode, votingState.getJSONResponse()));
         }
         return message;
+    }
+
+    @Override
+    public Message submitAction(Message message, Principal principal) {
+        String rawPassCode = message.getReceiverName();
+        String userName = webSocketSecurityService.getUserName(principal);
+
+        //Update User Data
+        String userKey = VotingState.getUserResponseRedisKeyString(rawPassCode,userName);
+        UserVotingResponse userVotingResponse = redisCache.getCacheObject(userKey);
+        userVotingResponse.addDataToMap(message.getData());
+        redisCache.setCacheObject(userKey,userVotingResponse);
+
+        //Update Global Data (Add submit count)
+        String globalVotingData = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
+        VotingState votingState = redisCache.getCacheObject(globalVotingData);
+
+
+        return null;
     }
 
 
