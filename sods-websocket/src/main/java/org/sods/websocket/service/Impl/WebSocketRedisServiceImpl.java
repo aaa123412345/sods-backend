@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.sods.common.utils.RedisCache;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -45,6 +46,20 @@ public class WebSocketRedisServiceImpl implements WebSocketRedisService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Boolean deleteVotingGroup(String passcode) {
+        VotingState votingState = redisCache.getCacheObject(VotingState.getGlobalVotingDataRedisKeyString(passcode));
+        if(Objects.isNull(votingState)){
+            return false;
+        }
+        List<String> userCacheKey = votingState.getUserResponseRedisKeyList();
+        userCacheKey.forEach((e)->{
+            redisCache.deleteObject(e);
+        });
+        redisCache.deleteObject(VotingState.getGlobalVotingDataRedisKeyString(passcode));
+        return true;
     }
 
     @Override

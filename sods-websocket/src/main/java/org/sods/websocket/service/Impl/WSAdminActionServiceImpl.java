@@ -55,18 +55,18 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
     public Message RemoveGroup(Message message, Principal principal) {
         String rawPasscode = message.getReceiverName();
         System.out.println("Remove Group");
-        String passcode = "Voting:" + message.getReceiverName();
+
 
         //Try to Remove
-        Boolean success = webSocketRedisService.deleteObjectIfKeyExist(passcode);
+        Boolean success = webSocketRedisService.deleteVotingGroup(rawPasscode);
         if(success){
             simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private",
                     Message.getServerMessage(rawPasscode,Action.NONE,Status.MESSAGE,
-                            JsonDataResponse.getStringWithKey("msg","Create Group Success:" + rawPasscode)));
+                            JsonDataResponse.getStringWithKey("msg","Remove Group Success:" + rawPasscode)));
         }else{
             simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private",
                     Message.getServerMessage(rawPasscode,Action.NONE,Status.MESSAGE,
-                            JsonDataResponse.getStringWithKey("msg","Create Group Failed (Group is exist):" + rawPasscode)));
+                            JsonDataResponse.getStringWithKey("msg","Remove Group Failed (Group is not exist):" + rawPasscode)));
         }
 
 
@@ -81,9 +81,8 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
         System.out.println("Create Group:" + rawPasscode);
         String passcode1 = VotingState.getGlobalVotingDataRedisKeyString(rawPasscode);
 
-        VotingState votingState = new VotingState(rawPasscode);
-        votingState.setSurveyID(surveyID);
-        votingState.setSurveyFormat(surveyFormat);
+        VotingState votingState = new VotingState(rawPasscode,surveyID,surveyFormat);
+        System.out.println(votingState.getMaxQuestion());
 
         //Try to get
         Boolean success1 = webSocketRedisService.setObjectIfKeyNotExist(passcode1,votingState);
@@ -141,11 +140,27 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
 
     @Override
     public Message setNextQuestion(Message message, Principal principal) {
-        //Clear analysis data in previous votingState
+        String rawPassCode = message.getReceiverName();
+
+        //Get Global Data
+        String globalVotingDataKey = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
+        VotingState votingState = redisCache.getCacheObject(globalVotingDataKey);
+
         //Set the voting state to next question
-        //Update the Voting State
-        //Syn the new question for all user in this voting
-        return null;
+        Boolean success = votingState.checkAndSetToNextQuestion();
+
+        if(success){
+            //Update the Voting State
+            redisCache.setCacheObject(globalVotingDataKey,votingState);
+            //Syn the new question for all user in this voting
+            simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
+                    Message.getSynchronizationMessage(rawPassCode, votingState.getJSONResponseWithRenderData()));
+
+        }else {
+            return null;
+        }
+
+        return message;
     }
 
     @Override

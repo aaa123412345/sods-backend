@@ -10,5 +10,7 @@ public interface WebSocketRedisService {
     Boolean setObjectIfKeyNotExist(String key,Object object);
     Boolean deleteObjectIfKeyExist(String key);
 
+    Boolean deleteVotingGroup(String passcode);
+
     Boolean checkIfKeyExist(String key);
 }

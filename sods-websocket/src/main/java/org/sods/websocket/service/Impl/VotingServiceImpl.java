@@ -117,9 +117,9 @@ public class VotingServiceImpl implements VotingService {
             case CREATEGROUP: return  wsAdminActionService.CreateGroup(message, principal);
             case REMOVEGROUP: return wsAdminActionService.RemoveGroup(message, principal);
             case CLEAR:return wsAdminActionService.CLEAR(message, principal);
-            case NEXTQUESTION: wsAdminActionService.setNextQuestion(message, principal);
-            case SHOWRESULT: wsAdminActionService.showResultOfCurrentQuestion(message, principal);
-            case VOTINGEND: wsAdminActionService.endVotingAndCollectData(message, principal);
+            case NEXTQUESTION: return wsAdminActionService.setNextQuestion(message, principal);
+            case SHOWRESULT: return wsAdminActionService.showResultOfCurrentQuestion(message, principal);
+            case VOTINGEND: return wsAdminActionService.endVotingAndCollectData(message, principal);
         }
         return null;
     }

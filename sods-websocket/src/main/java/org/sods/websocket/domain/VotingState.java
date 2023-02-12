@@ -22,6 +22,7 @@ public class VotingState {
     private List<String> participantJoin;
     private List<String> participantSubmit;
     private Integer currentQuestion;
+    private Integer maxQuestion;
     private ClientRenderMethod clientRenderMethod;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -29,15 +30,17 @@ public class VotingState {
 
 
 
-    public VotingState(String Passcode){
 
-        this.setSurveyID("Test");
-        this.setSurveyFormat("Test");
+    public VotingState(String Passcode,String surveyID,String surveyFormat){
+
+        this.setSurveyID(surveyID);
+        this.setSurveyFormat(surveyFormat);
         this.setStartTime(LocalDateTime.now());
+        this.maxQuestion = this.countMaxQuestion();
         this.setPasscode(Passcode);
         this.setParticipantJoin(new ArrayList<>());
         this.setParticipantSubmit(new ArrayList<>());
-        this.setCurrentQuestion(0);
+        this.setCurrentQuestion(1);
         this.setClientRenderMethod(ClientRenderMethod.VOTING);
     }
 
@@ -82,12 +85,13 @@ public class VotingState {
     @JSONField(serialize = false)
     public String getJSONResponse(){
         Map<String,Object> map = new HashMap<>();
-        map.put("passcode",this.Passcode);
-        map.put("surveyID",this.surveyID);
-        map.put("participantJoin",this.participantJoin.size());
-        map.put("participantSubmit",this.participantSubmit.size());
-        map.put("currentQuestion",this.currentQuestion.toString());
-        map.put("clientRenderMethod",this.clientRenderMethod);
+        map.put("passcode",Passcode);
+        map.put("surveyID",surveyID);
+        map.put("participantJoin",participantJoin.size());
+        map.put("participantSubmit",participantSubmit.size());
+        map.put("currentQuestion",currentQuestion.toString());
+        map.put("maxQuestion",maxQuestion);
+        map.put("clientRenderMethod",clientRenderMethod);
         return JSONObject.toJSONString(map);
     }
 
@@ -105,15 +109,41 @@ public class VotingState {
     @JSONField(serialize = false)
     public String getJSONResponseWithRenderData(){
         Map<String,Object> map = new HashMap<>();
-        map.put("passcode",this.Passcode);
-        map.put("participantJoin",this.participantJoin.size());
-        map.put("participantSubmit",this.participantSubmit.size());
-        map.put("currentQuestion",this.currentQuestion.toString());
-        map.put("clientRenderMethod",this.clientRenderMethod);
-        map.put("renderData",this.renderData);
+        map.put("passcode",Passcode);
+        map.put("participantJoin",participantJoin.size());
+        map.put("participantSubmit",participantSubmit.size());
+        map.put("currentQuestion",currentQuestion.toString());
+        map.put("maxQuestion",maxQuestion);
+        map.put("clientRenderMethod",clientRenderMethod);
+        map.put("renderData",renderData);
         return JSONObject.toJSONString(map);
     }
 
+    @JSONField(serialize = false)
+    public Boolean checkAndSetToNextQuestion(){
+        if(currentQuestion<=maxQuestion){
+            this.currentQuestion=currentQuestion+1;
+            this.clientRenderMethod=ClientRenderMethod.VOTING;
+            this.renderData=getCurrentQuestionFormat();
+            this.participantSubmit=new ArrayList<>();
+            return true;
+        }else{
+            return false;
+        }
+    }
+    @JSONField(serialize = false)
+    public Integer countMaxQuestion(){
+        JSONObject formatObject = JSONObject.parseObject(surveyFormat);
+
+        //Find Part Key
+        List<String> stringList = (List<String>) formatObject.getJSONObject("info").get("partKey");
+        String partKey = stringList.get(0);
+
+        //Get question set
+        List<Object> objectList = (List<Object>) formatObject.getJSONObject("questionset").get(partKey);
+
+        return objectList.size();
+    }
     @JSONField(serialize = false)
     public List<String> getUserResponseRedisKeyList(){
         List<String> list = new ArrayList<>();
@@ -134,7 +164,7 @@ public class VotingState {
         List<Object> objectList = (List<Object>) formatObject.getJSONObject("questionset").get(partKey);
 
 
-        return JSONObject.toJSONString(objectList.get(currentQuestion));
+        return JSONObject.toJSONString(objectList.get(currentQuestion-1));
     }
 
     @JSONField(serialize = false)

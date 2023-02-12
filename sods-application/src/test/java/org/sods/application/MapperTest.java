@@ -63,9 +63,7 @@ public class MapperTest {
         String partKey = stringList.get(0);
         System.out.println(partKey);
         List<Object> objectList = (List<Object>) formatObject.getJSONObject("questionset").get(partKey);*/
-        votingState.setCurrentQuestion(0);
-        redisCache.setCacheObject(key,votingState);
-        System.out.println(JSONObject.toJSONString(votingState.getCurrentQuestionFormat()));
+        System.out.println(votingState.getMaxQuestion());
     }
 
     @Autowired

@@ -61,7 +61,23 @@ public class WSUserActionServiceImpl implements WSUserActionService {
         String rawPassCode = message.getReceiverName();
         String userName = webSocketSecurityService.getUserID(principal);
 
-        System.out.println(message.getData());
+        //Get Global Data
+        String globalVotingDataKey = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
+        VotingState votingState = redisCache.getCacheObject(globalVotingDataKey);
+
+        //Check the user action
+        String questionKey = JSONObject.parseObject(message.getData()).getString("key");
+
+
+
+        //Not allow to submit at SHOWRESULT stage
+        if(votingState.getClientRenderMethod().equals(ClientRenderMethod.SHOWRESULT)){
+
+            return null;
+        } else if(!votingState.getCurrentQuestion().toString().equals(questionKey)){
+
+            return null;
+        }
 
         //Update User Data
         String userKey = VotingState.getUserResponseRedisKeyString(rawPassCode,userName);
@@ -70,8 +86,6 @@ public class WSUserActionServiceImpl implements WSUserActionService {
         redisCache.setCacheObject(userKey,userVotingResponse);
 
         //Update Global Data (Add submitted User List)
-        String globalVotingDataKey = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
-        VotingState votingState = redisCache.getCacheObject(globalVotingDataKey);
         votingState.addParticipantSubmitIfNotExist(userName);
         redisCache.setCacheObject(globalVotingDataKey,votingState);
 
