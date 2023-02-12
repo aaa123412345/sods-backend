@@ -76,6 +76,15 @@ public class MapperTest {
         System.out.println(users);
     }
 
+    @Test
+    public void dataTypeTesting(){
+        List<String> ls = new ArrayList<>();
+        ls.add("a");
+        ls.add("b");
+        ls.add("c");
+        System.out.println(ls instanceof ArrayList);
+    }
+
 
 
     @Test

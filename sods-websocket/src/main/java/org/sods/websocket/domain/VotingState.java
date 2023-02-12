@@ -25,6 +25,7 @@ public class VotingState {
     private ClientRenderMethod clientRenderMethod;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private String renderData;
 
 
 
@@ -90,19 +91,29 @@ public class VotingState {
         return JSONObject.toJSONString(map);
     }
 
-
-
     @JSONField(serialize = false)
-    public String getJSONResponseWithRenderData(String jsonString){
+    public String getCurrentQuestionType(){
+        JSONObject formatObject = JSONObject.parseObject(surveyFormat);
+        //Find Part Key
+        List<String> stringList = (List<String>) formatObject.getJSONObject("info").get("partKey");
+        String partKey = stringList.get(0);
+        //Get question set
+        List<JSONObject> objectList = (List<JSONObject>) formatObject.getJSONObject("questionset").get(partKey);
+
+        return objectList.get(currentQuestion).getString("type");
+    }
+    @JSONField(serialize = false)
+    public String getJSONResponseWithRenderData(){
         Map<String,Object> map = new HashMap<>();
         map.put("passcode",this.Passcode);
         map.put("participantJoin",this.participantJoin.size());
         map.put("participantSubmit",this.participantSubmit.size());
         map.put("currentQuestion",this.currentQuestion.toString());
         map.put("clientRenderMethod",this.clientRenderMethod);
-        map.put("renderData",jsonString);
+        map.put("renderData",this.renderData);
         return JSONObject.toJSONString(map);
     }
+
     @JSONField(serialize = false)
     public List<String> getUserResponseRedisKeyList(){
         List<String> list = new ArrayList<>();

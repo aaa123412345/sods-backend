@@ -50,6 +50,7 @@ public class VotingServiceImpl implements VotingService {
         //System.out.println("Join");
         String userName = webSocketSecurityService.getUserID(principal);
         votingState.addParticipantJoinIfNotExist(userName);
+        votingState.setRenderData(votingState.getCurrentQuestionFormat());
         redisCache.setCacheObject(passcode,votingState);
 
         //Add a redis cache for storing user response
@@ -60,7 +61,7 @@ public class VotingServiceImpl implements VotingService {
 
         simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
                 Message.getSynchronizationMessage(rawPassCode,
-                        votingState.getJSONResponseWithRenderData(votingState.getCurrentQuestionFormat())));
+                        votingState.getJSONResponseWithRenderData()));
 
 
         return message;

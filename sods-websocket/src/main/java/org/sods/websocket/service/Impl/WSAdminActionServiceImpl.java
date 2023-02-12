@@ -9,6 +9,7 @@ import org.sods.websocket.service.WSUserActionService;
 import org.sods.websocket.service.WebSocketRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -102,11 +103,40 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
 
     @Override
     public Message showResultOfCurrentQuestion(Message message, Principal principal) {
+        //Get voting State
+        String rawPassCode = message.getReceiverName();
+        VotingState votingState = redisCache.getCacheObject
+                (VotingState.getGlobalVotingDataRedisKeyString(rawPassCode));
+
         //Collect All User Response In Cache (Current question) <- Missing question data replace with null (All user)
-        //Do the data grouping
+        List<String> userCacheKey = votingState.getUserResponseRedisKeyList();
+        QuestionDataGrouper questionDataGrouper = new QuestionDataGrouper(votingState.getCurrentQuestionType());
+
+        //Loop all userCacheKey
+        String questionKey = votingState.getCurrentQuestion().toString();
+        userCacheKey.forEach((e)->{
+            UserVotingResponse u = redisCache.getCacheObject(e);
+            //CurrentQuestion (int) is a key of user respond => Check key if it is exist
+            Boolean keyExist = u.fillObjectIfKeyNotExist(questionKey);
+            if(!keyExist){
+                redisCache.setCacheObject(e,u);
+            }else{
+                //If key exist, Do the data grouping
+                questionDataGrouper.collectDataAndPutIntoMap(u.getUserData().get(questionKey));
+            }
+        });
+
         //Update the Voting State
+        votingState.setClientRenderMethod(ClientRenderMethod.SHOWRESULT);
+        votingState.setRenderData(JSONObject.toJSONString(questionDataGrouper));
+        redisCache.setCacheObject(VotingState.getGlobalVotingDataRedisKeyString(rawPassCode),votingState);
+
         //Return the grouping result with user
-        return null;
+        simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
+                Message.getSynchronizationMessage(rawPassCode,
+                        votingState.getJSONResponseWithRenderData()));
+
+        return message;
     }
 
     @Override
