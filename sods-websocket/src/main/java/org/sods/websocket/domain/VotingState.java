@@ -78,7 +78,7 @@ public class VotingState {
         map.put("passcode",this.Passcode);
         map.put("participantJoin",this.participantJoin.size());
         map.put("participantSubmit",this.participantSubmit.size());
-        map.put("currentPartID",this.currentQuestion.toString());
+        map.put("currentQuestion",this.currentQuestion.toString());
         map.put("clientRenderMethod",this.clientRenderMethod);
         return JSONObject.toJSONString(map);
     }

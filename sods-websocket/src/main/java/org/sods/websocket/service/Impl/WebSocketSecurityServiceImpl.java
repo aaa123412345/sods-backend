@@ -11,10 +11,9 @@ import java.util.List;
 @Service
 public class WebSocketSecurityServiceImpl implements WebSocketSecurityService {
     @Override
-    public String getUserName(Principal principal) {
+    public String getUserID(Principal principal) {
         JSONObject userObject = JSON.parseObject(principal.getName());
-
-        return userObject.getString("UserName");
+        return userObject.getString("UserID");
     }
 
     @Override

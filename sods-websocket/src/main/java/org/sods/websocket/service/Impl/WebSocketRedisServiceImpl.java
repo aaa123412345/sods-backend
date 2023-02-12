@@ -4,9 +4,11 @@ import org.sods.websocket.domain.VotingState;
 import org.sods.websocket.service.WebSocketRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.sods.common.utils.RedisCache;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Service
 public class WebSocketRedisServiceImpl implements WebSocketRedisService {
     @Autowired
     private RedisCache redisCache;

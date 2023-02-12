@@ -48,7 +48,7 @@ public class VotingServiceImpl implements VotingService {
         }
         //Add people list in voting state (global)
         System.out.println("Join");
-        String userName = webSocketSecurityService.getUserName(principal);
+        String userName = webSocketSecurityService.getUserID(principal);
         votingState.addParticipantJoinIfNotExist(userName);
         redisCache.setCacheObject(passcode,votingState);
 
@@ -88,7 +88,15 @@ public class VotingServiceImpl implements VotingService {
         String rawPassCode = message.getReceiverName();
         String passcode = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
         VotingState votingState = redisCache.getCacheObject(passcode);
-        String userName = webSocketSecurityService.getUserName(principal);
+
+        //Check the channel if it is not exist
+        if(Objects.isNull(votingState)){
+
+            return null;
+        }
+
+
+        String userName = webSocketSecurityService.getUserID(principal);
 
         //Remove user if exist
         votingState.removeParticipantJoinIfExist(userName);

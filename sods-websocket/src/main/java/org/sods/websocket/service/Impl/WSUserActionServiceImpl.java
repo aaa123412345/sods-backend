@@ -17,6 +17,7 @@ public class WSUserActionServiceImpl implements WSUserActionService {
     @Autowired
     private RedisCache redisCache;
 
+    @Autowired
     private WebSocketSecurityService webSocketSecurityService;
 
     @Autowired
@@ -58,7 +59,9 @@ public class WSUserActionServiceImpl implements WSUserActionService {
     @Override
     public Message submitAction(Message message, Principal principal) {
         String rawPassCode = message.getReceiverName();
-        String userName = webSocketSecurityService.getUserName(principal);
+        String userName = webSocketSecurityService.getUserID(principal);
+
+        System.out.println(message.getData());
 
         //Update User Data
         String userKey = VotingState.getUserResponseRedisKeyString(rawPassCode,userName);

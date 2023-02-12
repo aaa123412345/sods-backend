@@ -76,7 +76,7 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
     public Message CreateGroup(Message message, Principal principal) {
         String rawPasscode = message.getReceiverName();
         System.out.println("Create Group:" + rawPasscode);
-        String passcode1 = "VotingState:" + rawPasscode;
+        String passcode1 = VotingState.getGlobalVotingDataRedisKeyString(rawPasscode);
 
 
         //Try to get
@@ -97,9 +97,10 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
 
     @Override
     public Message showResultOfCurrentQuestion(Message message, Principal principal) {
-        //Collect All User Response In Cache (Current question)
-        //Do the data analysis
-        //Share the result with user
+        //Collect All User Response In Cache (Current question) <- Missing question data replace with null (All user)
+        //Do the data grouping
+        //Update the Voting State
+        //Return the grouping result with user
         return null;
     }
 
@@ -107,6 +108,7 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
     public Message setNextQuestion(Message message, Principal principal) {
         //Clear analysis data in previous votingState
         //Set the voting state to next question
+        //Update the Voting State
         //Syn the new question for all user in this voting
         return null;
     }
