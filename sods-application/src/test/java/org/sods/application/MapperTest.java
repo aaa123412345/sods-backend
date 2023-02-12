@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.sods.common.utils.RedisCache;
 import org.sods.resource.domain.ActiveSurvey;
 import org.sods.resource.domain.PageData;
 import org.sods.resource.domain.Survey;
@@ -15,6 +16,7 @@ import org.sods.security.mapper.MenuMapper;
 import org.sods.security.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 
+import org.sods.websocket.domain.VotingState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,10 +44,28 @@ public class MapperTest {
 
     @Autowired
     private PageDataMapper pageDataMapper;
+
+    @Autowired
+    private RedisCache redisCache;
     @Test
     public void tesPageMapper(){
         PageData s = pageDataMapper.selectById("1");
         System.out.println(s);
+    }
+
+    @Test
+    public void testJsonWS(){
+        String key = "Voting:ABCDEF";
+        VotingState votingState = redisCache.getCacheObject("Voting:ABCDEF");
+        /*
+        JSONObject formatObject = JSONObject.parseObject(votingState.getSurveyFormat());
+        List<String> stringList = (List<String>) formatObject.getJSONObject("info").get("partKey");
+        String partKey = stringList.get(0);
+        System.out.println(partKey);
+        List<Object> objectList = (List<Object>) formatObject.getJSONObject("questionset").get(partKey);*/
+        votingState.setCurrentQuestion(0);
+        redisCache.setCacheObject(key,votingState);
+        System.out.println(JSONObject.toJSONString(votingState.getCurrentQuestionFormat()));
     }
 
     @Autowired

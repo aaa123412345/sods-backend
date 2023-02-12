@@ -75,12 +75,17 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
     @Override
     public Message CreateGroup(Message message, Principal principal) {
         String rawPasscode = message.getReceiverName();
+        String surveyID = JSONObject.parseObject(message.getData()).getString("surveyID");
+        String surveyFormat = JSONObject.toJSONString(JSONObject.parseObject(message.getData()).get("surveyFormat"));
         System.out.println("Create Group:" + rawPasscode);
         String passcode1 = VotingState.getGlobalVotingDataRedisKeyString(rawPasscode);
 
+        VotingState votingState = new VotingState(rawPasscode);
+        votingState.setSurveyID(surveyID);
+        votingState.setSurveyFormat(surveyFormat);
 
         //Try to get
-        Boolean success1 = webSocketRedisService.setObjectIfKeyNotExist(passcode1,new VotingState(rawPasscode));
+        Boolean success1 = webSocketRedisService.setObjectIfKeyNotExist(passcode1,votingState);
 
         if(success1){
             simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private",

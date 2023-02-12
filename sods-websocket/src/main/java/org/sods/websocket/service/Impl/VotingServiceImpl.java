@@ -47,7 +47,7 @@ public class VotingServiceImpl implements VotingService {
             return message;
         }
         //Add people list in voting state (global)
-        System.out.println("Join");
+        //System.out.println("Join");
         String userName = webSocketSecurityService.getUserID(principal);
         votingState.addParticipantJoinIfNotExist(userName);
         redisCache.setCacheObject(passcode,votingState);
@@ -59,7 +59,8 @@ public class VotingServiceImpl implements VotingService {
 
 
         simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
-                Message.getSynchronizationMessage(rawPassCode, votingState.getJSONResponse()));
+                Message.getSynchronizationMessage(rawPassCode,
+                        votingState.getJSONResponseWithRenderData(votingState.getCurrentQuestionFormat())));
 
 
         return message;
@@ -115,6 +116,9 @@ public class VotingServiceImpl implements VotingService {
             case CREATEGROUP: return  wsAdminActionService.CreateGroup(message, principal);
             case REMOVEGROUP: return wsAdminActionService.RemoveGroup(message, principal);
             case CLEAR:return wsAdminActionService.CLEAR(message, principal);
+            case NEXTQUESTION: wsAdminActionService.setNextQuestion(message, principal);
+            case SHOWRESULT: wsAdminActionService.showResultOfCurrentQuestion(message, principal);
+            case VOTINGEND: wsAdminActionService.endVotingAndCollectData(message, principal);
         }
         return null;
     }

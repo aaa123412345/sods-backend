@@ -111,6 +111,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
         queryWrapper.ge("end_time",LocalDateTime.now());
         queryWrapper.le("start_time",LocalDateTime.now());
         queryWrapper.eq("allow_public_search",true);
+
         List<ActiveSurvey> surveyActiveList = activeSurveyMapper.selectList(queryWrapper);
         return new ResponseResult(200,"Get All current Active Survey ",surveyActiveList);
     }

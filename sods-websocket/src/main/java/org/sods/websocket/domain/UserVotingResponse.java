@@ -27,15 +27,9 @@ public class UserVotingResponse {
     public void addDataToMap(String jsonStr){
         JSONObject userObject = JSON.parseObject(jsonStr);
         String key = userObject.getString("key");
-        String type = userObject.getString("type");
+        Object value = userObject.get("value");
+        this.userData.put(key,value);
 
-        if(type.equals("String")){
-            String value = userObject.getString("value");
-            this.userData.put(key,value);
-        }else if(type.equals("List")){
-            List<String> stringList = (List<String>) userObject.get("value");
-            this.userData.put(key,stringList);
-        }
 
     }
 
