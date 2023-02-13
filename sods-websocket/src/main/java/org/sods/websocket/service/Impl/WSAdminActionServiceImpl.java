@@ -6,6 +6,7 @@ import org.sods.security.service.JWTAuthCheckerService;
 import org.sods.websocket.domain.*;
 import org.sods.websocket.service.WSAdminActionService;
 import org.sods.websocket.service.WSUserActionService;
+import org.sods.websocket.service.WebSocketDBStoringService;
 import org.sods.websocket.service.WebSocketRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,6 +31,9 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
 
     @Autowired
     private WebSocketRedisService webSocketRedisService;
+
+    @Autowired
+    private WebSocketDBStoringService webSocketDBStoringService;
 
     @Autowired
     private RedisCache redisCache;
@@ -165,11 +169,35 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
 
     @Override
     public Message endVotingAndCollectData(Message message, Principal principal) {
+        //Get global voting State
+        String rawPassCode = message.getReceiverName();
+        VotingState votingState = redisCache.getCacheObject
+                (VotingState.getGlobalVotingDataRedisKeyString(rawPassCode));
+
+        //Collect All User Response In Cache (Current question) <- Missing question data replace with null (All user)
+        List<String> userCacheKey = votingState.getUserResponseRedisKeyList();
+        List<UserVotingResponse> userVotingResponseList = new ArrayList<>();
         //Get the user response in Redis
+        userCacheKey.forEach((e)->{
+            userVotingResponseList.add(redisCache.getCacheObject(e));
+        });
+
         //create the response record in database
-        //Clear all data of these voting in Redis Cache
+        if(webSocketDBStoringService.saveToDB(votingState,userVotingResponseList)){
+            //Clear all data of these voting in Redis Cache
+            Boolean success = webSocketRedisService.deleteVotingGroup(rawPassCode);
+        }
+
+
         //Send Message to user to let them know the voting is ended
-        return null;
+        simpMessagingTemplate.convertAndSendToUser(rawPassCode, "/private",
+                Message.getServerMessage(rawPassCode,Action.NONE,Status.MESSAGE,
+                        JsonDataResponse.getStringWithKey("msg","Voting End" + rawPassCode)));
+
+        //Force unsubscribe
+        simpMessagingTemplate.convertAndSendToUser(rawPassCode, "/private",
+                Message.getServerMessage(rawPassCode,Action.FORCEUNSUBSCRIBE,Status.COMMAND, null));
+        return message;
     }
 
 }

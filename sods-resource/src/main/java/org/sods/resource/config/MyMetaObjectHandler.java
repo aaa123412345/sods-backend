@@ -24,15 +24,20 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         //Get user info
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        //Get User ID => if (No login, userid:-1)
-        if(principal instanceof LoginUser){
-            LoginUser loginUser = ((LoginUser)principal);
-            userid = loginUser.getUser().getId();
+        if(Objects.isNull(authentication)){
+            userid = -999L;
         }else{
-            userid = -1L;
+            Object principal = authentication.getPrincipal();
+
+            //Get User ID => if (No login, userid:-1)
+            if(principal instanceof LoginUser){
+                LoginUser loginUser = ((LoginUser)principal);
+                userid = loginUser.getUser().getId();
+            }else{
+                userid = -1L;
+            }
         }
+
 
 
 

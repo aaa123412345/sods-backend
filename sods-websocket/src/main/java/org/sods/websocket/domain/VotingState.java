@@ -166,7 +166,13 @@ public class VotingState {
 
         return JSONObject.toJSONString(objectList.get(currentQuestion-1));
     }
-
+    @JSONField(serialize = false)
+    public String getCurrentSurveyFormatPartKey(){
+        JSONObject formatObject = JSONObject.parseObject(surveyFormat);
+        //Find Part Key
+        List<String> stringList = (List<String>) formatObject.getJSONObject("info").get("partKey");
+        return stringList.get(0);
+    }
     @JSONField(serialize = false)
     public static String getUserResponseRedisKeyString(String passcode,String user){
         return "Voting:"+passcode+":"+user;

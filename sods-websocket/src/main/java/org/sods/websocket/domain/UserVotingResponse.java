@@ -19,6 +19,8 @@ public class UserVotingResponse {
     private String userID;
     private Map<String,Object> userData;
 
+
+
     public UserVotingResponse(String userID){
         this.userID = userID;
         this.userData = new HashMap<>();
@@ -41,6 +43,22 @@ public class UserVotingResponse {
         }
 
         return true;
+    }
+    @JSONField(serialize = false)
+    public void fillAllObjectIfKeyNotExist(Integer maxQuestion){
+        for(Integer i = 1; i<= maxQuestion; i++){
+            String key = i.toString();
+            if(!this.userData.containsKey(key)){
+                this.userData.put(key,UserVotingResponse.getEmptyMark());
+            }
+        }
+    }
+
+    @JSONField(serialize = false)
+    public String toSurveyResponseJsonStingFormat(String partKey){
+        Map<String,Object> outer = new HashMap<>();
+        outer.put(partKey,this.userData);
+        return JSONObject.toJSONString(outer);
     }
 
     @JSONField(serialize = false)

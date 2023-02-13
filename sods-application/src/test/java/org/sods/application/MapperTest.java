@@ -16,6 +16,8 @@ import org.sods.security.mapper.MenuMapper;
 import org.sods.security.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 
+import org.sods.websocket.domain.QuestionDataGrouper;
+import org.sods.websocket.domain.UserVotingResponse;
 import org.sods.websocket.domain.VotingState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,16 +56,36 @@ public class MapperTest {
     }
 
     @Test
-    public void testJsonWS(){
-        String key = "Voting:ABCDEF";
-        VotingState votingState = redisCache.getCacheObject("Voting:ABCDEF");
+    public void testIDAutoCreate(){
+        ActiveSurvey activeSurvey = new ActiveSurvey();
+        System.out.println(activeSurvey);
+    }
+    @Test
+    public void testVotingWS(){
+        //Get voting State
+        String rawPassCode = "ABCDEF";
+        VotingState votingState = redisCache.getCacheObject
+                (VotingState.getGlobalVotingDataRedisKeyString(rawPassCode));
+
+        //Collect All User Response In Cache (Current question) <- Missing question data replace with null (All user)
+        List<String> userCacheKey = votingState.getUserResponseRedisKeyList();
+        Integer maxQ = votingState.getMaxQuestion();
+
+        //Loop all userCacheKey
+        userCacheKey.forEach((e)->{
+            UserVotingResponse u = redisCache.getCacheObject(e);
+            u.fillAllObjectIfKeyNotExist(maxQ);
+            System.out.println(u.toSurveyResponseJsonStingFormat("1"));
+
+        });
+
         /*
         JSONObject formatObject = JSONObject.parseObject(votingState.getSurveyFormat());
         List<String> stringList = (List<String>) formatObject.getJSONObject("info").get("partKey");
         String partKey = stringList.get(0);
         System.out.println(partKey);
         List<Object> objectList = (List<Object>) formatObject.getJSONObject("questionset").get(partKey);*/
-        System.out.println(votingState.getMaxQuestion());
+
     }
 
     @Autowired
