@@ -1,5 +1,6 @@
 package org.sods.websocket.domain;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
@@ -44,16 +45,25 @@ public class QuestionDataGrouper {
     public void collectDataAndPutIntoMap(Object value){
         if(value instanceof String){
             addStringToMap((String) value);
-        } else if (value instanceof ArrayList) {
-            List<String> ls = (List<String>) value;
-            ls.forEach((e)->{
-                addStringToMap(e);
+        } else if (value instanceof JSONArray) {
+            JSONArray jsonArray = (JSONArray) value;
+
+            jsonArray.forEach((e)->{
+                String tmp = (String) e;
+                addStringToMap(tmp);
             });
-        } else if (value instanceof  Integer) {
+        } else if (value instanceof Integer) {
             Integer i = (Integer) value;
             addStringToMap(i.toString());
         }
     }
 
+    @JSONField(serialize = false)
+    public void resetRenderMethodAccordingToDataSize(){
 
+        if(map.size()<10){
+            this.resultRenderMethod = ResultRenderMethod.BARCHART;
+        }
+
+    }
 }

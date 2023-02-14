@@ -86,7 +86,7 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
         String passcode1 = VotingState.getGlobalVotingDataRedisKeyString(rawPasscode);
 
         VotingState votingState = new VotingState(rawPasscode,surveyID,surveyFormat);
-        System.out.println(votingState.getMaxQuestion());
+
 
         //Try to get
         Boolean success1 = webSocketRedisService.setObjectIfKeyNotExist(passcode1,votingState);
@@ -128,6 +128,9 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
                 questionDataGrouper.collectDataAndPutIntoMap(u.getUserData().get(questionKey));
             }
         });
+
+        //Select the best client-side rendering method
+        questionDataGrouper.resetRenderMethodAccordingToDataSize();
 
         //Update the Voting State
         votingState.setClientRenderMethod(ClientRenderMethod.SHOWRESULT);

@@ -42,6 +42,7 @@ public class VotingState {
         this.setParticipantSubmit(new ArrayList<>());
         this.setCurrentQuestion(1);
         this.setClientRenderMethod(ClientRenderMethod.VOTING);
+        this.setRenderData(this.getCurrentQuestionFormat());
     }
 
     @JSONField(serialize = false)
@@ -104,7 +105,7 @@ public class VotingState {
         //Get question set
         List<JSONObject> objectList = (List<JSONObject>) formatObject.getJSONObject("questionset").get(partKey);
 
-        return objectList.get(currentQuestion).getString("type");
+        return objectList.get(currentQuestion-1).getString("type");
     }
     @JSONField(serialize = false)
     public String getJSONResponseWithRenderData(){
@@ -121,7 +122,7 @@ public class VotingState {
 
     @JSONField(serialize = false)
     public Boolean checkAndSetToNextQuestion(){
-        if(currentQuestion<=maxQuestion){
+        if(currentQuestion<maxQuestion){
             this.currentQuestion=currentQuestion+1;
             this.clientRenderMethod=ClientRenderMethod.VOTING;
             this.renderData=getCurrentQuestionFormat();

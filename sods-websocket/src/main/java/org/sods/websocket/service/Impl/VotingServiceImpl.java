@@ -50,7 +50,6 @@ public class VotingServiceImpl implements VotingService {
         //System.out.println("Join");
         String userName = webSocketSecurityService.getUserID(principal);
         votingState.addParticipantJoinIfNotExist(userName);
-        votingState.setRenderData(votingState.getCurrentQuestionFormat());
         redisCache.setCacheObject(passcode,votingState);
 
         //Add a redis cache for storing user response

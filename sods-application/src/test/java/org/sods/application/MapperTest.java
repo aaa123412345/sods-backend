@@ -61,6 +61,19 @@ public class MapperTest {
         System.out.println(activeSurvey);
     }
     @Test
+    public void testRedisDataFormat(){
+        UserVotingResponse userVotingResponse=redisCache.getCacheObject("Voting:ABCDEF:1");
+        Object object = userVotingResponse.getUserData().get("4");
+        System.out.println(object.getClass());
+        JSONArray jsonArray = (JSONArray) object;
+        jsonArray.forEach((e)->{
+            String tmp = (String) e;
+            System.out.println(e);
+        });
+
+        System.out.println(object);
+    }
+    @Test
     public void testVotingWS(){
         //Get voting State
         String rawPassCode = "ABCDEF";
