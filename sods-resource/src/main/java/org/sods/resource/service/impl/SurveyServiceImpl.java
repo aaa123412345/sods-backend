@@ -102,5 +102,14 @@ public class SurveyServiceImpl implements SurveyService {
         return new ResponseResult(200,"New survey is created");
     }
 
+    @Override
+    public ResponseResult listAllWithTypeFilter(String type) {
+        QueryWrapper<Survey> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("survey_type",type);
+        List<Survey> surveyList = surveyMapper.selectList(queryWrapper);
+
+        return new ResponseResult(200,"Get All survey with type: " + type,surveyList);
+    }
+
 
 }

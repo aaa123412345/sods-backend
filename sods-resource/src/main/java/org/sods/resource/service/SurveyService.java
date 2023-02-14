@@ -8,4 +8,6 @@ public interface SurveyService {
     ResponseResult delete(Long id);
     ResponseResult put(Long id,String payload);
     ResponseResult post(String payload);
+
+    ResponseResult listAllWithTypeFilter(String type);
 }

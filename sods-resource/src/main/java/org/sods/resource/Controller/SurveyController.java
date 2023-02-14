@@ -24,6 +24,11 @@ public class SurveyController {
         return surveyService.listAll(true);
     }
 
+    @PreAuthorize("@ex.hasAuthority('system:survey:editor:read')")
+    @GetMapping("/survey_vote_only")
+    public ResponseResult getAllVoting(){
+        return surveyService.listAllWithTypeFilter("Vote");
+    }
 
     @GetMapping("/survey/{survey_id}")
     public ResponseResult getOneSurvey(@PathVariable("survey_id")String survey_id){

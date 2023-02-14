@@ -1,5 +1,6 @@
 package org.sods.websocket.service.Impl;
 
+import com.alibaba.fastjson.JSONObject;
 import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.Survey;
 import org.sods.resource.mapper.SurveyMapper;
@@ -8,10 +9,11 @@ import org.sods.websocket.service.RESTVotingService;
 import org.sods.websocket.service.WebSocketRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-
+@Service
 public class RESTVotingServiceImpl implements RESTVotingService {
     @Autowired
     private WebSocketRedisService webSocketRedisService;
@@ -29,7 +31,7 @@ public class RESTVotingServiceImpl implements RESTVotingService {
             return new ResponseResult<>(400,"Create voting with code "+rawPassCode+" failed: The group exist.");
         }
 
-        Survey survey = surveyMapper.selectById(Long.parseLong(surveyID));
+        Survey survey = surveyMapper.selectById(Long.parseLong(JSONObject.parseObject(surveyID).getString("surveyID")));
 
         if(Objects.isNull(survey)){
             return new ResponseResult<>(400,"Create voting with code "+rawPassCode+" " +
