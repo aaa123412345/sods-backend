@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 public class QuestionDataGrouper {
@@ -59,11 +56,22 @@ public class QuestionDataGrouper {
     }
 
     @JSONField(serialize = false)
-    public void resetRenderMethodAccordingToDataSize(){
-
-        if(map.size()<10){
+    public void processDataBeforeShare(){
+        this.sortMap();
+        if(map.size()<10&&this.resultRenderMethod!=ResultRenderMethod.PIECHART){
             this.resultRenderMethod = ResultRenderMethod.BARCHART;
         }
 
+    }
+
+    @JSONField(serialize = false)
+    public void sortMap(){
+        List<String> sortedKeys=new ArrayList(this.map.keySet());
+        Collections.sort(sortedKeys);
+        Map<String,Integer> sortedMap = new HashMap<>();
+        sortedKeys.forEach((e)->{
+            sortedMap.put(e,this.map.get(e));
+        });
+        this.map=sortedMap;
     }
 }

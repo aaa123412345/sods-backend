@@ -12,7 +12,6 @@ import java.security.Principal;
 
 
 @Controller
-
 public class VoteController {
 
     @Autowired

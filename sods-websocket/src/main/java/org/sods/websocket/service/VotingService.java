@@ -8,7 +8,6 @@ public interface VotingService {
     Message joinChannel(Message message, Principal principal);
     Message messageChannel(Message message, Principal principal);
     Message leaveChannel(Message message, Principal principal);
-
     Message commandForChannel(Message message, Principal principal);
 
 

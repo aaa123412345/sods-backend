@@ -70,7 +70,8 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
         }else{
             simpMessagingTemplate.convertAndSendToUser(rawPasscode, "/private",
                     Message.getServerMessage(rawPasscode,Action.NONE,Status.MESSAGE,
-                            JsonDataResponse.getStringWithKey("msg","Remove Group Failed (Group is not exist):" + rawPasscode)));
+                            JsonDataResponse.getStringWithKey("msg","Remove Group Failed (Group is not exist):"
+                                    + rawPasscode)));
         }
 
 
@@ -130,7 +131,7 @@ public class WSAdminActionServiceImpl implements WSAdminActionService {
         });
 
         //Select the best client-side rendering method
-        questionDataGrouper.resetRenderMethodAccordingToDataSize();
+        questionDataGrouper.processDataBeforeShare();
 
         //Update the Voting State
         votingState.setClientRenderMethod(ClientRenderMethod.SHOWRESULT);
