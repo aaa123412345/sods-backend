@@ -23,7 +23,7 @@ public class MarkerController {
     }
 
     @GetMapping
-    public ResponseResult getAllMarkers(@RequestParam(name = "floorplan-id", required = false) Integer floorPlanID, @RequestParam(name = "booth-id", required = false) Integer boothID){
+    public ResponseResult getAllMarkers(@RequestParam(name = "floorplanId", required = false) Integer floorPlanID, @RequestParam(name = "boothId", required = false) Integer boothID){
         return markerService.getMarkerByFloorPlanIdOrBoothId(floorPlanID, boothID);
     }
 

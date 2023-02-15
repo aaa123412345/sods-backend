@@ -19,11 +19,16 @@ public class FloorPlanController {
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PostMapping
+    public ResponseResult createFloorPlan(@RequestBody FloorPlan floorPlan) {
+        return floorPlanService.createFloorPlan(floorPlan);
+    }
+    /**
     public ResponseResult createFloorPlan(@RequestParam("floorplan") String floorPlanString, @RequestParam("image") MultipartFile imageFile) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         FloorPlan floorPlan = mapper.readValue(floorPlanString, FloorPlan.class);
         return floorPlanService.createFloorPlan(floorPlan, imageFile);
     }
+     **/
 
     @GetMapping
     public ResponseResult getAllFloorPlan(){
@@ -37,11 +42,16 @@ public class FloorPlanController {
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PutMapping("/{id}")
+    public ResponseResult updateFloorPlanById(@PathVariable Integer id, @RequestBody FloorPlan floorPlan) {
+        return floorPlanService.updateFloorPlanById(id, floorPlan);
+    }
+    /**
     public ResponseResult updateFloorPlanById(@PathVariable Integer id, @RequestParam("floorplan") String floorPlanString, @RequestParam("image") MultipartFile imageFile) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         FloorPlan floorPlan = mapper.readValue(floorPlanString, FloorPlan.class);
         return floorPlanService.updateFloorPlanById(id, floorPlan, imageFile);
     }
+     **/
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @DeleteMapping("/{id}")

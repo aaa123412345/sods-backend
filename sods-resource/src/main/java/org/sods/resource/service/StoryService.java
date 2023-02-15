@@ -6,10 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface StoryService {
 
-    ResponseResult createStory(Story story, MultipartFile imageFile);
+    ResponseResult createStory(Story story);
+    //ResponseResult createStory(Story story, MultipartFile imageFile);
     ResponseResult getAllStories();
     ResponseResult getStoryById(Integer id);
-    ResponseResult updateStoryById(Integer id, Story newStory, MultipartFile imageFile);
+    ResponseResult updateStoryById(Integer id, Story newStory);
+    //ResponseResult updateStoryById(Integer id, Story newStory, MultipartFile imageFile);
     ResponseResult deleteStoryById(Integer id);
 
 }
