@@ -84,12 +84,6 @@ public class BoothServiceImpl implements BoothService {
         if(booth.getDescriptionZH() != null)
             booth.setDescriptionZH(newBooth.getDescriptionZH());
 
-        if(booth.getSpeechEN() != null)
-            booth.setSpeechEN(newBooth.getSpeechEN());
-
-        if(booth.getSpeechZH() != null)
-            booth.setSpeechZH(newBooth.getSpeechZH());
-
         boothMapper.updateById(booth);
 
         return new ResponseResult(200, "Booth (id: " + id + ") is updated successfully. ");
