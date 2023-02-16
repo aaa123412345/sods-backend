@@ -35,13 +35,10 @@ public class Booth {
     @TableField("description_zh")
     private String descriptionZH;
 
-    @TableField("speech_en")
-    private String speechEN;
-
-    @TableField("speech_zh")
-    private String speechZH;
-
     @TableField("image_url")
     private String imageUrl;
+
+    @TableField("vr_image_url")
+    private String vrImageUrl;
 
 }

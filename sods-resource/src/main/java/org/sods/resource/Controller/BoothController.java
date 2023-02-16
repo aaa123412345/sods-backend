@@ -26,7 +26,7 @@ public class BoothController {
     }
 
     @GetMapping("/booths")
-    public ResponseResult getAllBooths(@RequestParam(name = "floorplan_id", required = false) Integer floorPlanID){
+    public ResponseResult getAllBooths(@RequestParam(name = "floorplanId", required = false) Integer floorPlanID){
         return boothService.getAllBooths(floorPlanID);
     }
 
@@ -37,11 +37,16 @@ public class BoothController {
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PutMapping("/booths/{id}")
+    public ResponseResult updateBoothById(@PathVariable Integer id, @RequestBody Booth booth) {
+        return boothService.updateBoothById(id, booth);
+    }
+    /**
     public ResponseResult updateBoothById(@PathVariable Integer id, @RequestParam("booth") String boothString, @RequestParam("image") MultipartFile imageFile) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Booth booth = mapper.readValue(boothString, Booth.class);
         return boothService.updateBoothById(id, booth, imageFile);
     }
+     **/
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @DeleteMapping("/booths/{id}")

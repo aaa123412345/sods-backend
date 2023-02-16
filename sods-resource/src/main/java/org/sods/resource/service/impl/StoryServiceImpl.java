@@ -16,22 +16,21 @@ public class StoryServiceImpl implements StoryService {
     @Autowired
     StoryMapper storyMapper;
 
-    public String getImageUrl(MultipartFile file){
+    @Override
+    public ResponseResult createStory(Story story) {
 
-        // upload file to aws
-        // get url from cdn
-        return "https://s3.amazonaws.com/bucketname/foldername/imagename.jpg";
+        storyMapper.insert(story);
+        return new ResponseResult(201,"New story is created successfully.");
 
     }
-
-    @Override
+    /**
     public ResponseResult createStory(Story story, MultipartFile imageFile) {
 
         //story.setImageUrl(getImageUrl(imageFile));
         storyMapper.insert(story);
         return new ResponseResult(201,"New story is created successfully.");
 
-    }
+    }**/
 
     @Override
     public ResponseResult getAllStories() {
@@ -52,6 +51,23 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
+    public ResponseResult updateStoryById(Integer id, Story newStory) {
+
+        Story story = storyMapper.selectById(id);
+        if(story == null)
+            return new ResponseResult(404, "Failed: Story (id: " + id + ") is not found. ");
+
+        story.setTitleEN(newStory.getTitleEN());
+        story.setTitleZH(newStory.getTitleZH());
+        story.setContentEN(newStory.getContentEN());
+        story.setContentZH(newStory.getContentZH());
+        // story.setImageUrl(newStory.getImageUrl());
+
+        storyMapper.updateById(story);
+        return new ResponseResult(200, "Story (id: " + id + ") is updated successfully.");
+
+    }
+    /**
     public ResponseResult updateStoryById(Integer id, Story newStory, MultipartFile imageFile) {
 
         Story story = storyMapper.selectById(id);
@@ -63,15 +79,15 @@ public class StoryServiceImpl implements StoryService {
         story.setContentEN(newStory.getContentEN());
         story.setContentZH(newStory.getContentZH());
 
-        /*
+
         if(!imageFile.isEmpty())
             story.setImageUrl(getImageUrl(imageFile));
-        */
+
 
         storyMapper.updateById(story);
         return new ResponseResult(200, "Story (id: " + id + ") is updated successfully.");
 
-    }
+    }**/
 
     @Override
     public ResponseResult deleteStoryById(Integer id) {

@@ -9,7 +9,8 @@ public interface BoothService {
     ResponseResult createBooth(Booth booth, Double y, Double x, Integer floorPlanId);
     ResponseResult getAllBooths(Integer floorPlanId);
     ResponseResult getBoothById(Integer id);
-    ResponseResult updateBoothById(Integer id, Booth newBooth, MultipartFile imageFile);
+    ResponseResult updateBoothById(Integer id, Booth newBooth);
+    //ResponseResult updateBoothById(Integer id, Booth newBooth, MultipartFile imageFile);
     ResponseResult deleteBoothById(Integer id);
 
 }

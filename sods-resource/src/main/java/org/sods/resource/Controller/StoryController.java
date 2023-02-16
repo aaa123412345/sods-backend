@@ -22,11 +22,16 @@ public class StoryController {
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PostMapping
+    public ResponseResult createStory(@RequestBody Story story) {
+        return storyService.createStory(story);
+    }
+    /**
     public ResponseResult createStory(@RequestParam("story") String storyString, @RequestParam("image") MultipartFile imageFile) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Story story = mapper.readValue(storyString, Story.class);
         return storyService.createStory(story, imageFile);
     }
+     **/
 
     @GetMapping
     public ResponseResult getAllStories(){
@@ -40,11 +45,15 @@ public class StoryController {
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PutMapping("/{id}")
+    public ResponseResult updateStoryById(@PathVariable Integer id, @RequestBody Story story) {
+        return storyService.updateStoryById(id, story);
+    }
+    /**
     public ResponseResult updateStoryById(@PathVariable Integer id, @RequestParam("story") String storyString, @RequestParam("image") MultipartFile imageFile) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Story story = mapper.readValue(storyString, Story.class);
         return storyService.updateStoryById(id, story, imageFile);
-    }
+    }**/
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @DeleteMapping("/{id}")

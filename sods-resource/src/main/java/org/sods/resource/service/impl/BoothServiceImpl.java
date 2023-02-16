@@ -53,42 +53,21 @@ public class BoothServiceImpl implements BoothService {
     }
 
     @Override
-    public ResponseResult updateBoothById(Integer id, Booth newBooth, MultipartFile imageFile) {
+    public ResponseResult updateBoothById(Integer id, Booth newBooth) {
 
         Booth booth = boothMapper.selectById(id);
 
-        if(booth == null)
+        if (booth == null)
             return new ResponseResult(404, "Failed: Booth (id: " + id + ") is not found.");
 
-        if(!imageFile.isEmpty()){
-            // upload file to aws
-            // get url from cdn
-            //booth.setImageUrl(cdn);
-        }
-
-        if(booth.getTitleEN() != null)
-            booth.setTitleEN(newBooth.getTitleEN());
-
-        if(booth.getTitleZH() != null)
-            booth.setTitleZH(newBooth.getTitleZH());
-
-        if(booth.getVenueEN() != null)
-            booth.setVenueEN(newBooth.getVenueEN());
-
-        if(booth.getVenueZH() != null)
-            booth.setVenueZH(newBooth.getVenueZH());
-
-        if(booth.getDescriptionEN() != null)
-            booth.setDescriptionEN(newBooth.getDescriptionEN());
-
-        if(booth.getDescriptionZH() != null)
-            booth.setDescriptionZH(newBooth.getDescriptionZH());
-
-        if(booth.getSpeechEN() != null)
-            booth.setSpeechEN(newBooth.getSpeechEN());
-
-        if(booth.getSpeechZH() != null)
-            booth.setSpeechZH(newBooth.getSpeechZH());
+        booth.setTitleEN(newBooth.getTitleEN());
+        booth.setTitleZH(newBooth.getTitleZH());
+        booth.setVenueEN(newBooth.getVenueEN());
+        booth.setVenueZH(newBooth.getVenueZH());
+        booth.setDescriptionEN(newBooth.getDescriptionEN());
+        booth.setDescriptionZH(newBooth.getDescriptionZH());
+        //booth.setImageUrl(newBooth.getImage(Url());
+        //booth.setVrImageUrl(newBooth.getVrImageUrl());
 
         boothMapper.updateById(booth);
 
@@ -96,6 +75,44 @@ public class BoothServiceImpl implements BoothService {
 
     }
 
+        /**
+        public ResponseResult updateBoothById(Integer id, Booth newBooth, MultipartFile imageFile) {
+
+            Booth booth = boothMapper.selectById(id);
+
+            if(booth == null)
+                return new ResponseResult(404, "Failed: Booth (id: " + id + ") is not found.");
+
+            if(!imageFile.isEmpty()){
+                // upload file to aws
+                // get url from cdn
+                //booth.setImageUrl(cdn);
+            }
+
+            if(booth.getTitleEN() != null)
+                booth.setTitleEN(newBooth.getTitleEN());
+
+            if(booth.getTitleZH() != null)
+                booth.setTitleZH(newBooth.getTitleZH());
+
+            if(booth.getVenueEN() != null)
+                booth.setVenueEN(newBooth.getVenueEN());
+
+            if(booth.getVenueZH() != null)
+                booth.setVenueZH(newBooth.getVenueZH());
+
+            if(booth.getDescriptionEN() != null)
+                booth.setDescriptionEN(newBooth.getDescriptionEN());
+
+            if(booth.getDescriptionZH() != null)
+                booth.setDescriptionZH(newBooth.getDescriptionZH());
+
+            boothMapper.updateById(booth);
+
+            return new ResponseResult(200, "Booth (id: " + id + ") is updated successfully. ");
+
+        }
+        **/
     @Override
     public ResponseResult deleteBoothById(Integer id) {
 

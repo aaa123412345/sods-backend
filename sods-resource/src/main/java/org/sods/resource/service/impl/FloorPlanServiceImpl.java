@@ -10,6 +10,7 @@ import org.sods.resource.mapper.MarkerMapper;
 import org.sods.resource.service.FloorPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -26,15 +27,12 @@ public class FloorPlanServiceImpl implements FloorPlanService {
     @Autowired
     BoothMapper boothMapper;
 
-    public String getImageUrl(MultipartFile file){
-
-        // upload file to aws
-        // get url from cdn
-        return "https://s3.amazonaws.com/bucketname/foldername/imagename.jpg";
-
-    }
-
     @Override
+    public ResponseResult createFloorPlan(@RequestBody FloorPlan floorPlan) {
+        floorPlanMapper.insert(floorPlan);
+        return new ResponseResult(201,"New floor plan is created successfully.");
+    }
+    /**
     public ResponseResult createFloorPlan(FloorPlan floorPlan, MultipartFile imageFile) {
 
         //floorPlan.setImageUrl(getImageUrl(imageFile));
@@ -42,6 +40,7 @@ public class FloorPlanServiceImpl implements FloorPlanService {
         return new ResponseResult(201,"New floor plan is created successfully.");
 
     }
+     **/
 
     @Override
     public ResponseResult getAllFloorPlan() {
@@ -61,6 +60,21 @@ public class FloorPlanServiceImpl implements FloorPlanService {
     }
 
     @Override
+    public ResponseResult updateFloorPlanById(Integer id, FloorPlan newFloorPlan) {
+
+        FloorPlan floorPlan = floorPlanMapper.selectById(id);
+        if(floorPlan == null)
+            return new ResponseResult(404, "Failed: Floor Plan (id: " + id + ") is not found. ");
+
+        floorPlan.setRegionEN(newFloorPlan.getRegionEN());
+        floorPlan.setRegionZH(newFloorPlan.getRegionZH());
+        // floorPlan.setImageUrl(newFloorPlan.getImageUrl());
+
+        floorPlanMapper.updateById(floorPlan);
+        return new ResponseResult(200, "Floor Plan (id: " + id + ") is updated successfully.");
+
+    }
+    /**
     public ResponseResult updateFloorPlanById(Integer id, FloorPlan newFloorPlan, MultipartFile imageFile) {
 
         FloorPlan floorPlan = floorPlanMapper.selectById(id);
@@ -70,15 +84,16 @@ public class FloorPlanServiceImpl implements FloorPlanService {
         floorPlan.setRegionEN(newFloorPlan.getRegionEN());
         floorPlan.setRegionZH(newFloorPlan.getRegionZH());
 
-        /*
+
         if(!imageFile.isEmpty())
             floorPlan.setImageUrl(getImageUrl(imageFile));
-        */
+
 
         floorPlanMapper.updateById(floorPlan);
         return new ResponseResult(200, "Floor Plan (id: " + id + ") is updated successfully.");
 
     }
+    **/
 
     @Override
     public ResponseResult deleteFloorPlanById(Integer id) {
