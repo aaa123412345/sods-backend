@@ -20,6 +20,10 @@ public class BookingActivityInformation {
 
     private String location;
 
+    private Integer maxQuote;
+
+    private Integer currentNum;
+
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;

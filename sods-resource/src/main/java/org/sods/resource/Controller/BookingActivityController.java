@@ -23,18 +23,31 @@ public class BookingActivityController {
     @PreAuthorize("@ex.hasAuthority('system:booking:bai:create')")
     @PostMapping("/booking_activity_information/")
     public ResponseResult postBookingActivity(@RequestBody BookingActivityInformation payload){
+        System.out.println(payload);
         return bookingActivityInformationService.createBookingActivityInfo(payload);
     }
     @PreAuthorize("@ex.hasAuthority('system:booking:bai:update')")
     @PutMapping("/booking_activity_information/{booking_activity_id}")
     public ResponseResult putBookingActivity(@RequestBody BookingActivityInformation payload,
                                              @PathVariable("booking_activity_id")String booking_activity_id){
+        System.out.println(payload);
         return bookingActivityInformationService.updateBookingActivityInfo(payload, Long.parseLong(booking_activity_id));
     }
     @PreAuthorize("@ex.hasAuthority('system:booking:bai:delete')")
     @DeleteMapping("/booking_activity_information/{booking_activity_id}")
     public ResponseResult deleteBookingActivity(@PathVariable("booking_activity_id")String booking_activity_id){
         return bookingActivityInformationService.deleteBookingActivityInfo(Long.parseLong(booking_activity_id));
+    }
+
+    @PreAuthorize("@ex.hasAuthority('system:booking:bai:read')")
+    @GetMapping("/booking_activity_information/all")
+    public ResponseResult getAllBookingActivity(){
+        return bookingActivityInformationService.getAllBookingActivityInfo();
+    }
+
+    @GetMapping("/booking_activity_information/current")
+    public ResponseResult getCurrentBookingActivity(){
+        return bookingActivityInformationService.getCurrentBookingActivityInfo();
     }
 
 

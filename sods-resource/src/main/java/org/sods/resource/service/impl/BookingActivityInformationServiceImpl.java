@@ -1,6 +1,8 @@
 package org.sods.resource.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.sods.common.domain.ResponseResult;
+import org.sods.resource.domain.ActiveSurvey;
 import org.sods.resource.domain.BookingActivityInformation;
 import org.sods.resource.mapper.BookingActivityInformationMapper;
 
@@ -8,6 +10,8 @@ import org.sods.resource.service.BookingActivityInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -39,7 +43,8 @@ public class BookingActivityInformationServiceImpl implements BookingActivityInf
         if(Objects.isNull(old)){
             return new ResponseResult<>(404,"Update failed: Booking Activity Information is not found");
         }
-        bookingActivityInformationMapper.updateById(old);
+        bookingActivityInformation.setBookingActivityId(old.getBookingActivityId());
+        bookingActivityInformationMapper.updateById(bookingActivityInformation);
         return new ResponseResult<>(200,"Update Booking Activity Information Success");
     }
 
@@ -52,5 +57,20 @@ public class BookingActivityInformationServiceImpl implements BookingActivityInf
         }
         bookingActivityInformationMapper.deleteById(booking_activity_id);
         return new ResponseResult<>(200,"Delete Booking Activity Information Success");
+    }
+
+    @Override
+    public ResponseResult getCurrentBookingActivityInfo() {
+        QueryWrapper<BookingActivityInformation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.le("end_time", LocalDateTime.now());
+
+        List<BookingActivityInformation> list = bookingActivityInformationMapper.selectList(queryWrapper);
+        return new ResponseResult(200,"Get All current booking activity information ",list);
+    }
+
+    @Override
+    public ResponseResult getAllBookingActivityInfo() {
+        List<BookingActivityInformation> list = bookingActivityInformationMapper.selectList(null);
+        return new ResponseResult(200,"Get All booking activity information ",list);
     }
 }
