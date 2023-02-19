@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("designedSurvey")
+@TableName("survey_designedSurvey")
 public class Survey {
     @TableId
     private Long surveyId;
