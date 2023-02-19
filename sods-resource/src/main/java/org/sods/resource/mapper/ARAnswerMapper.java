@@ -1,0 +1,9 @@
+package org.sods.resource.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+import org.sods.resource.domain.ARAnswer;
+
+@Mapper
+public interface ARAnswerMapper extends BaseMapper<ARAnswer> {
+}
