@@ -17,7 +17,10 @@ public class ARTreasure {
     @TableId(value = "treasure_id", type = IdType.AUTO)
     private Integer treasureId;
 
-    @TableField("question")
-    private String question;
+    @TableField("question_en")
+    private String questionEN;
+
+    @TableField("question_zh")
+    private String questionZH;
 
 }

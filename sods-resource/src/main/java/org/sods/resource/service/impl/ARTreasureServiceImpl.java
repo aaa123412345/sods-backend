@@ -45,7 +45,8 @@ public class ARTreasureServiceImpl implements ARTreasureService {
         if(existingARTreasure == null)
             return new ResponseResult(404, "Failed: AR Treasure Game (id: " + id + ") is not found. ");
 
-        existingARTreasure.setQuestion(arTreasure.getQuestion());
+        existingARTreasure.setQuestionEN(arTreasure.getQuestionEN());
+        existingARTreasure.setQuestionZH(arTreasure.getQuestionZH());
         arTreasureMapper.updateById(existingARTreasure);
         return new ResponseResult(200, "AR Treasure Game (id: " + id + ") is updated successfully.");
     }
