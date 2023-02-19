@@ -11,32 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest/BookingSystem")
-public class BookingSystemController {
+public class BookingUserArriveController {
+
+
     @Autowired
     private BookingUserArriveDataService bookingUserArriveDataService;
-    @Autowired
-    private BookingActivityInformationService bookingActivityInformationService;
 
-    @GetMapping("/booking_activity_information/{booking_activity_id}")
-    public ResponseResult getBookingActivity(@PathVariable("booking_activity_id")String booking_activity_id){
-        return bookingActivityInformationService.getBookingActivityInfo(Long.parseLong(booking_activity_id));
-    }
-    @PreAuthorize("@ex.hasAuthority('system:booking:bai:create')")
-    @PostMapping("/booking_activity_information/")
-    public ResponseResult postBookingActivity(@RequestBody BookingActivityInformation payload){
-        return bookingActivityInformationService.createBookingActivityInfo(payload);
-    }
-    @PreAuthorize("@ex.hasAuthority('system:booking:bai:update')")
-    @PutMapping("/booking_activity_information/{booking_activity_id}")
-    public ResponseResult putBookingActivity(@RequestBody BookingActivityInformation payload,
-                                             @PathVariable("booking_activity_id")String booking_activity_id){
-        return bookingActivityInformationService.updateBookingActivityInfo(payload, Long.parseLong(booking_activity_id));
-    }
-    @PreAuthorize("@ex.hasAuthority('system:booking:bai:delete')")
-    @DeleteMapping("/booking_activity_information/{booking_activity_id}")
-    public ResponseResult deleteBookingActivity(@PathVariable("booking_activity_id")String booking_activity_id){
-        return bookingActivityInformationService.deleteBookingActivityInfo(Long.parseLong(booking_activity_id));
-    }
 
 
     @GetMapping("/user_arrive_data/{booking_activity_id}/{user_id}")
@@ -48,18 +28,18 @@ public class BookingSystemController {
 
     @PreAuthorize("@ex.hasAuthority('system:booking:buad:create')")
     @PostMapping("/user_arrive_data/{booking_activity_id}/{user_id}")
-    public ResponseResult postUserArriveData(@RequestBody BookingUserArriveData payload,
+    public ResponseResult postUserArriveData(
                                              @PathVariable("booking_activity_id")String booking_activity_id,
                                              @PathVariable("user_id")String user_id){
-        return bookingUserArriveDataService.createUserArriveData(payload,
+        return bookingUserArriveDataService.createUserArriveData(
                 Long.parseLong(user_id),Long.parseLong(booking_activity_id));
     }
     @PreAuthorize("@ex.hasAuthority('system:booking:buad:update')")
     @PutMapping("/user_arrive_data/{booking_activity_id}/{user_id}")
-    public ResponseResult putUserArriveData(@RequestBody BookingUserArriveData payload,
+    public ResponseResult putUserArriveData(
                                             @PathVariable("booking_activity_id")String booking_activity_id,
                                             @PathVariable("user_id")String user_id){
-        return bookingUserArriveDataService.updateUserArriveData(payload,
+        return bookingUserArriveDataService.UserArriveDataSetIsArrive(
                 Long.parseLong(user_id),Long.parseLong(booking_activity_id));
     }
     @PreAuthorize("@ex.hasAuthority('system:booking:buad:delete')")

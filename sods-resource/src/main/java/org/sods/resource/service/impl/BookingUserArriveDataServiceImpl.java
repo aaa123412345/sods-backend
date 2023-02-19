@@ -1,27 +1,30 @@
 package org.sods.resource.service.impl;
 
+
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.sods.common.domain.ResponseResult;
-import org.sods.resource.domain.BookingActivityInformation;
 import org.sods.resource.domain.BookingUserArriveData;
 import org.sods.resource.mapper.BookingUserArriveDataMapper;
+import org.sods.resource.service.BookingActivityInformationService;
 import org.sods.resource.service.BookingUserArriveDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+
 @Service
 public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataService {
+
     @Autowired
     private BookingUserArriveDataMapper bookingUserArriveDataMapper;
     @Override
     public ResponseResult getUserArriveData(Long user_id, Long booking_activity_id) {
-        QueryWrapper<BookingUserArriveData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",user_id);
-        queryWrapper.eq("booking_activity_id",booking_activity_id);
-        BookingUserArriveData bookingUserArriveData = bookingUserArriveDataMapper.selectOne(queryWrapper);
+
+        BookingUserArriveData bookingUserArriveData = getObjectWithComposeID(user_id,booking_activity_id);
+
         if(Objects.isNull(bookingUserArriveData)){
             return new ResponseResult<>(404,"Booking User Arrive Data is not found");
         }
@@ -30,7 +33,14 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
     }
 
     @Override
-    public ResponseResult createUserArriveData(BookingUserArriveData bookingUserArriveData, Long user_id, Long booking_activity_id) {
+    public ResponseResult createUserArriveData( Long user_id, Long booking_activity_id) {
+        BookingUserArriveData old = getObjectWithComposeID(user_id,booking_activity_id);
+
+        if(Objects.isNull(old)){
+            return new ResponseResult<>(404,"Create failed: Booking User Arrive Data is exist");
+        }
+
+        BookingUserArriveData bookingUserArriveData = new BookingUserArriveData();
         bookingUserArriveData.setUserID(user_id);
         bookingUserArriveData.setBookingActivityId(booking_activity_id);
         bookingUserArriveDataMapper.insert(bookingUserArriveData);
@@ -38,39 +48,56 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
     }
 
     @Override
-    public ResponseResult updateUserArriveData(BookingUserArriveData bookingUserArriveData, Long user_id, Long booking_activity_id) {
-        QueryWrapper<BookingUserArriveData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",user_id);
-        queryWrapper.eq("booking_activity_id",booking_activity_id);
-        BookingUserArriveData old = bookingUserArriveDataMapper.selectOne(queryWrapper);
+    public ResponseResult UserArriveDataSetIsArrive(Long user_id, Long booking_activity_id) {
+
+
+        BookingUserArriveData old = getObjectWithComposeID(user_id, booking_activity_id);
+
+
         if(Objects.isNull(old)){
             return new ResponseResult<>(404,"Update Failed: Booking User Arrive Data is not found");
         }
 
+        old.setIsArrive(true);
+
         UpdateWrapper<BookingUserArriveData> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("user_id",user_id);
         updateWrapper.eq("booking_activity_id",booking_activity_id);
+        bookingUserArriveDataMapper.update(old,updateWrapper);
 
-        bookingUserArriveDataMapper.update(bookingUserArriveData,updateWrapper);
 
-
-        return new ResponseResult<>(200,"Update Success: Booking User Arrive Data is found",bookingUserArriveData);
+        return new ResponseResult<>(200,"Update Success: Booking User Arrive Data is found");
     }
 
     @Override
     public ResponseResult deleteUserArriveData(Long user_id, Long booking_activity_id) {
-        QueryWrapper<BookingUserArriveData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",user_id);
-        queryWrapper.eq("booking_activity_id",booking_activity_id);
-        BookingUserArriveData old = bookingUserArriveDataMapper.selectOne(queryWrapper);
+
+
+        BookingUserArriveData old = getObjectWithComposeID(user_id, booking_activity_id);
+
         if(Objects.isNull(old)){
             return new ResponseResult<>(404,"Delete Failed: Booking User Arrive Data is not found");
         }
+
         UpdateWrapper<BookingUserArriveData> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("user_id",user_id);
         updateWrapper.eq("booking_activity_id",booking_activity_id);
+
         bookingUserArriveDataMapper.delete(updateWrapper);
         return new ResponseResult<>(200,"Delete Success: Booking User Arrive Data is found");
 
     }
+
+    public BookingUserArriveData getObjectWithComposeID(Long user_id, Long booking_activity_id){
+        QueryWrapper<BookingUserArriveData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id",user_id);
+        queryWrapper.eq("booking_activity_id",booking_activity_id);
+        return bookingUserArriveDataMapper.selectOne(queryWrapper);
+    }
+
+
+
+
+
 }
+
