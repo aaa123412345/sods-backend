@@ -139,12 +139,15 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
                 ActiveSurvey.getJsonResultforClient(activeSurveyMapper.selectList(queryWrapper));
 
         //Only return the survey that user do not write
-        tmpList.stream()
-                .filter(m -> !userJoinedSurveyID.contains((Long) m.get("activeSurveyId")))
-                .collect(toList());
+        List<Map> resultList = new ArrayList<>();
+        tmpList.forEach((e)->{
+            if(!userJoinedSurveyID.contains(e.get("activeSurveyId"))){
+                resultList.add(e);
+            }
+        });
 
 
-        return new ResponseResult(200,"Get All current Active Survey ",tmpList);
+        return new ResponseResult(200,"Get All current Active Survey ",resultList);
     }
 
     @Override

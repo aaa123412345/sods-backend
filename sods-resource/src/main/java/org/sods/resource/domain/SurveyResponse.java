@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @TableName("survey_surveyResponse")
 public class SurveyResponse {
-    @TableId
-    private Long responseSurveyId;
 
     private Long activeSurveyId;
 
