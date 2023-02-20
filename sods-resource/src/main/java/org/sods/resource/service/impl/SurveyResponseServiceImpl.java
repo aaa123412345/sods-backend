@@ -57,6 +57,7 @@ public class SurveyResponseServiceImpl implements SurveyResponseService {
         SurveyResponse surveyResponse = new SurveyResponse();
         surveyResponse.setResponseData(payload);
         surveyResponse.setActiveSurveyId(activeSurveyID);
+        surveyResponse.setUserId(userId);
         surveyResponseMapper.insert(surveyResponse);
         return new ResponseResult(200,"New survey response is created");
     }

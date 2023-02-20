@@ -11,6 +11,9 @@ public interface BookingUserArriveDataService {
     ResponseResult deleteUserArriveData(Long user_id,Long booking_activity_id);
 
     ResponseResult userJoin(Long booking_activity_id);
+    ResponseResult userLeave(Long booking_activity_id);
+
+    ResponseResult userCheckIsBook(Long booking_activity_id);
 
 
 }

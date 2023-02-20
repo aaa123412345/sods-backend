@@ -69,6 +69,7 @@ public class WebSocketDBStoringServiceImpl implements WebSocketDBStoringService 
         SurveyResponse surveyResponse = new SurveyResponse();
         surveyResponse.setResponseData(userVotingResponse.toSurveyResponseJsonStingFormat(partKey));
         surveyResponse.setActiveSurveyId(activeSurveyID);
+        surveyResponse.setUserId(Long.parseLong(userVotingResponse.getUserID()));
 
         return surveyResponse;
     }

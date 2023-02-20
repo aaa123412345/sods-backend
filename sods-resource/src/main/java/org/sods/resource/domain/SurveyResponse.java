@@ -15,6 +15,8 @@ public class SurveyResponse {
 
     private Long activeSurveyId;
 
+    private Long userId;
+
     private String responseData;
 
     @TableField(fill = FieldFill.INSERT)

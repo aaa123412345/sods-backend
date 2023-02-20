@@ -12,6 +12,8 @@ import org.sods.resource.service.BookingUserArriveDataService;
 import org.sods.security.domain.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -94,13 +96,24 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
     @Override
     public ResponseResult userJoin(Long booking_activity_id) {
         //Get user info
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        Long user_id = loginUser.getUser().getId();
+        Long user_id = getUserID();
 
         return createUserArriveData(user_id,booking_activity_id);
     }
+
+    @Override
+    public ResponseResult userLeave(Long booking_activity_id) {
+        //Get user info
+        Long user_id = getUserID();
+        return deleteUserArriveData(user_id,booking_activity_id);
+    }
+
+    @Override
+    public ResponseResult userCheckIsBook(Long booking_activity_id) {
+        Long user_id = getUserID();
+        return getUserArriveData(user_id,booking_activity_id);
+    }
+
 
     public BookingUserArriveData getObjectWithComposeID(Long user_id, Long booking_activity_id){
         QueryWrapper<BookingUserArriveData> queryWrapper = new QueryWrapper<>();
@@ -109,7 +122,27 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
         return bookingUserArriveDataMapper.selectOne(queryWrapper);
     }
 
+    public Long getUserID(){
+        Long userid;
+        //Get user info
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if(Objects.isNull(authentication)){
+            userid = -999L;
+        }else{
+            Object principal = authentication.getPrincipal();
 
+            //Get User ID => if (No login, userid:-1)
+            if(principal instanceof LoginUser){
+                LoginUser loginUser = ((LoginUser)principal);
+                userid = loginUser.getUser().getId();
+            }else{
+                userid = -1L;
+            }
+        }
+
+        return userid;
+    }
 
 
 
