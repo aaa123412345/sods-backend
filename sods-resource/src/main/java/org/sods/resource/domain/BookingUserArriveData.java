@@ -17,7 +17,7 @@ public class BookingUserArriveData {
 
     private Long bookingActivityId;
 
-    private Long userID;
+    private Long userId;
 
     private Boolean isArrive;
 

@@ -5,6 +5,7 @@ import org.sods.security.domain.User;
 import org.sods.security.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,7 @@ public class LoginController {
 
     @RequestMapping("/user/login")
     public ResponseResult login(@RequestBody User user){
-        System.out.println("the service is called");
+
         return loginService.login(user);
     }
 
@@ -30,5 +31,12 @@ public class LoginController {
     @RequestMapping("/user/logout")
     public ResponseResult logout(){
         return loginService.logout();
+    }
+
+    @PreAuthorize("@ex.isCurrentUser(#userID)")
+    @RequestMapping("/user/check/{userID}")
+    public ResponseResult checkUser(@PathVariable("userID") String userID){
+
+        return new ResponseResult<>(200,"Hi "+userID);
     }
 }

@@ -6,9 +6,12 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.ActiveSurvey;
+import org.sods.resource.domain.BookingUserArriveData;
 import org.sods.resource.domain.Survey;
+import org.sods.resource.domain.SurveyResponse;
 import org.sods.resource.mapper.ActiveSurveyMapper;
 import org.sods.resource.mapper.SurveyMapper;
+import org.sods.resource.mapper.SurveyResponseMapper;
 import org.sods.resource.service.ActiveSurveyService;
 import org.sods.security.domain.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +22,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
     @Autowired
     private ActiveSurveyMapper activeSurveyMapper;
+
+    @Autowired
+    private SurveyResponseMapper surveyResponseMapper;
 
     @Autowired
     private SurveyMapper surveyMapper;
@@ -107,13 +112,39 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
     @Override
     public ResponseResult getAllActiveSurveyIDWhichCurrentActive() {
+        Long userid = getUserID();
+        List<Long> userJoinedSurveyID = new ArrayList<>();
+
+        //Get user submitted survey
+        if(userid>0){
+            QueryWrapper<SurveyResponse> responseQueryWrapper = new QueryWrapper<>();
+            responseQueryWrapper.eq("create_user_id",userid);
+            List<SurveyResponse> surveyResponseList = surveyResponseMapper.selectList(responseQueryWrapper);
+            surveyResponseList.forEach((e)->{
+                userJoinedSurveyID.add(e.getActiveSurveyId());
+            });
+        }
+
         QueryWrapper<ActiveSurvey> queryWrapper = new QueryWrapper<>();
         queryWrapper.ge("end_time",LocalDateTime.now());
         queryWrapper.le("start_time",LocalDateTime.now());
         queryWrapper.eq("allow_public_search",true);
 
-        List<ActiveSurvey> surveyActiveList = activeSurveyMapper.selectList(queryWrapper);
-        return new ResponseResult(200,"Get All current Active Survey ",surveyActiveList);
+        //For Anonymous user, Only return the survey which allow anonymous response
+        if(userid<0){
+            queryWrapper.eq("allowAnonymous",true);
+        }
+
+        List<Map> tmpList =
+                ActiveSurvey.getJsonResultforClient(activeSurveyMapper.selectList(queryWrapper));
+
+        //Only return the survey that user do not write
+        tmpList.stream()
+                .filter(m -> !userJoinedSurveyID.contains((Long) m.get("activeSurveyId")))
+                .collect(toList());
+
+
+        return new ResponseResult(200,"Get All current Active Survey ",tmpList);
     }
 
     @Override
@@ -188,6 +219,28 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
         //Response to user
         return new ResponseResult(200,"New Active survey is created");
+    }
+
+    public Long getUserID(){
+        Long userid;
+        //Get user info
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if(Objects.isNull(authentication)){
+            userid = -999L;
+        }else{
+            Object principal = authentication.getPrincipal();
+
+            //Get User ID => if (No login, userid:-1)
+            if(principal instanceof LoginUser){
+                LoginUser loginUser = ((LoginUser)principal);
+                userid = loginUser.getUser().getId();
+            }else{
+                userid = -1L;
+            }
+        }
+
+        return userid;
     }
 }
 

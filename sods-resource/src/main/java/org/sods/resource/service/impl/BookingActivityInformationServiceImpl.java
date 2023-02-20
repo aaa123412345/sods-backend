@@ -4,20 +4,28 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.ActiveSurvey;
 import org.sods.resource.domain.BookingActivityInformation;
+import org.sods.resource.domain.BookingUserArriveData;
 import org.sods.resource.mapper.BookingActivityInformationMapper;
 
+import org.sods.resource.mapper.BookingUserArriveDataMapper;
 import org.sods.resource.service.BookingActivityInformationService;
+import org.sods.security.domain.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class BookingActivityInformationServiceImpl implements BookingActivityInformationService {
     @Autowired
     private BookingActivityInformationMapper bookingActivityInformationMapper;
+
+    @Autowired
+    private BookingUserArriveDataMapper bookingUserArriveDataMapper;
 
     @Override
     public ResponseResult getBookingActivityInfo(Long booking_activity_id) {
@@ -61,10 +69,32 @@ public class BookingActivityInformationServiceImpl implements BookingActivityInf
 
     @Override
     public ResponseResult getCurrentBookingActivityInfo() {
+        Long userid = getUserID();
+        List<String> userJoinedActivityID = new ArrayList<>();
+        if(userid>0){
+            QueryWrapper<BookingUserArriveData> arriveDataQueryWrapperWrapper = new QueryWrapper<>();
+            arriveDataQueryWrapperWrapper.eq("user_id",userid);
+            List<BookingUserArriveData> buadList = bookingUserArriveDataMapper.selectList(arriveDataQueryWrapperWrapper);
+            buadList.forEach((e)->{
+                userJoinedActivityID.add(e.getBookingActivityId().toString());
+            });
+        }
+
         QueryWrapper<BookingActivityInformation> queryWrapper = new QueryWrapper<>();
         queryWrapper.le("end_time", LocalDateTime.now());
 
-        List<BookingActivityInformation> list = bookingActivityInformationMapper.selectList(queryWrapper);
+        List<Map> list =
+                BookingActivityInformation.getJsonResultforClient(bookingActivityInformationMapper.selectList(queryWrapper));
+
+        //For Client Display
+        list.forEach((e)->{
+            if(userJoinedActivityID.contains(e.get("bookingActivityId"))){
+                e.put("isJoin",true);
+            }else{
+                e.put("isJoin",false);
+            }
+
+        });
         return new ResponseResult(200,"Get All current booking activity information ",list);
     }
 
@@ -72,5 +102,27 @@ public class BookingActivityInformationServiceImpl implements BookingActivityInf
     public ResponseResult getAllBookingActivityInfo() {
         List<BookingActivityInformation> list = bookingActivityInformationMapper.selectList(null);
         return new ResponseResult(200,"Get All booking activity information ",list);
+    }
+
+    public Long getUserID(){
+        Long userid;
+        //Get user info
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if(Objects.isNull(authentication)){
+            userid = -999L;
+        }else{
+            Object principal = authentication.getPrincipal();
+
+            //Get User ID => if (No login, userid:-1)
+            if(principal instanceof LoginUser){
+                LoginUser loginUser = ((LoginUser)principal);
+                userid = loginUser.getUser().getId();
+            }else{
+                userid = -1L;
+            }
+        }
+
+        return userid;
     }
 }

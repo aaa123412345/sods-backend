@@ -9,7 +9,10 @@ import org.sods.resource.domain.BookingUserArriveData;
 import org.sods.resource.mapper.BookingUserArriveDataMapper;
 import org.sods.resource.service.BookingActivityInformationService;
 import org.sods.resource.service.BookingUserArriveDataService;
+import org.sods.security.domain.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -41,7 +44,7 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
         }
 
         BookingUserArriveData bookingUserArriveData = new BookingUserArriveData();
-        bookingUserArriveData.setUserID(user_id);
+        bookingUserArriveData.setUserId(user_id);
         bookingUserArriveData.setBookingActivityId(booking_activity_id);
         bookingUserArriveDataMapper.insert(bookingUserArriveData);
         return new ResponseResult<>(200,"Booking User Arrive Data is created");
@@ -86,6 +89,17 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
         bookingUserArriveDataMapper.delete(updateWrapper);
         return new ResponseResult<>(200,"Delete Success: Booking User Arrive Data is found");
 
+    }
+
+    @Override
+    public ResponseResult userJoin(Long booking_activity_id) {
+        //Get user info
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        Long user_id = loginUser.getUser().getId();
+
+        return createUserArriveData(user_id,booking_activity_id);
     }
 
     public BookingUserArriveData getObjectWithComposeID(Long user_id, Long booking_activity_id){

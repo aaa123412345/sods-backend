@@ -15,11 +15,6 @@ public class CustomExpressionRoot {
         //get the user login data
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        /*
-        //If user is anonymous but the request require any permission, return false
-        if(authentication.getPrincipal().equals("anonymousUser")){
-            return false;
-        }*/
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
 
         List<String> permissions = loginUser.getPermissions();
@@ -29,5 +24,18 @@ public class CustomExpressionRoot {
 
         //check related authority
         return permissions.contains(authority);
+    }
+
+    public Boolean isCurrentUser(String userID){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        if(loginUser.getUser().getId() == Long.parseLong(userID)){
+            return true;
+        } else if (loginUser.getPermissions().contains("system:root")) {
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }
