@@ -56,7 +56,7 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
 
         //Add participant
         bookingActivityInformation.setCurrentNum(bookingActivityInformation.getCurrentNum()+1);
-        bookingActivityInformationMapper.insert(bookingActivityInformation);
+        bookingActivityInformationMapper.updateById(bookingActivityInformation);
 
         //Create User - Activity Record
         BookingUserArriveData bookingUserArriveData = new BookingUserArriveData();
@@ -105,7 +105,7 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
 
         //Reduce participant
         bookingActivityInformation.setCurrentNum(bookingActivityInformation.getCurrentNum()-1);
-        bookingActivityInformationMapper.insert(bookingActivityInformation);
+        bookingActivityInformationMapper.updateById(bookingActivityInformation);
 
         UpdateWrapper<BookingUserArriveData> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("user_id",user_id);
