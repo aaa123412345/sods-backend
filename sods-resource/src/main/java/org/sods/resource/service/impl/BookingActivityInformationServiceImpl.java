@@ -29,6 +29,8 @@ public class BookingActivityInformationServiceImpl implements BookingActivityInf
 
     @Override
     public ResponseResult getBookingActivityInfo(Long booking_activity_id) {
+
+
         BookingActivityInformation bookingActivityInformation =
                 bookingActivityInformationMapper.selectById(booking_activity_id);
         if(Objects.isNull(bookingActivityInformation)){
@@ -81,7 +83,7 @@ public class BookingActivityInformationServiceImpl implements BookingActivityInf
         }
 
         QueryWrapper<BookingActivityInformation> queryWrapper = new QueryWrapper<>();
-        queryWrapper.le("end_time", LocalDateTime.now());
+        queryWrapper.ge("end_time", LocalDateTime.now());
 
         List<Map> list =
                 BookingActivityInformation.getJsonResultforClient(bookingActivityInformationMapper.selectList(queryWrapper));

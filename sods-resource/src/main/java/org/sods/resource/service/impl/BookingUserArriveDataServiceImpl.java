@@ -5,7 +5,9 @@ package org.sods.resource.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.sods.common.domain.ResponseResult;
+import org.sods.resource.domain.BookingActivityInformation;
 import org.sods.resource.domain.BookingUserArriveData;
+import org.sods.resource.mapper.BookingActivityInformationMapper;
 import org.sods.resource.mapper.BookingUserArriveDataMapper;
 import org.sods.resource.service.BookingActivityInformationService;
 import org.sods.resource.service.BookingUserArriveDataService;
@@ -25,6 +27,8 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
 
     @Autowired
     private BookingUserArriveDataMapper bookingUserArriveDataMapper;
+    @Autowired
+    private BookingActivityInformationMapper bookingActivityInformationMapper;
     @Override
     public ResponseResult getUserArriveData(Long user_id, Long booking_activity_id) {
 
@@ -41,10 +45,20 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
     public ResponseResult createUserArriveData( Long user_id, Long booking_activity_id) {
         BookingUserArriveData old = getObjectWithComposeID(user_id,booking_activity_id);
 
-        if(Objects.isNull(old)){
-            return new ResponseResult<>(404,"Create failed: Booking User Arrive Data is exist");
+        if(Objects.nonNull(old)){
+            return new ResponseResult<>(400,"Create failed: Booking User Arrive Data is exist");
         }
 
+        BookingActivityInformation bookingActivityInformation = bookingActivityInformationMapper.selectById(booking_activity_id);
+        if(Objects.isNull(bookingActivityInformation)){
+            return new ResponseResult<>(400,"Create failed: Activity id is not exist");
+        }
+
+        //Add participant
+        bookingActivityInformation.setCurrentNum(bookingActivityInformation.getCurrentNum()+1);
+        bookingActivityInformationMapper.insert(bookingActivityInformation);
+
+        //Create User - Activity Record
         BookingUserArriveData bookingUserArriveData = new BookingUserArriveData();
         bookingUserArriveData.setUserId(user_id);
         bookingUserArriveData.setBookingActivityId(booking_activity_id);
@@ -83,6 +97,15 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
         if(Objects.isNull(old)){
             return new ResponseResult<>(404,"Delete Failed: Booking User Arrive Data is not found");
         }
+
+        BookingActivityInformation bookingActivityInformation = bookingActivityInformationMapper.selectById(booking_activity_id);
+        if(Objects.isNull(bookingActivityInformation)){
+            return new ResponseResult<>(400,"Create failed: Activity id is not exist");
+        }
+
+        //Reduce participant
+        bookingActivityInformation.setCurrentNum(bookingActivityInformation.getCurrentNum()-1);
+        bookingActivityInformationMapper.insert(bookingActivityInformation);
 
         UpdateWrapper<BookingUserArriveData> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("user_id",user_id);

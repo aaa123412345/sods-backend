@@ -68,6 +68,7 @@ public class LoginServiceImpl implements LoginService {
         map.put("token",jwt);
         map.put("rolePermission",list);
         map.put("userType",loginUser.getUser().getUserType());
+        map.put("userId",loginUser.getUser().getId());
 
         return new ResponseResult(200,"login success",map);
 

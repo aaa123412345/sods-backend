@@ -11,7 +11,6 @@ public interface BookingActivityInformationService {
     ResponseResult updateBookingActivityInfo(BookingActivityInformation bookingActivityInformation,Long booking_activity_id);
     ResponseResult deleteBookingActivityInfo(Long booking_activity_id);
     ResponseResult getCurrentBookingActivityInfo();
-
     ResponseResult getAllBookingActivityInfo();
 
 }

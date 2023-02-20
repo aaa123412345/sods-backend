@@ -22,7 +22,9 @@ public class BookingActivityInformation {
     @TableId
     private Long bookingActivityId;
 
-    private String information;
+    private String title;
+
+    private String content;
 
     private String location;
 
@@ -57,7 +59,7 @@ public class BookingActivityInformation {
         bookingActivityInformationList.forEach((e)->{
             Map<String,Object> stringObjectMap = new HashMap<>();
             stringObjectMap.put("bookingActivityId",e.getBookingActivityId());
-            stringObjectMap.put("information",e.getInformation());
+            stringObjectMap.put("title",e.getTitle());
             stringObjectMap.put("location",e.getLocation());
             stringObjectMap.put("maxQuote",e.getMaxQuote());
             stringObjectMap.put("currentNum",e.getCurrentNum());
