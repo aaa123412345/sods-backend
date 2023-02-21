@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -77,5 +80,15 @@ public class RESTVotingServiceImpl implements RESTVotingService {
             return new ResponseResult<>(404,"The voting with code "+rawPassCode+" is not exist.");
         }
 
+    }
+
+    @Override
+    public ResponseResult getExistGroups() {
+        List<VotingState> votingStates = webSocketRedisService.getExistVotingGroup();
+        List<Map> result = new ArrayList<>();
+        votingStates.forEach((e)->{
+            result.add(e.getJSONMapResponse());
+        });
+        return new ResponseResult<>(200,"Voting group return",result);
     }
 }

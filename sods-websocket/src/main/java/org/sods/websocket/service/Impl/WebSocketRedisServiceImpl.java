@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.sods.common.utils.RedisCache;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,6 +20,8 @@ public class WebSocketRedisServiceImpl implements WebSocketRedisService {
         String RedisPasscode = "Voting:" + passcode;
         return redisCache.getCacheObject(RedisPasscode);
     }
+
+
 
     @Override
     public Boolean setVotingStateWithPasscode(String passcode, VotingState votingState) {
@@ -68,5 +71,15 @@ public class WebSocketRedisServiceImpl implements WebSocketRedisService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<VotingState> getExistVotingGroup() {
+        List<String> keys = new ArrayList<String>(redisCache.keys("Voting:*"));
+        List<VotingState> votingStates = new ArrayList<>();
+        keys.forEach((e)->{
+            votingStates.add(redisCache.getCacheObject(e));
+        });
+        return votingStates;
     }
 }

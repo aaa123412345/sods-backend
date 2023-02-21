@@ -88,6 +88,7 @@ public class VotingState {
         Map<String,Object> map = new HashMap<>();
         map.put("passcode",Passcode);
         map.put("surveyID",surveyID);
+
         map.put("participantJoin",participantJoin.size());
         map.put("participantSubmit",participantSubmit.size());
         map.put("currentQuestion",currentQuestion.toString());
@@ -95,6 +96,21 @@ public class VotingState {
         map.put("maxQuestion",maxQuestion);
         map.put("clientRenderMethod",clientRenderMethod);
         return JSONObject.toJSONString(map);
+    }
+
+    @JSONField(serialize = false)
+    public Map<String, Object> getJSONMapResponse(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("passcode",Passcode);
+        map.put("surveyID",surveyID);
+        map.put("startTime",startTime);
+        map.put("participantJoin",participantJoin.size());
+        map.put("participantSubmit",participantSubmit.size());
+        map.put("currentQuestion",currentQuestion.toString());
+        map.put("currentQuestionMsg",this.getCurrentQuestionMsg());
+        map.put("maxQuestion",maxQuestion);
+        map.put("clientRenderMethod",clientRenderMethod);
+        return map;
     }
 
     @JSONField(serialize = false)
@@ -190,9 +206,10 @@ public class VotingState {
         List<String> stringList = (List<String>) formatObject.getJSONObject("info").get("partKey");
         return stringList.get(0);
     }
+
     @JSONField(serialize = false)
     public static String getUserResponseRedisKeyString(String passcode,String user){
-        return "Voting:"+passcode+":"+user;
+        return "VotingClient:"+passcode+":"+user;
     }
 
     @JSONField(serialize = false)

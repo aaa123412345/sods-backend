@@ -11,17 +11,23 @@ import org.springframework.web.bind.annotation.*;
 public class VoteRestController {
     @Autowired
     private RESTVotingService restVotingService;
-    @GetMapping("/{passcode}")
+    @GetMapping("/passcode/{passcode}")
     public ResponseResult trytoJoin(@PathVariable("passcode")String passcode){
         return restVotingService.checkGroup(passcode);
     }
+
+    @PreAuthorize("@ex.hasAuthority('system:voting:read')")
+    @GetMapping("/getExist")
+    public ResponseResult getExistGroup(){
+        return restVotingService.getExistGroups();
+    }
     @PreAuthorize("@ex.hasAuthority('system:voting:create')")
-    @PostMapping("/{passcode}")
+    @PostMapping("/passcode/{passcode}")
     public ResponseResult createVoting(@PathVariable("passcode")String passcode,@RequestBody String surveyID){
         return restVotingService.createGroup(passcode, surveyID);
     }
     @PreAuthorize("@ex.hasAuthority('system:voting:delete')")
-    @DeleteMapping ("/{passcode}")
+    @DeleteMapping ("/passcode/{passcode}")
     public ResponseResult deleteRoom(@PathVariable("passcode")String passcode){
         return restVotingService.removeGroup(passcode);
     }
