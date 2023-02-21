@@ -82,6 +82,7 @@ public class BookingActivityInformationServiceImpl implements BookingActivityInf
             });
         }
 
+
         QueryWrapper<BookingActivityInformation> queryWrapper = new QueryWrapper<>();
         queryWrapper.ge("end_time", LocalDateTime.now());
 
@@ -90,7 +91,7 @@ public class BookingActivityInformationServiceImpl implements BookingActivityInf
 
         //For Client Display
         list.forEach((e)->{
-            if(userJoinedActivityID.contains(e.get("bookingActivityId"))){
+            if(userJoinedActivityID.contains( ((Long)e.get("bookingActivityId")).toString())){
                 e.put("isJoin",true);
             }else{
                 e.put("isJoin",false);
