@@ -72,9 +72,12 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
 
         BookingUserArriveData old = getObjectWithComposeID(user_id, booking_activity_id);
 
-
         if(Objects.isNull(old)){
-            return new ResponseResult<>(404,"Update Failed: Booking User Arrive Data is not found");
+            return new ResponseResult<>(404,"Data not found");
+        }
+
+        if(old.getIsArrive()){
+            return new ResponseResult<>(400,"The User is arrived.");
         }
 
         old.setIsArrive(true);
