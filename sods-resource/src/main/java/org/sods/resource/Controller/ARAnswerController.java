@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/miniGame/arAnswer")
+@RequestMapping("/minigame/arAnswers")
 public class ARAnswerController {
 
     @Autowired

@@ -22,5 +22,8 @@ public class ARTreasure {
 
     @TableField("question_zh")
     private String questionZH;
+    
+    @TableField("answers")
+    private String answers;
 
 }

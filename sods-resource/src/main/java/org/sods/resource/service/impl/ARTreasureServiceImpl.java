@@ -47,6 +47,7 @@ public class ARTreasureServiceImpl implements ARTreasureService {
 
         existingARTreasure.setQuestionEN(arTreasure.getQuestionEN());
         existingARTreasure.setQuestionZH(arTreasure.getQuestionZH());
+        existingARTreasure.setAnswers((arTreasure.getAnswers()));
         arTreasureMapper.updateById(existingARTreasure);
         return new ResponseResult(200, "AR Treasure Game (id: " + id + ") is updated successfully.");
     }

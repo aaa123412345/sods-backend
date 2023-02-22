@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/miniGame/arTreasure")
+@RequestMapping("/minigame/arTreasures")
 public class ARTreasureController {
 
     @Autowired
