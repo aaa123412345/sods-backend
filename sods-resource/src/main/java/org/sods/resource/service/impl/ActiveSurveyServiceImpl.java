@@ -132,7 +132,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
         //For Anonymous user, Only return the survey which allow anonymous response
         if(userid<0){
-            queryWrapper.eq("allowAnonymous",true);
+            queryWrapper.eq("allow_anonymous",true);
         }
 
         List<Map> tmpList =

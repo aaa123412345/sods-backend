@@ -14,21 +14,11 @@ public class SurveyController {
 
     @PreAuthorize("@ex.hasAuthority('system:survey:editor:read')")
     @GetMapping("/survey")
-    public ResponseResult getAllSurvey(){
-        return surveyService.listAll(false);
+    public ResponseResult getSurveys(@RequestParam String withFormat,@RequestParam String type){
+        return surveyService.getSurveysWithCondition(withFormat, type);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:editor:read')")
-    @GetMapping("/survey_with_format")
-    public ResponseResult getAllSurveyWithFormat(){
-        return surveyService.listAll(true);
-    }
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:editor:read')")
-    @GetMapping("/survey_vote_only")
-    public ResponseResult getAllVoting(){
-        return surveyService.listAllWithTypeFilter("Vote");
-    }
 
     @GetMapping("/survey/{survey_id}")
     public ResponseResult getOneSurvey(@PathVariable("survey_id")String survey_id){

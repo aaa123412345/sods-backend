@@ -4,10 +4,12 @@ import org.sods.common.domain.ResponseResult;
 
 public interface SurveyService {
     ResponseResult get(Long id);
-    ResponseResult listAll(Boolean withFormat );
+
     ResponseResult delete(Long id);
     ResponseResult put(Long id,String payload);
     ResponseResult post(String payload);
 
-    ResponseResult listAllWithTypeFilter(String type);
+
+
+    ResponseResult getSurveysWithCondition(String withFormat, String type);
 }

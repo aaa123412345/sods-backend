@@ -37,18 +37,6 @@ public class SurveyServiceImpl implements SurveyService {
                 ,JSONObject.parseObject(target.getSurveyFormat()));
     }
 
-    @Override
-    public ResponseResult listAll(Boolean withFormat) {
-
-        List<Survey> surveyList = surveyMapper.selectList(null);
-        if(!withFormat) {
-            for (int i = 0; i < surveyList.size(); i++) {
-                surveyList.get(i).setSurveyFormat("");
-            }
-        }
-
-        return new ResponseResult(200,"Get All",surveyList);
-    }
 
     @Override
     public ResponseResult delete(Long id) {
@@ -102,13 +90,22 @@ public class SurveyServiceImpl implements SurveyService {
         return new ResponseResult(200,"New survey is created");
     }
 
-    @Override
-    public ResponseResult listAllWithTypeFilter(String type) {
-        QueryWrapper<Survey> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("survey_type",type);
-        List<Survey> surveyList = surveyMapper.selectList(queryWrapper);
 
-        return new ResponseResult(200,"Get All survey with type: " + type,surveyList);
+
+    @Override
+    public ResponseResult getSurveysWithCondition(String withFormat, String type) {
+        QueryWrapper<Survey> queryWrapper = new QueryWrapper<>();
+        if(type.equals("Survey") || type.equals("Vote")){
+            queryWrapper.eq("survey_type",type);
+        }
+        List<Survey> surveyList = surveyMapper.selectList(queryWrapper);
+        if(withFormat.equals("False")){
+            surveyList.forEach((e)->{
+                e.setSurveyFormat("");
+            });
+        }
+
+        return new ResponseResult<>(200,"Selected Survey Return",surveyList);
     }
 
 
