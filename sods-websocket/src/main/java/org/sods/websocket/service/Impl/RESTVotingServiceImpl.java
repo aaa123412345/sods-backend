@@ -33,15 +33,23 @@ public class RESTVotingServiceImpl implements RESTVotingService {
         if(success){
             return new ResponseResult<>(400,"Create voting with code "+rawPassCode+" failed: The group exist.");
         }
+        Long SurveyIDLong;
 
-        Survey survey = surveyMapper.selectById(Long.parseLong(JSONObject.parseObject(surveyID).getString("surveyID")));
+        try {
+           SurveyIDLong = Long.parseLong(JSONObject.parseObject(surveyID).getString("surveyID"));
+        }catch (Error error){
+            return new ResponseResult<>(400,"Create voting with code "+rawPassCode+" failed: Wrong Format of the survey id.");
+        }
+
+
+        Survey survey = surveyMapper.selectById(SurveyIDLong);
 
         if(Objects.isNull(survey)){
             return new ResponseResult<>(400,"Create voting with code "+rawPassCode+" " +
                     "failed: The survey with id "+surveyID+" is not exist.");
         }
 
-        VotingState votingState = new VotingState(rawPassCode,surveyID,survey.getSurveyFormat());
+        VotingState votingState = new VotingState(rawPassCode,SurveyIDLong.toString(),survey.getSurveyFormat());
         webSocketRedisService.setObjectIfKeyNotExist(VotingState.getGlobalVotingDataRedisKeyString(rawPassCode),
                 votingState);
 
