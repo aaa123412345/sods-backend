@@ -23,7 +23,7 @@ public class TourguideConfigServiceImpl implements TourguideConfigService {
 
     @Override
     public ResponseResult getConfig() {
-        List<TourguideConfig> result = tourguideConfigMapper.selectList(null);
+        TourguideConfig result = tourguideConfigMapper.selectById(1);
 
         if(result == null)
             return new ResponseResult(404, "Failed: Config is not found.");
@@ -32,8 +32,8 @@ public class TourguideConfigServiceImpl implements TourguideConfigService {
     }
 
     @Override
-    public ResponseResult updateConfig(Integer id, TourguideConfig tourguideConfig) {
-        TourguideConfig existingConfig = tourguideConfigMapper.selectById(id);
+    public ResponseResult updateConfig(TourguideConfig tourguideConfig) {
+        TourguideConfig existingConfig = tourguideConfigMapper.selectById(1);
         if(existingConfig == null)
             return new ResponseResult(404, "Failed: Config is not found. ");
 

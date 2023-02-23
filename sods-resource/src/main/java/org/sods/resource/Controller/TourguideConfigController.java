@@ -23,9 +23,9 @@ public class TourguideConfigController {
         return tourguideConfigService.getConfig();
     }
 
-    @PutMapping("/{id}")
-    public ResponseResult updateConfig(@PathVariable Integer id, @RequestBody TourguideConfig tourguideConfig){
-        return tourguideConfigService.updateConfig(id, tourguideConfig);
+    @PutMapping
+    public ResponseResult updateConfig(@RequestBody TourguideConfig tourguideConfig){
+        return tourguideConfigService.updateConfig(tourguideConfig);
     }
 
 }

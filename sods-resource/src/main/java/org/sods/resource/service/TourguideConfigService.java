@@ -9,6 +9,6 @@ public interface TourguideConfigService {
 
     ResponseResult getConfig();
 
-    ResponseResult updateConfig(Integer id, TourguideConfig tourguideConfig);
+    ResponseResult updateConfig(TourguideConfig tourguideConfig);
 
 }
