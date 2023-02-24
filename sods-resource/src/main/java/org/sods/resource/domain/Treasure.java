@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("AR_TREASURE")
-public class ARTreasure {
+@TableName("TREASURE")
+public class Treasure {
 
     @TableId(value = "treasure_id", type = IdType.AUTO)
     private Integer treasureId;
