@@ -1,11 +1,11 @@
 package org.sods.resource.service;
 
 import org.sods.common.domain.ResponseResult;
-import org.sods.resource.domain.ARStatistic;
+import org.sods.resource.domain.TreasureStatistic;
 
-public interface ARStatisticService {
+public interface TreausreStatisticService {
 
-    ResponseResult createARStatistic(ARStatistic arStatistic);
+    ResponseResult createARStatistic(TreasureStatistic treasureStatistic);
 
     ResponseResult getAllARStatistic();
 

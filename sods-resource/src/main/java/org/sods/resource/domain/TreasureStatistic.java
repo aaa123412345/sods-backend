@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("AR_STATISTIC")
-public class ARStatistic {
+@TableName("TREASURE_STATISTIC")
+public class TreasureStatistic {
 
     @TableId(value = "statistic_id", type = IdType.AUTO)
     private Integer statisticId;

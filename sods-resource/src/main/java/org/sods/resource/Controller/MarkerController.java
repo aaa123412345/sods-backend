@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tourguide/markers")
+@RequestMapping("/TourGuide/markers")
 public class MarkerController {
 
     @Autowired

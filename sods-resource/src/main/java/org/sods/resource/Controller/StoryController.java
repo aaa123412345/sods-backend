@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tourguide/stories")
+@RequestMapping("/TourGuide/stories")
 public class StoryController {
 
     @Autowired
