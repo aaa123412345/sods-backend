@@ -5,6 +5,7 @@ public enum Status {
     LEAVE,
     MESSAGE,
     COMMAND,
+    ADMINJOIN,
 
     ERROR
 }

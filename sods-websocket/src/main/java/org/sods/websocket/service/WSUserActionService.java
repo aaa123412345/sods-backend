@@ -5,8 +5,7 @@ import org.sods.websocket.domain.Message;
 import java.security.Principal;
 
 public interface WSUserActionService {
-    Message addAction(Message message, Principal principal);
-    Message minusAction(Message message, Principal principal);
+
     Message submitAction(Message message, Principal principal);
 
 

@@ -43,7 +43,7 @@ public class VotingState {
         this.setCurrentQuestion(1);
         this.setClientRenderMethod(ClientRenderMethod.VOTING);
         this.setRenderData(this.getCurrentQuestionFormat());
-        System.out.println(this);
+
     }
 
     @JSONField(serialize = false)

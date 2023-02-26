@@ -31,4 +31,17 @@ public class VoteRestController {
     public ResponseResult deleteRoom(@PathVariable("passcode")String passcode){
         return restVotingService.removeGroup(passcode);
     }
+
+    @GetMapping("checkSubmit/{passcode}")
+    public ResponseResult checkUserSubmit(@PathVariable("passcode") String passcode){
+        return restVotingService.checkUserSubmit(passcode);
+    }
+
+
+
+/*
+    @PostMapping ("/submit/{passcode}")
+    public ResponseResult userSubmit(@PathVariable("passcode")String passcode,@RequestBody String payload){
+        return restVotingService.removeGroup(passcode);
+    }*/
 }

@@ -10,5 +10,5 @@ public interface VotingService {
     Message leaveChannel(Message message, Principal principal);
     Message commandForChannel(Message message, Principal principal);
 
-
+    Message adminjoinChannel(Message message, Principal principal);
 }

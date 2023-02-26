@@ -8,4 +8,8 @@ public interface RESTVotingService {
     ResponseResult checkGroup(String rawPassCode);
 
     ResponseResult getExistGroups();
+
+    ResponseResult checkUserSubmit(String rawPassCode);
+
+    ResponseResult submitResponse(String rawPassCode,String payload);
 }

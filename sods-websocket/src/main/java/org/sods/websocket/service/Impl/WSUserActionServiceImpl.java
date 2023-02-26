@@ -22,39 +22,6 @@ public class WSUserActionServiceImpl implements WSUserActionService {
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
-    @Override
-    public Message addAction(Message message, Principal principal) {
-
-        String rawPassCode = message.getReceiverName();
-        String passcode = "Voting:" + rawPassCode;
-        VotingState votingState = redisCache.getCacheObject(passcode);
-        if(!Objects.isNull(votingState)) {
-            //votingState.setClickCount(votingState.getClickCount() + 1);
-            redisCache.setCacheObject(passcode, votingState);
-
-            //Synchronization
-            simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
-                    Message.getSynchronizationMessage(rawPassCode, votingState.getJSONResponse()));
-
-        }
-        return message;
-    }
-
-    @Override
-    public Message minusAction(Message message, Principal principal) {
-        String rawPassCode = message.getReceiverName();
-        String passcode = "Voting:" + rawPassCode;
-        VotingState votingState = redisCache.getCacheObject(passcode);
-        if(!Objects.isNull(votingState)) {
-           // votingState.setClickCount(votingState.getClickCount() - 1);
-            redisCache.setCacheObject(passcode, votingState);
-
-            //Synchronization
-            simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
-                    Message.getSynchronizationMessage(rawPassCode, votingState.getJSONResponse()));
-        }
-        return message;
-    }
 
     @Override
     public Message submitAction(Message message, Principal principal) {

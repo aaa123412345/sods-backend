@@ -28,11 +28,20 @@ public class UserVotingResponse {
     }
 
     @JSONField(serialize = false)
-    public void addDataToMap(String jsonStr){
+    public Integer addDataToMap(String jsonStr){
+        // 0 -> Success, 1 -> format error, 2 -> repeat
         JSONObject userObject = JSON.parseObject(jsonStr);
-        String key = userObject.getString("key");
-        Object value = userObject.get("value");
-        this.userData.put(key,value);
+        if(userObject.containsKey("key") && userObject.containsKey("value")) {
+            String key = userObject.getString("key");
+            Object value = userObject.get("value");
+            if(this.userData.containsKey(key)){
+                return 2;
+            }
+            this.userData.put(key, value);
+            return 0;
+        }else{
+            return 1;
+        }
     }
 
     @JSONField(serialize = false)

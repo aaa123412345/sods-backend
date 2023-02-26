@@ -2,11 +2,15 @@ package org.sods.websocket.service.Impl;
 
 
 import org.sods.common.utils.RedisCache;
+import org.sods.security.domain.LoginUser;
 import org.sods.security.service.JWTAuthCheckerService;
 import org.sods.websocket.domain.*;
 import org.sods.websocket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -69,10 +73,9 @@ public class VotingServiceImpl implements VotingService {
     @Override
     public Message messageChannel(Message message,Principal principal) {
 
-        System.out.println("Message");
+        //System.out.println("Message");
         switch (message.getAction()){
-            case ADD: return wsUserActionService.addAction(message, principal);
-            case MINUS: return wsUserActionService.minusAction(message, principal);
+
             case SUBMIT:return wsUserActionService.submitAction(message, principal);
 
         }
@@ -121,6 +124,28 @@ public class VotingServiceImpl implements VotingService {
             case VOTINGEND: return wsAdminActionService.endVotingAndCollectData(message, principal);
         }
         return null;
+    }
+
+    @Override
+    public Message adminjoinChannel(Message message, Principal principal) {
+        String rawPassCode = message.getReceiverName();
+        String passcode = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
+
+        VotingState votingState = redisCache.getCacheObject(passcode);
+        //Check the channel if it is not exist
+
+        if(Objects.isNull(votingState)){
+            simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
+                    Message.getServerMessage(rawPassCode,Action.FORCEUNSUBSCRIBE,Status.COMMAND,null));
+            return message;
+        }
+
+        simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
+                Message.getSynchronizationMessage(rawPassCode,
+                        votingState.getJSONResponseWithRenderData()));
+
+
+        return message;
     }
 
 

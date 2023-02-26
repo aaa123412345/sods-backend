@@ -45,6 +45,8 @@ public class VoteController {
                     return votingService.leaveChannel(message, principal);
                 case COMMAND:
                     return votingService.commandForChannel(message,principal);
+                case ADMINJOIN:
+                    return votingService.adminjoinChannel(message, principal);
 
             }
 
