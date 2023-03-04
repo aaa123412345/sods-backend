@@ -15,6 +15,7 @@ import org.sods.resource.mapper.SurveyResponseMapper;
 import org.sods.resource.service.ActiveSurveyService;
 import org.sods.security.domain.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -42,10 +43,10 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
     public ResponseResult getDataWithActiveSurveyID(Long id) {
         ActiveSurvey target = activeSurveyMapper.selectById(id);
         if(Objects.isNull(target)){
-            return new ResponseResult(404,"Failed to get: Active Survey is not find");
+            return new ResponseResult(HttpStatus.NOT_FOUND.value(), "Failed to get: Active Survey is not find");
         }
 
-        return new ResponseResult(200,"Active Survey Data: "+target.getSurveyId()+" is returned"
+        return new ResponseResult(HttpStatus.OK.value(), "Active Survey Data: "+target.getSurveyId()+" is returned"
                 , target);
     }
 
@@ -58,7 +59,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
         queryWrapper.eq("pass_code",passcode);
         ActiveSurvey activeSurvey = activeSurveyMapper.selectOne(queryWrapper);
         if(Objects.isNull( activeSurvey)){
-            return new ResponseResult(404,"Failed to get: Passcode is not valid");
+            return new ResponseResult(HttpStatus.NOT_FOUND.value(),"Failed to get: Passcode is not valid");
         }
 
         //If not Allow Anonymous, check the user
@@ -70,14 +71,14 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
             //Get User ID => if (No login, userid:-1)
             if(!(principal instanceof LoginUser)){
-                return new ResponseResult(403,"Failed to get: Permission is not enough for these survey");
+                return new ResponseResult(HttpStatus.FORBIDDEN.value(),"Failed to get: Permission is not enough for these survey");
             }
         }
         //Get Survey with the previous result id
         Survey target = surveyMapper.selectById(activeSurvey.getSurveyId());
 
         if(Objects.isNull(target)){
-            return new ResponseResult(404,"Failed to get: Survey is not find");
+            return new ResponseResult(HttpStatus.NOT_FOUND.value(),"Failed to get: Survey is not find");
         }
 
         Map<String,Object> result = new HashMap<>();
@@ -90,7 +91,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
 
 
-        return new ResponseResult(200,"Result with Passcode: "+passcode+" is returned"
+        return new ResponseResult(HttpStatus.OK.value(),"Result with Passcode: "+passcode+" is returned"
                 ,result);
 
     }
@@ -100,14 +101,14 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
         QueryWrapper<ActiveSurvey> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("survey_id",id);
         List<ActiveSurvey> surveyActiveList = activeSurveyMapper.selectList(queryWrapper);
-        return new ResponseResult(200,"Get All Active Survey with Survey ID : "+id,surveyActiveList);
+        return new ResponseResult(HttpStatus.OK.value(),"Get All Active Survey with Survey ID : "+id,surveyActiveList);
     }
 
     @Override
     public ResponseResult getAllActiveSurveyID() {
         List<ActiveSurvey> surveyActiveList = activeSurveyMapper.selectList(null);
 
-        return new ResponseResult(200,"Get All Active Survey",surveyActiveList);
+        return new ResponseResult(HttpStatus.OK.value(),"Get All Active Survey",surveyActiveList);
     }
 
     @Override
@@ -147,7 +148,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
         });
 
 
-        return new ResponseResult(200,"Get All current Active Survey ",resultList);
+        return new ResponseResult(HttpStatus.OK.value(),"Get All current Active Survey ",resultList);
     }
 
     @Override
@@ -157,13 +158,13 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
         //Check if survey is not exist
         if(Objects.isNull(target)){
-            return new ResponseResult(400,"Failed to delete: Active Survey is not find");
+            return new ResponseResult(HttpStatus.BAD_REQUEST.value(), "Failed to delete: Active Survey is not find");
         }
 
         //save to database
         activeSurveyMapper.deleteById(target.getSurveyId());
 
-        return new ResponseResult(200,"Active Survey is deleted");
+        return new ResponseResult(HttpStatus.OK.value(),"Active Survey is deleted");
     }
 
     @Override
@@ -171,7 +172,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
         UpdateWrapper<ActiveSurvey> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("survey_id",id);
         activeSurveyMapper.delete(updateWrapper);
-        return new ResponseResult(200,"Active Survey with Survey ID: "+id+" is deleted");
+        return new ResponseResult(HttpStatus.OK.value(),"Active Survey with Survey ID: "+id+" is deleted");
     }
 
     @Override
@@ -181,7 +182,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
         //Check if survey is not exist
         if(Objects.isNull(target)){
-            return new ResponseResult(400,"Failed to update: Active Survey is not find");
+            return new ResponseResult(HttpStatus.BAD_REQUEST.value(),"Failed to update: Active Survey is not find");
         }
 
         if(!Objects.isNull(payload.getStartTime())){
@@ -197,7 +198,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
 
         //save to database
         activeSurveyMapper.updateById(target);
-        return new ResponseResult(200,"Active Survey is update");
+        return new ResponseResult(HttpStatus.OK.value(),"Active Survey is update");
     }
 
 
@@ -221,7 +222,7 @@ public class ActiveSurveyServiceImpl implements ActiveSurveyService {
         activeSurveyMapper.insert(payload);
 
         //Response to user
-        return new ResponseResult(200,"New Active survey is created");
+        return new ResponseResult(HttpStatus.OK.value(),"New Active survey is created");
     }
 
     public Long getUserID(){
