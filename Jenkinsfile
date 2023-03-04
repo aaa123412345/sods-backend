@@ -23,7 +23,7 @@ pipeline {
     stage('Docker Build Image') {
       steps {
         echo 'Image'
-        sh 'docker build -t public.ecr.aws/i4f7p8k7/backenddocker'
+        sh 'docker build -t public.ecr.aws/i4f7p8k7/backenddocker .'
         
       }
     }
