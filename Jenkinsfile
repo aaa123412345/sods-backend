@@ -11,9 +11,10 @@ pipeline {
         sh 'mvn clean package'
       }
     }
-    stage('Docker Image') {
+    stage('Docker Build Image') {
       steps {
         echo 'Image'
+        sh 'docker build -t public.ecr.aws/i4f7p8k7/backenddocker .'
       }
     }
     stage('Push') {
