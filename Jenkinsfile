@@ -2,19 +2,20 @@ pipeline {
   agent any
   
   stages {
-    stage('Build') {
+    stage('Build Jar') {
       steps {
-        echo 'Hello World'
+        echo 'Package Jar with mvn'
+        sh 'mvn clean package'
       }
     }
-    stage('Login') {
+    stage('Docker Image') {
       steps {
-        echo 'Hello World'
+        echo 'Image'
       }
     }
     stage('Push') {
       steps {
-       echo 'Hello World'
+       echo 'eeee'
       }
     }
   }
