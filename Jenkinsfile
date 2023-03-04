@@ -5,16 +5,28 @@ pipeline {
         maven "maven3"
   }
   stages {
+    stage('Clone repository') { 
+            steps { 
+                script{
+                checkout scm
+                }
+            }
+        }
+    
     stage('Build Jar') {
       steps {
         echo 'Package Jar with mvn'
         sh 'mvn clean package'
       }
     }
+    
     stage('Docker Build Image') {
       steps {
         echo 'Image'
-        sh 'docker build -t public.ecr.aws/i4f7p8k7/backenddocker .'
+        script{
+                 app = docker.build("backenddocker")
+                }
+        
       }
     }
     stage('Push') {
