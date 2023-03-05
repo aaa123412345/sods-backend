@@ -29,9 +29,12 @@ pipeline {
     }
     stage('Push To ECR') {
       steps {
-       docker.withRegistry("https://public.ecr.aws/i4f7p8k7/", "aws") {
-          docker.image("backenddocker").push()
+        script{
+          docker.withRegistry("https://public.ecr.aws/i4f7p8k7/", "aws") {
+            docker.image("backenddocker").push()
+          }
         }
+       
       }
     }
   }
