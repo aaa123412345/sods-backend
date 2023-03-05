@@ -34,8 +34,9 @@ pipeline {
       steps {
         sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'
         script{
-          withAWS(credentials: 'aws', region: 'ap-northeast') {
-            sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/i4f7p8k7'
+          withDockerRegistry(url: "https://public.ecr.aws/i4f7p8k7/",credentialsId: "ecr:us-east-1:aws"){
+           
+          
           }
          
         }
