@@ -35,7 +35,9 @@ pipeline {
         script{
           withAWS(credentials: 'aws') {
             ecrLogin()
-            def images = ecrListImages(repositoryName: 'backenddocker')
+            sh 'docker tag backenddocker:latest public.ecr.aws/i4f7p8k7/backenddocker:latest'
+            sh 'docker push public.ecr.aws/i4f7p8k7/backenddocker:latest'
+            
           }
         }
         
