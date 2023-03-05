@@ -31,7 +31,7 @@ pipeline {
       steps {
         script{
          
-          withDockerRegistry(credentialsId: 'ecr:ap-northeast-1:aws', url: 'public.ecr.aws/i4f7p8k7/') {
+          withDockerRegistry(credentialsId: 'ecr:ap-northeast-1:aws', url: 'https://public.ecr.aws/i4f7p8k7/') {
                docker.image("backenddocker").push()
           }
         }
