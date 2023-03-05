@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'
+  
   tools {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "maven3"
@@ -32,6 +32,7 @@ pipeline {
     }
     stage('Push To ECR') {
       steps {
+        sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'
         script{
          
           withDockerRegistry("https://public.ecr.aws/i4f7p8k7/","ecr:ap-northeast-1:aws") {
