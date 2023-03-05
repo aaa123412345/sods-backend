@@ -69,6 +69,7 @@ pipeline {
              set -ev
              ssh -o StrictHostKeyChecking=no -l ec2-user ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com << EOF
              docker rm $(docker stop $(docker ps -a -q --filter ancestor=public.ecr.aws/i4f7p8k7/backenddocker --format="{{.ID}}"))
+             docker rmi public.ecr.aws/i4f7p8k7/backenddocker
              docker pull public.ecr.aws/i4f7p8k7/backenddocker:latest
              docker run -t -i -d -p 8888:8888 public.ecr.aws/i4f7p8k7/backenddocker:latest
              exit
