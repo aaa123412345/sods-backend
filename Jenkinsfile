@@ -19,8 +19,12 @@ pipeline {
       steps {
         echo 'Package Jar with mvn'
         configFileProvider(
-            [configFile(fileId: '93b8fbf4-4cba-47da-bc30-7102ed4d7524', variable: 'MAVEN_SETTINGS')]) {
-            sh 'mvn -s $MAVEN_SETTINGS clean package'
+            [configFile(fileId: '93b8fbf4-4cba-47da-bc30-7102ed4d7524', variable: 'Config')]) {
+             // some block
+              echo " =========== ^^^^^^^^^^^^ Reading config from pipeline script "
+              sh "cat ${env.Config}"
+              echo " =========== ~~~~~~~~~~~~ ============ "
+            //sh 'mvn clean package'
         }
         
       }
