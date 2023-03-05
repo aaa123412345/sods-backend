@@ -19,7 +19,7 @@ pipeline {
       steps {
         echo 'Package Jar with mvn'
         configFileProvider(
-            [configFile(fileId: 'java-backend-config', variable: 'MAVEN_SETTINGS')]) {
+            [configFile(fileId: '93b8fbf4-4cba-47da-bc30-7102ed4d7524', variable: 'MAVEN_SETTINGS')]) {
             sh 'mvn -s $MAVEN_SETTINGS clean package'
         }
         
