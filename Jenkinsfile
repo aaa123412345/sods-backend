@@ -34,10 +34,10 @@ pipeline {
       steps {
         script{
           withAWS(credentials: 'aws') {
-             sh 'aws iam get-user'
-            //sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/i4f7p8k7'
-            //sh 'docker tag backenddocker:latest public.ecr.aws/i4f7p8k7/backenddocker:latest'
-            //sh 'docker push public.ecr.aws/i4f7p8k7/backenddocker:latest'
+             //sh 'aws iam get-user'
+            sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/i4f7p8k7'
+            sh 'docker tag backenddocker:latest public.ecr.aws/i4f7p8k7/backenddocker:latest'
+            sh 'docker push public.ecr.aws/i4f7p8k7/backenddocker:latest'
             
           }
         }
