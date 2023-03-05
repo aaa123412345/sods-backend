@@ -43,13 +43,13 @@ pipeline {
         }
       }
     }
-     stage('SSH') {
+     stage('SSH to AWS EC2') {
       steps {
         echo 'SSH'
         sshagent(credentials:['ssh']){
           sh """
              set -ev
-             ssh -o StrictHostKeyChecking=no -l root ec2-user@ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com << EOF
+             ssh -o StrictHostKeyChecking=no -l ec2-user ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com << EOF
              docker ps
              exit
           """
