@@ -35,7 +35,7 @@ pipeline {
         sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'
         script{
          
-          withDockerRegistry("https://public.ecr.aws/i4f7p8k7/","ecr:ap-northeast-1:aws") {
+          withDockerRegistry(url: "https://public.ecr.aws/i4f7p8k7/",credentialsId: "ecr:ap-northeast-1:aws") {
               app.push("${env.BUILD_NUMBER}")
               app.push("latest")
           }
