@@ -13,26 +13,32 @@ pipeline {
                 }
             }
         }
-  
-    
-    stage('Build Jar') {
+    stage('Copy application.yml to directory'){
       steps {
-        echo 'Package Jar with mvn'
+        echo 'Copy file'
         configFileProvider(
             [configFile(fileId: '93b8fbf4-4cba-47da-bc30-7102ed4d7524', variable: 'Config')]) {
              // some block
-              echo " =========== ^^^^^^^^^^^^ Reading config from pipeline script "
-              sh "cat ${env.Config}"
+              
+   
               sh "mkdir sods-application/src/main/resources"
               sh "touch sods-application/src/main/resources/application.yml"
               sh "cp ${env.Config} sods-application/src/main/resources/application.yml"
-              echo " =========== ~~~~~~~~~~~~ ============ "
-            //sh 'mvn clean package'
+              
+             
         }
         
       }
     }
-     /*
+    
+    stage('Build Jar') {
+      steps {
+        echo 'Package Jar with mvn'
+        sh 'mvn clean package'
+        
+      }
+    }
+     
     stage('Docker Build Image') {
       steps {
         echo 'Image'
@@ -72,7 +78,7 @@ pipeline {
         
         
       }
-    }*/
+    }
     
     
     
