@@ -23,7 +23,9 @@ pipeline {
     stage('Docker Build Image') {
       steps {
         echo 'Image'
-        sh 'docker build -t backenddocker .'
+          script{
+                 app = docker.build("backenddocker")
+                }
         
       }
     }
@@ -31,8 +33,9 @@ pipeline {
       steps {
         script{
          
-          withDockerRegistry(credentialsId: 'ecr:ap-northeast-1:aws', url: 'https://public.ecr.aws/i4f7p8k7/') {
-               docker.image("backenddocker").push()
+          withDockerRegistry('https://public.ecr.aws/i4f7p8k7/','ecr:ap-northeast-1:aws') {
+              app.push("${env.BUILD_NUMBER}")
+              app.push("latest")
           }
         }
        
