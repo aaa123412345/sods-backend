@@ -30,8 +30,9 @@ pipeline {
     stage('Push To ECR') {
       steps {
         script{
-          docker.withRegistry("https://public.ecr.aws/i4f7p8k7/", "aws") {
-            docker.image("backenddocker").push()
+         
+          withDockerRegistry(credentialsId: 'ecr:ap-northeast-1:aws', url: 'public.ecr.aws/i4f7p8k7/') {
+               docker.image("backenddocker").push()
           }
         }
        
