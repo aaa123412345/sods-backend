@@ -41,11 +41,25 @@ pipeline {
             
           }
         }
-        
-       
       }
     }
+     stage('SSH') {
+      steps {
+        echo 'SSH'
+          script{
+                 sh 'ssh -i "docker.pem" ec2-user@ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com'
+                 sh 'docker rm $(docker stop $(docker ps -a -q --filter ancestor=public.ecr.aws/i4f7p8k7/backenddocker --format="{{.ID}}"))'
+                 sh 'docker pull public.ecr.aws/i4f7p8k7/backenddocker:latest'
+                 sh 'docker run -t -i -d -p 8888:8888 public.ecr.aws/i4f7p8k7/backenddocker:latest'
+                }
+        
+      }
+    }
+    
+    
+    
   }
+  
   post {
     always {
       echo 'Hello World'
