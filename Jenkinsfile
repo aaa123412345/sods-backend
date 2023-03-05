@@ -13,7 +13,7 @@ pipeline {
                 }
             }
         }
-   stages {
+  
     stage('Add application yml') { 
             steps { 
                 sh "ls"
