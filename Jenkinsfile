@@ -21,8 +21,8 @@ pipeline {
              // some block
               
    
-              sh "mkdir sods-application/src/main/resources"
-              sh "touch sods-application/src/main/resources/application.yml"
+              sh "mkdir -p sods-application/src/main/resources"
+              sh "touch -p sods-application/src/main/resources/application.yml"
               sh "cp ${env.Config} sods-application/src/main/resources/application.yml"
               
              
