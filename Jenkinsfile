@@ -34,10 +34,10 @@ pipeline {
       steps {
         script{
           withAWS(credentials: 'aws') {
-            ecrLogin()
-            sh 'docker login --username AWS --password-stdin public.ecr.aws/i4f7p8k7'
-            sh 'docker tag backenddocker:latest public.ecr.aws/i4f7p8k7/backenddocker:latest'
-            sh 'docker push public.ecr.aws/i4f7p8k7/backenddocker:latest'
+            def login = ecrLogin()
+            //sh 'docker login --username AWS --password-stdin public.ecr.aws/i4f7p8k7'
+            //sh 'docker tag backenddocker:latest public.ecr.aws/i4f7p8k7/backenddocker:latest'
+            //sh 'docker push public.ecr.aws/i4f7p8k7/backenddocker:latest'
             
           }
         }
