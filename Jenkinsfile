@@ -47,8 +47,13 @@ pipeline {
       steps {
         echo 'SSH'
         sshagent(credentials:['ssh']){
-          sh 'ssh ec2-user@ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com'
-          sh 'docker ps'
+          sh """
+             set -ev
+             ssh -o StrictHostKeyChecking=no -l root ec2-user@ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com << EOF
+             docker ps
+             exit
+          """
+       
         }
         /*
           script{
