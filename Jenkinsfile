@@ -14,19 +14,18 @@ pipeline {
             }
         }
   
-    stage('Add application yml') { 
-            steps { 
-                sh "ls"
-            }
-        }
-    /*
+    
     stage('Build Jar') {
       steps {
         echo 'Package Jar with mvn'
-        sh 'mvn clean package'
+        configFileProvider(
+            [configFile(fileId: 'java-backend-config', variable: 'MAVEN_SETTINGS')]) {
+            sh 'mvn -s $MAVEN_SETTINGS clean package'
+        }
+        
       }
     }
-    
+     /*
     stage('Docker Build Image') {
       steps {
         echo 'Image'
