@@ -67,6 +67,15 @@ pipeline {
         }
       }
     }
+    stage('Remove Local Docker Image') {
+      steps {
+        echo 'Remove Local Docker Image'
+          script{
+                 sh 'docker rmi backenddocker'
+                 sh 'docker rmi public.ecr.aws/i4f7p8k7/backenddocker:latest'
+                }
+      }
+    }
      stage('SSH to AWS EC2') {
       steps {
         echo 'SSH'
