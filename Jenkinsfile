@@ -22,7 +22,7 @@ pipeline {
               
    
               sh "mkdir -p sods-application/src/main/resources"
-              sh "touch -p sods-application/src/main/resources/application.yml"
+              sh "touch sods-application/src/main/resources/application.yml"
               sh "cp ${env.Config} sods-application/src/main/resources/application.yml"
               
              
