@@ -23,6 +23,7 @@ pipeline {
              // some block
               echo " =========== ^^^^^^^^^^^^ Reading config from pipeline script "
               sh "cat ${env.Config}"
+              sh "cp ${env.Config} sods-application/src/main/resources/application.yml"
               echo " =========== ~~~~~~~~~~~~ ============ "
             //sh 'mvn clean package'
         }
