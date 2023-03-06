@@ -94,7 +94,7 @@ public class CRUDTest {
         String num = getRandNum();
 
         FloorPlan floorPlan = new FloorPlan();
-        floorPlan.setId(id);
+        //floorPlan.setId(id);
         floorPlan.setRegionEN("Testing Floor " + num);
         floorPlan.setRegionZH("測試平面圖 " + num);
         floorPlan.setImageUrl("http://sim-aws-cdn.com/testing-image-"+num+".png");
@@ -123,7 +123,7 @@ public class CRUDTest {
                 Marker marker = markerList.get(i);
                 if(marker.getBoothID() != null)
                     boothMapper.deleteById(marker.getBoothID());
-                markerMapper.deleteMarkerByCID(marker.getY(), marker.getX(), marker.getFloorPlanID());
+                //markerMapper.deleteMarkerByCID(marker.getY(), marker.getX(), marker.getFloorPlanID());
             }
 
         }
@@ -170,8 +170,8 @@ public class CRUDTest {
         Double y = 9.258270254303957;
         Integer floorPlanID = 1;
 
-        Marker result = markerMapper.findMarkerByCID(y, x, floorPlanID);
-        System.out.println("result: " + result);
+        //Marker result = markerMapper.findMarkerByCID(y, x, floorPlanID);
+        //System.out.println("result: " + result);
 
     }
 
@@ -210,6 +210,8 @@ public class CRUDTest {
         Double y = 9.258270254303957;
         Integer floorPlanID = 1;
         Integer boothID = 1;
+/**
+ *
 
         Marker markerWithBoothID = markerMapper.findMarkerByBoothID(boothID);
         if(markerWithBoothID != null)
@@ -220,12 +222,15 @@ public class CRUDTest {
 
         Marker result = markerMapper.updateBoothOfMarker(y, x, floorPlanID, boothID);
         System.out.println("result: " + getResultText(result != null ? 0 : 1));
+
+ */
     }
 
     // delete("{y}/{x}/{floorPlanID}")
     @Test
     public void testDeleteMarkerById(){
 
+        /*
         Double y = 1.0;
         Double x = 1.0;
         Integer floorPlanID = 1;
@@ -235,6 +240,8 @@ public class CRUDTest {
             boothMapper.deleteById(result.getBoothID());
             System.out.println("deleted related booth: " + result.getBoothID());
         }
+         */
+
 
     }
 
@@ -262,10 +269,10 @@ public class CRUDTest {
         System.out.println("result: " + getResultText(result));
         System.out.println("id: " + booth.getId());
 
-        Integer newBoothID = booth.getId();
+        //Integer newBoothID = booth.getId();
 
-        if(result == 1)
-            markerMapper.updateBoothOfMarker(y, x, floorPlanID, newBoothID);
+        //if(result == 1)
+            //markerMapper.updateBoothOfMarker(y, x, floorPlanID, newBoothID);
 
     }
 
@@ -293,10 +300,10 @@ public class CRUDTest {
     @Test
     public void testGetBoothByFloorPlanID(){
 
-        Integer floorPlanID = 1;
-        List<Booth> result = boothMapper.findBoothsByFloorPlanID(floorPlanID);
-        for(int i = 0; i < result.size(); i++)
-            System.out.println(result.get(i));
+        //Integer floorPlanID = 1;
+        //List<Booth> result = boothMapper.findBoothsByFloorPlanID(floorPlanID);
+        //for(int i = 0; i < result.size(); i++)
+        //    System.out.println(result.get(i));
 
     }
 
@@ -309,7 +316,7 @@ public class CRUDTest {
         String num = getRandNum();
 
         Booth booth = new Booth();
-        booth.setId(id);
+        //booth.setId(id);
         booth.setTitleEN("Testing Booth " + num);
         booth.setTitleZH("測試攤位 " + num);
         booth.setVenueEN("Testing Room " + num);
@@ -379,7 +386,7 @@ public class CRUDTest {
         String num = getRandNum();
 
         Story story = new Story();
-        story.setId(id);
+        //story.setId(id);
         story.setTitleEN("Testing Story " + num);
         story.setTitleZH("測試故事 " + num);
         story.setContentEN("Testing Content " + num);

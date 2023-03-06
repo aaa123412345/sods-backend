@@ -36,13 +36,13 @@ public class FloorPlanController {
     }
 
     @GetMapping("/{id}")
-    public ResponseResult getFloorPlanById(@PathVariable Integer id){
+    public ResponseResult getFloorPlanById(@PathVariable Long id){
         return floorPlanService.getFloorPlanById(id);
     }
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PutMapping("/{id}")
-    public ResponseResult updateFloorPlanById(@PathVariable Integer id, @RequestBody FloorPlan floorPlan) {
+    public ResponseResult updateFloorPlanById(@PathVariable Long id, @RequestBody FloorPlan floorPlan) {
         return floorPlanService.updateFloorPlanById(id, floorPlan);
     }
     /**
@@ -55,7 +55,7 @@ public class FloorPlanController {
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @DeleteMapping("/{id}")
-    public ResponseResult deleteFloorPlanById(@PathVariable Integer id){
+    public ResponseResult deleteFloorPlanById(@PathVariable Long id){
         return floorPlanService.deleteFloorPlanById(id);
     }
 

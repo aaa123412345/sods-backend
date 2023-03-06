@@ -34,18 +34,18 @@ public class StoryController {
      **/
 
     @GetMapping
-    public ResponseResult getAllStories(){
-        return storyService.getAllStories();
+    public ResponseResult getAllStories(@RequestParam(name = "deleteFlag", required = false) Integer deleteFlag){
+        return storyService.getAllStories(deleteFlag);
     }
 
     @GetMapping("/{id}")
-    public ResponseResult getStoryById(@PathVariable Integer id){
+    public ResponseResult getStoryById(@PathVariable Long id){
         return storyService.getStoryById(id);
     }
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PutMapping("/{id}")
-    public ResponseResult updateStoryById(@PathVariable Integer id, @RequestBody Story story) {
+    public ResponseResult updateStoryById(@PathVariable Long id, @RequestBody Story story) {
         return storyService.updateStoryById(id, story);
     }
     /**
@@ -57,7 +57,7 @@ public class StoryController {
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @DeleteMapping("/{id}")
-    public ResponseResult deleteStoryById(@PathVariable Integer id){
+    public ResponseResult deleteStoryById(@PathVariable Long id){
         return storyService.deleteStoryById(id);
     }
 

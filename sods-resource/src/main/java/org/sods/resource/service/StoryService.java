@@ -8,10 +8,10 @@ public interface StoryService {
 
     ResponseResult createStory(Story story);
     //ResponseResult createStory(Story story, MultipartFile imageFile);
-    ResponseResult getAllStories();
-    ResponseResult getStoryById(Integer id);
-    ResponseResult updateStoryById(Integer id, Story newStory);
+    ResponseResult getAllStories(Integer deleteFlag);
+    ResponseResult getStoryById(Long id);
+    ResponseResult updateStoryById(Long id, Story newStory);
     //ResponseResult updateStoryById(Integer id, Story newStory, MultipartFile imageFile);
-    ResponseResult deleteStoryById(Integer id);
+    ResponseResult deleteStoryById(Long id);
 
 }

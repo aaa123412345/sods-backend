@@ -19,22 +19,22 @@ public class TreasureController {
     }
 
     @GetMapping
-    public ResponseResult getAllARTreasure(){
-        return treasureService.getAllARTreasure();
+    public ResponseResult getAllARTreasure(@RequestParam(name = "deleteFlag", required = false) Integer deleteFlag){
+        return treasureService.getAllARTreasure(deleteFlag);
     }
 
     @GetMapping("/{id}")
-    public ResponseResult getARTreasureById(@PathVariable Integer id){
+    public ResponseResult getARTreasureById(@PathVariable Long id){
         return treasureService.getARTreasureById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseResult updateARTreasureById(@PathVariable Integer id, @RequestBody Treasure treasure){
+    public ResponseResult updateARTreasureById(@PathVariable Long id, @RequestBody Treasure treasure){
         return treasureService.updateARTreasureById(id, treasure);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseResult deleteARTreasureById(@PathVariable Integer id){
+    public ResponseResult deleteARTreasureById(@PathVariable Long id){
         return treasureService.deleteARTreasure(id);
     }
 

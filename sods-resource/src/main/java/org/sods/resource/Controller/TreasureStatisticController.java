@@ -24,7 +24,7 @@ public class TreasureStatisticController {
     }
 
     @GetMapping("/{id}")
-    public ResponseResult getARStatisticById(@PathVariable Integer id){
+    public ResponseResult getARStatisticById(@PathVariable Long id){
         return treausreStatisticService.getARStatisticById(id);
     }
 }

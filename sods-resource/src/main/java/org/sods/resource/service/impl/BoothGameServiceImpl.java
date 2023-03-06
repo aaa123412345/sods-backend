@@ -29,7 +29,7 @@ public class BoothGameServiceImpl implements BoothGameService {
     }
 
     @Override
-    public ResponseResult getBoothGameByBoothId(Integer id) {
+    public ResponseResult getBoothGameByBoothId(Long id) {
 
         QueryWrapper query = new QueryWrapper<>();
         query.eq("booth_id", id);
@@ -39,7 +39,7 @@ public class BoothGameServiceImpl implements BoothGameService {
     }
 
     @Override
-    public ResponseResult getBoothGameByGameId(Integer id) {
+    public ResponseResult getBoothGameByGameId(Long id) {
         QueryWrapper query = new QueryWrapper<>();
         query.eq("game_id", id);
         List<BoothGame> result = boothGameMapper.selectList(query);
@@ -48,7 +48,7 @@ public class BoothGameServiceImpl implements BoothGameService {
     }
 
     @Override
-    public ResponseResult updateBoothGameByGameIdAndBoothId(Integer boothId, Integer gameId, BoothGame boothGame) {
+    public ResponseResult updateBoothGameByGameIdAndBoothId(Long boothId, Long gameId, BoothGame boothGame) {
 
         QueryWrapper query = new QueryWrapper<>();
         query.eq("game_id", gameId);
@@ -63,7 +63,7 @@ public class BoothGameServiceImpl implements BoothGameService {
     }
 
     @Override
-    public ResponseResult deleteFloorPlanByBoothIdAndGameId(Integer boothId, Integer gameId) {
+    public ResponseResult deleteFloorPlanByBoothIdAndGameId(Long boothId, Long gameId) {
 
         QueryWrapper query = new QueryWrapper<>();
         query.eq("game_id", gameId);

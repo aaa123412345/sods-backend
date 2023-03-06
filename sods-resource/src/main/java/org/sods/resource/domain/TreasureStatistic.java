@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class TreasureStatistic {
 
     @TableId(value = "statistic_id", type = IdType.AUTO)
-    private Integer statisticId;
+    private Long statisticId;
 
     @TableField("user_id")
     private Long userId;

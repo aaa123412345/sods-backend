@@ -9,9 +9,9 @@ public interface FloorPlanService {
     ResponseResult createFloorPlan(FloorPlan floorPlan);
     //ResponseResult createFloorPlan(FloorPlan floorPlan, MultipartFile imageFile);
     ResponseResult getAllFloorPlan();
-    ResponseResult getFloorPlanById(Integer id);
-    ResponseResult updateFloorPlanById(Integer id, FloorPlan newFloorPlan);
+    ResponseResult getFloorPlanById(Long id);
+    ResponseResult updateFloorPlanById(Long id, FloorPlan newFloorPlan);
     //ResponseResult updateFloorPlanById(Integer id, FloorPlan newFloorPlan, MultipartFile imageFile);
-    ResponseResult deleteFloorPlanById(Integer id);
+    ResponseResult deleteFloorPlanById(Long id);
 
 }

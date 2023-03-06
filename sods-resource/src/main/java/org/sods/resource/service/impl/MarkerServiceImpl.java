@@ -5,10 +5,12 @@ import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.Marker;
 import org.sods.resource.mapper.BoothMapper;
 import org.sods.resource.mapper.MarkerMapper;
+import org.sods.resource.mapper.TourguideConfigMapper;
 import org.sods.resource.service.MarkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,7 +39,7 @@ public class MarkerServiceImpl implements MarkerService {
     }
 
     @Override
-    public ResponseResult getMarkerByFloorPlanIdOrBoothId(Integer floorPlanId, Integer boothId) {
+    public ResponseResult getMarkerByFloorPlanIdOrBoothId(Long floorPlanId, Long boothId) {
 
         QueryWrapper<Marker> query = new QueryWrapper<>();
         if(floorPlanId != null)
@@ -52,7 +54,7 @@ public class MarkerServiceImpl implements MarkerService {
     }
 
     @Override
-    public ResponseResult getMarkerByIds(Double y, Double x, Integer floorPlanId) {
+    public ResponseResult getMarkerByIds(Double y, Double x, Long floorPlanId) {
 
         Marker result = markerMapper.findMarkerByCID(y, x, floorPlanId);
 
@@ -64,7 +66,19 @@ public class MarkerServiceImpl implements MarkerService {
     }
 
     @Override
-    public ResponseResult deleteMarkerByIds(Double y, Double x, Integer floorPlanId) {
+    public ResponseResult assignBoothToMarker(Double y, Double x, Long floorPlanId, Long boothId) {
+
+        Marker result = markerMapper.findMarkerByCID(y, x, floorPlanId);
+
+        if(result == null)
+            return new ResponseResult(404, "Failed: Marker is not found. ");
+        markerMapper.updateBoothOfMarker(y, x, floorPlanId, boothId);
+
+        return new ResponseResult(200, "Marker is assigned to booth successfully. ", result);
+    }
+
+    @Override
+    public ResponseResult deleteMarkerByIds(Double y, Double x, Long floorPlanId) {
 
         Marker marker = markerMapper.findMarkerByCID(y, x, floorPlanId);
         if(marker == null)

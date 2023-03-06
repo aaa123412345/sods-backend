@@ -7,8 +7,9 @@ public interface MarkerService {
 
     ResponseResult createMarker(Marker marker);
     ResponseResult getAllMarkers();
-    ResponseResult getMarkerByFloorPlanIdOrBoothId(Integer floorPlanId, Integer boothId);
-    ResponseResult getMarkerByIds(Double y, Double x, Integer floorPlanId);
-    ResponseResult deleteMarkerByIds(Double y, Double x, Integer floorPlanId);
+    ResponseResult getMarkerByFloorPlanIdOrBoothId(Long floorPlanId, Long boothId);
+    ResponseResult getMarkerByIds(Double y, Double x, Long floorPlanId);
+    ResponseResult assignBoothToMarker(Double y, Double x, Long floorPlanId, Long boothId);
+    ResponseResult deleteMarkerByIds(Double y, Double x, Long floorPlanId);
 
 }

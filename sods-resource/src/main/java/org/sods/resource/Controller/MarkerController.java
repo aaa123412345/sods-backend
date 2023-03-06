@@ -23,19 +23,27 @@ public class MarkerController {
     }
 
     @GetMapping
-    public ResponseResult getAllMarkers(@RequestParam(name = "floorplanId", required = false) Integer floorPlanID, @RequestParam(name = "boothId", required = false) Integer boothID){
+    public ResponseResult getAllMarkers(
+            @RequestParam(name = "floorplanId", required = false) Long floorPlanID,
+            @RequestParam(name = "boothId", required = false) Long boothID
+    ){
         return markerService.getMarkerByFloorPlanIdOrBoothId(floorPlanID, boothID);
     }
 
 
     @GetMapping("/{y}/{x}/{floorPlanID}")
-    public ResponseResult getMarkerById(@PathVariable Double y, @PathVariable Double x, @PathVariable Integer floorPlanID){
+    public ResponseResult getMarkerById(@PathVariable Double y, @PathVariable Double x, @PathVariable Long floorPlanID){
         return markerService.getMarkerByIds(y, x, floorPlanID);
+    }
+
+    @PutMapping("/{y}/{x}/{floorPlanID}")
+    public ResponseResult getMarkerById(@PathVariable Double y, @PathVariable Double x, @PathVariable Long floorPlanID, @RequestBody Marker marker){
+        return markerService.assignBoothToMarker(y, x, floorPlanID, marker.getBoothID());
     }
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @DeleteMapping("/{y}/{x}/{floorPlanID}")
-    public ResponseResult deleteMarkerById(@PathVariable Double y, @PathVariable Double x, @PathVariable Integer floorPlanID){
+    public ResponseResult deleteMarkerById(@PathVariable Double y, @PathVariable Double x, @PathVariable Long floorPlanID){
         return markerService.deleteMarkerByIds(y, x, floorPlanID);
     }
 

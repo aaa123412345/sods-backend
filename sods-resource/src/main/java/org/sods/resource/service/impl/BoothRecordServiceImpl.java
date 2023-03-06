@@ -46,7 +46,7 @@ public class BoothRecordServiceImpl implements BoothRecordService {
     }
 
     @Override
-    public ResponseResult updateRecordByUserIdAndBoothId(Long userId, Integer boothId) {
+    public ResponseResult updateRecordByUserIdAndBoothId(Long userId, Long boothId) {
 
         QueryWrapper query = new QueryWrapper<>();
         query.eq("user_id", userId);

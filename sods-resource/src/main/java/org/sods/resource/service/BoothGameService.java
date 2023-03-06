@@ -9,12 +9,12 @@ public interface BoothGameService {
 
     ResponseResult getAllBoothGame();
 
-    ResponseResult getBoothGameByBoothId(Integer id);
+    ResponseResult getBoothGameByBoothId(Long id);
 
-    ResponseResult getBoothGameByGameId(Integer id);
+    ResponseResult getBoothGameByGameId(Long id);
 
-    ResponseResult updateBoothGameByGameIdAndBoothId(Integer boothId, Integer gameId, BoothGame boothGame);
+    ResponseResult updateBoothGameByGameIdAndBoothId(Long boothId, Long gameId, BoothGame boothGame);
 
-    ResponseResult deleteFloorPlanByBoothIdAndGameId(Integer boothId, Integer gameId);
+    ResponseResult deleteFloorPlanByBoothIdAndGameId(Long boothId, Long gameId);
 
 }

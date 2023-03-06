@@ -10,14 +10,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("MARKER")
 public class Marker {
-
-    //@TableId(type = IdType.NONE)
-    //private MarkerPK id;
 
     @MppMultiId
     private Double y;
@@ -27,12 +26,10 @@ public class Marker {
 
     @MppMultiId
     @TableField("fk_floorplan_id")
-    private Integer floorPlanID;
+    private Long floorPlanID;
 
     @TableField("fk_booth_id")
-    private Integer boothID;
-
-    //private Booth booth;
+    private Long boothID;
 
 }
 

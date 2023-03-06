@@ -1,12 +1,11 @@
 package org.sods.resource.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Treasure {
 
     @TableId(value = "treasure_id", type = IdType.AUTO)
-    private Integer treasureId;
+    private Long treasureId;
 
     @TableField("question_en")
     private String questionEN;
@@ -25,5 +24,13 @@ public class Treasure {
     
     @TableField("answers")
     private String answers;
+
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    @TableField("delete_flag")
+    @TableLogic
+    private Integer deleteFlag;
+
 
 }
