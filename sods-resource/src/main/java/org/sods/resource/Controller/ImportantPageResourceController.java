@@ -32,6 +32,7 @@ public class ImportantPageResourceController {
     public ResponseResult updatePageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
                                          @RequestBody String payload) {
+        resourceService.makeBackup("pageimportant",language,pathVariable);
         return resourceService.put("pageimportant",language,pathVariable,payload);
     }
 

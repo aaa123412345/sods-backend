@@ -7,4 +7,6 @@ public interface PageResourceService {
     ResponseResult delete(String domain,String language,String path);
     ResponseResult post(String domain,String language,String path, String payload);
     ResponseResult put(String domain,String language,String path, String payload);
+
+    Boolean makeBackup(String domain,String language,String path);
 }

@@ -114,7 +114,7 @@ public class VotingServiceImpl implements VotingService {
 
     @Override
     public Message commandForChannel(Message message, Principal principal) {
-        System.out.println("Command");
+        //System.out.println("Command");
         switch (message.getAction()){
             case CREATEGROUP: return  wsAdminActionService.CreateGroup(message, principal);
             case REMOVEGROUP: return wsAdminActionService.RemoveGroup(message, principal);

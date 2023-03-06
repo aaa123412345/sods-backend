@@ -92,4 +92,34 @@ public class PageResourceServiceImpl implements PageResourceService {
 
         return new ResponseResult<>(200,"Put Success: Page is updated");
     }
+
+    @Override
+    public Boolean makeBackup(String domain, String language, String path) {
+        QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
+        pageDataQueryWrapper.eq("domain",domain);
+        pageDataQueryWrapper.eq("path",path);
+        pageDataQueryWrapper.eq("language",language);
+        PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
+
+        if(Objects.isNull(p)){
+            return false;
+        }
+
+        QueryWrapper<PageData> pageDataQueryWrapper2 = new QueryWrapper<>();
+        pageDataQueryWrapper2.eq("domain",domain);
+        pageDataQueryWrapper2.eq("path",path+"_backup");
+        pageDataQueryWrapper2.eq("language",language);
+        PageData p2 = pageDataMapper.selectOne(pageDataQueryWrapper2);
+
+        if(Objects.isNull(p2)){
+            p.setPageId(null);
+            p.setPath(p.getPath()+"_backup");
+            pageDataMapper.insert(p);
+        }else {
+            p2.setPageData(p.getPageData());
+            pageDataMapper.updateById(p2);
+        }
+
+        return true;
+    }
 }
