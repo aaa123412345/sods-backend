@@ -83,9 +83,9 @@ pipeline {
           sshagent(credentials:['ssh']){
             sh 'set -ev'
             sh 'ssh -o StrictHostKeyChecking=no -l ec2-user ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com << EOF'
-            sh 'docker stop backend'
-            sh 'docker rm backend'
-            sh 'docker rmi public.ecr.aws/i4f7p8k7/backenddocker'
+            sh 'docker stop backend || true'
+            sh 'docker rm backend || true'
+            sh 'docker rmi -f public.ecr.aws/i4f7p8k7/backenddocker || true'
             sh 'docker pull public.ecr.aws/i4f7p8k7/backenddocker:latest'
             sh 'docker run -t -i -d -p  8888:8888 --name="backend" public.ecr.aws/i4f7p8k7/backenddocker:latest'
             sh 'exit'
