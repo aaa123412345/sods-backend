@@ -23,13 +23,14 @@ public class FTPServerController {
         return storeService.uploadFile(multipart);
     }*/
 
-    @GetMapping("/s3/bucket")
+    @GetMapping("/ftp/bucket")
     public ResponseResult listBucket(){
         return s3Service.getAllBucket();
     }
 
-    @PostMapping("/s3/upload")
+    @PostMapping("/ftp/upload")
     public ResponseResult upload(@RequestParam("file") MultipartFile multipart){
+        System.out.println("Request Start");
         return s3Service.upload(multipart);
     }
 }

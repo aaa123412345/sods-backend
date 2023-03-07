@@ -157,6 +157,7 @@ public class S3Handler {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
+                .acl(ObjectCannedACL.PUBLIC_READ)
                 .build();
         RequestBody requestBody = RequestBody.fromBytes(file.getBytes());
         s3Client.putObject(putObjectRequest, requestBody);
