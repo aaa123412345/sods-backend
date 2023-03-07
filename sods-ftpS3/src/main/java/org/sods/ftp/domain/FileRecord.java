@@ -15,6 +15,8 @@ public class FileRecord {
     @TableId
     private String fileName;
     private String url;
+    private String type;
+    private String extension;
     @TableField(fill = FieldFill.INSERT)
     private Long createUserId;
 

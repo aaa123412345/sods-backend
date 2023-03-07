@@ -1,5 +1,6 @@
 package org.sods.ftp.Service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.http.HttpStatus;
 import org.sods.common.domain.ResponseResult;
 import org.sods.ftp.Service.S3Service;
@@ -41,9 +42,44 @@ public class S3ServiceImpl implements S3Service {
         FileRecord fileRecord = new FileRecord();
         fileRecord.setFileName(file.getOriginalFilename());
         fileRecord.setUrl(objectPath+file.getOriginalFilename());
+        fileRecord.setType(file.getContentType());
+
+        //get file extension
+        String[] split = file.getOriginalFilename().split("\\.");
+        fileRecord.setExtension(split[split.length-1]);
+
 
         fileRecordMapper.insert(fileRecord);
 
         return new ResponseResult<>(HttpStatus.SC_OK,"Upload Success");
     }
+
+    @Override
+    public ResponseResult delete(String fileName) {
+        try {
+            S3Handler.deleteFile(bucketName,fileName);
+        }catch (Exception e){
+            return new ResponseResult<>(HttpStatus.SC_INTERNAL_SERVER_ERROR,"Delete failed");
+        }
+
+        fileRecordMapper.deleteById(fileName);
+
+        return new ResponseResult<>(HttpStatus.SC_OK,"Delete Success");
+    }
+
+    @Override
+    public ResponseResult getFilesRecord(String type,String extension) {
+        QueryWrapper<FileRecord> queryWrapper = new QueryWrapper<>();
+        if(type!=null){
+            queryWrapper.eq("type",type);
+        }
+        if(extension!=null){
+            queryWrapper.eq("extension",extension);
+        }
+        queryWrapper.select("file_name","url","type","extension");
+        List<FileRecord> fileRecords = fileRecordMapper.selectList(queryWrapper);
+        return new ResponseResult<>(HttpStatus.SC_OK,"ok",fileRecords);
+    }
+
+
 }
