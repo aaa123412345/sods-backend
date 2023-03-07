@@ -11,6 +11,6 @@ public interface BoothRecordService {
 
     ResponseResult createRecord(BoothRecord boothRecord);
     ResponseResult getAllRecords(Long userId);
-    ResponseResult updateRecordByUserIdAndBoothId(Long userId, Integer boothId);
+    ResponseResult updateRecordByUserIdAndBoothId(Long userId, Long boothId);
 
 }

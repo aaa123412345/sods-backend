@@ -15,10 +15,10 @@ public class BoothGame {
 
     @MppMultiId
     @TableField("booth_id")
-    private Integer boothId;
+    private Long boothId;
 
     @MppMultiId
     @TableField("game_id")
-    private Integer gameId;
+    private Long gameId;
 
 }

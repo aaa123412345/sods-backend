@@ -19,25 +19,33 @@ public class BoothController {
     @Autowired
     BoothService boothService;
 
+    @PostMapping("/booths")
+    public ResponseResult createBooth(@RequestBody Booth booth){
+        return boothService.createBooth(booth);
+    }
+
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PostMapping("/markers/{y}/{x}/{floorPlanID}/booths")
-    public ResponseResult createBooth(@RequestBody Booth booth, @PathVariable Double y, @PathVariable Double x, @PathVariable Integer floorPlanID){
-        return boothService.createBooth(booth, y, x, floorPlanID);
+    public ResponseResult createBoothWithMarker(@RequestBody Booth booth, @PathVariable Double y, @PathVariable Double x, @PathVariable Long floorPlanID){
+        return boothService.createBoothWithMaker(booth, y, x, floorPlanID);
     }
 
     @GetMapping("/booths")
-    public ResponseResult getAllBooths(@RequestParam(name = "floorplanId", required = false) Integer floorPlanID){
-        return boothService.getAllBooths(floorPlanID);
+    public ResponseResult getAllBooths(
+            @RequestParam(name = "floorplanId", required = false) Long floorPlanID,
+            @RequestParam(name = "deleteFlag", required = false) Integer deleteFlag
+    ){
+        return boothService.getAllBooths(floorPlanID, deleteFlag);
     }
 
     @GetMapping("/booths/{id}")
-    public ResponseResult getBoothById(@PathVariable Integer id){
+    public ResponseResult getBoothById(@PathVariable Long id){
         return boothService.getBoothById(id);
     }
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @PutMapping("/booths/{id}")
-    public ResponseResult updateBoothById(@PathVariable Integer id, @RequestBody Booth booth) {
+    public ResponseResult updateBoothById(@PathVariable Long id, @RequestBody Booth booth) {
         return boothService.updateBoothById(id, booth);
     }
     /**
@@ -50,7 +58,7 @@ public class BoothController {
 
     @PreAuthorize("@ex.hasAuthority('system:tourguide:root')")
     @DeleteMapping("/booths/{id}")
-    public ResponseResult deleteBoothById(@PathVariable Integer id){
+    public ResponseResult deleteBoothById(@PathVariable Long id){
         return boothService.deleteBoothById(id);
     }
 

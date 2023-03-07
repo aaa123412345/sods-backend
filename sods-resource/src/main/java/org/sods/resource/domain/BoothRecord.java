@@ -21,7 +21,7 @@ public class BoothRecord {
     private Long userId;
 
     @TableField("booth_id")
-    private Integer boothId;
+    private Long boothId;
 
     @TableField("visit_end_time")
     private LocalDateTime visitEndTime;

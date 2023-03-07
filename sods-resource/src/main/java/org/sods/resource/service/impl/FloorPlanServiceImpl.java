@@ -32,15 +32,6 @@ public class FloorPlanServiceImpl implements FloorPlanService {
         floorPlanMapper.insert(floorPlan);
         return new ResponseResult(201,"New floor plan is created successfully.");
     }
-    /**
-    public ResponseResult createFloorPlan(FloorPlan floorPlan, MultipartFile imageFile) {
-
-        //floorPlan.setImageUrl(getImageUrl(imageFile));
-        floorPlanMapper.insert(floorPlan);
-        return new ResponseResult(201,"New floor plan is created successfully.");
-
-    }
-     **/
 
     @Override
     public ResponseResult getAllFloorPlan() {
@@ -49,7 +40,7 @@ public class FloorPlanServiceImpl implements FloorPlanService {
     }
 
     @Override
-    public ResponseResult getFloorPlanById(Integer id) {
+    public ResponseResult getFloorPlanById(Long id) {
 
         FloorPlan result = floorPlanMapper.selectById(id);
         if(result == null)
@@ -60,43 +51,25 @@ public class FloorPlanServiceImpl implements FloorPlanService {
     }
 
     @Override
-    public ResponseResult updateFloorPlanById(Integer id, FloorPlan newFloorPlan) {
+    public ResponseResult updateFloorPlanById(Long id, FloorPlan newFloorPlan) {
 
         FloorPlan floorPlan = floorPlanMapper.selectById(id);
         if(floorPlan == null)
             return new ResponseResult(404, "Failed: Floor Plan (id: " + id + ") is not found. ");
 
+        String newImageUrl = newFloorPlan.getImageUrl() == null ? floorPlan.getImageUrl() : newFloorPlan.getImageUrl();
+
         floorPlan.setRegionEN(newFloorPlan.getRegionEN());
         floorPlan.setRegionZH(newFloorPlan.getRegionZH());
-        // floorPlan.setImageUrl(newFloorPlan.getImageUrl());
+        floorPlan.setImageUrl(newImageUrl);
 
         floorPlanMapper.updateById(floorPlan);
         return new ResponseResult(200, "Floor Plan (id: " + id + ") is updated successfully.");
 
     }
-    /**
-    public ResponseResult updateFloorPlanById(Integer id, FloorPlan newFloorPlan, MultipartFile imageFile) {
-
-        FloorPlan floorPlan = floorPlanMapper.selectById(id);
-        if(floorPlan == null)
-            return new ResponseResult(404, "Failed: Floor Plan (id: " + id + ") is not found. ");
-
-        floorPlan.setRegionEN(newFloorPlan.getRegionEN());
-        floorPlan.setRegionZH(newFloorPlan.getRegionZH());
-
-
-        if(!imageFile.isEmpty())
-            floorPlan.setImageUrl(getImageUrl(imageFile));
-
-
-        floorPlanMapper.updateById(floorPlan);
-        return new ResponseResult(200, "Floor Plan (id: " + id + ") is updated successfully.");
-
-    }
-    **/
 
     @Override
-    public ResponseResult deleteFloorPlanById(Integer id) {
+    public ResponseResult deleteFloorPlanById(Long id) {
 
         FloorPlan floorPlan = floorPlanMapper.selectById(id);
         if(floorPlan == null)

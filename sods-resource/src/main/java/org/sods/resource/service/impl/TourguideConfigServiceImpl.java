@@ -14,6 +14,7 @@ public class TourguideConfigServiceImpl implements TourguideConfigService {
 
     @Autowired
     TourguideConfigMapper tourguideConfigMapper;
+    private final Long configId = 6110100000000000L;
 
     @Override
     public ResponseResult createConfig(TourguideConfig tourguideConfig) {
@@ -23,7 +24,7 @@ public class TourguideConfigServiceImpl implements TourguideConfigService {
 
     @Override
     public ResponseResult getConfig() {
-        TourguideConfig result = tourguideConfigMapper.selectById(1);
+        TourguideConfig result = tourguideConfigMapper.selectById(configId);
 
         if(result == null)
             return new ResponseResult(404, "Failed: Config is not found.");
@@ -33,7 +34,7 @@ public class TourguideConfigServiceImpl implements TourguideConfigService {
 
     @Override
     public ResponseResult updateConfig(TourguideConfig tourguideConfig) {
-        TourguideConfig existingConfig = tourguideConfigMapper.selectById(1);
+        TourguideConfig existingConfig = tourguideConfigMapper.selectById(configId);
         if(existingConfig == null)
             return new ResponseResult(404, "Failed: Config is not found. ");
 

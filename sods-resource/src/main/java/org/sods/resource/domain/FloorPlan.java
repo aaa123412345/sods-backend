@@ -17,7 +17,7 @@ import java.util.List;
 public class FloorPlan {
 
     @TableId(value = "floorplan_id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     @TableField("region_en")
     private String regionEN;
@@ -27,7 +27,5 @@ public class FloorPlan {
 
     @TableField("image_url")
     private String imageUrl;
-
-    //private List<Marker> markers;
 
 }

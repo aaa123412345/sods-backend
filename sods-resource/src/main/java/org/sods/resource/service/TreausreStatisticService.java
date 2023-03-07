@@ -9,6 +9,6 @@ public interface TreausreStatisticService {
 
     ResponseResult getAllARStatistic();
 
-    ResponseResult getARStatisticById(Integer id);
+    ResponseResult getARStatisticById(Long id);
 
 }

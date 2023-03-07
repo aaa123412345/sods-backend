@@ -1,12 +1,11 @@
 package org.sods.resource.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Story {
 
     @TableId(value = "story_id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     @TableField("title_en")
     private String titleEN;
@@ -31,6 +30,14 @@ public class Story {
 
     @TableField("image_url")
     private String imageUrl;
+
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    @TableField("delete_flag")
+    @TableLogic
+    private Integer deleteFlag;
+
 
 }
 

@@ -27,7 +27,7 @@ public class TreasureStatisticServiceImpl implements TreausreStatisticService {
     }
 
     @Override
-    public ResponseResult getARStatisticById(Integer id) {
+    public ResponseResult getARStatisticById(Long id) {
 
         TreasureStatistic result = treasureStatisticMapper.selectById(id);
         if(result == null)

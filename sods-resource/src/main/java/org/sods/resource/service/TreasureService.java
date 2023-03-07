@@ -7,12 +7,12 @@ public interface TreasureService {
 
     ResponseResult createARTreasure(Treasure treasure);
 
-    ResponseResult getAllARTreasure();
+    ResponseResult getAllARTreasure(Integer deleteFlag);
 
-    ResponseResult getARTreasureById(Integer id);
+    ResponseResult getARTreasureById(Long id);
 
-    ResponseResult updateARTreasureById(Integer id, Treasure treasure);
+    ResponseResult updateARTreasureById(Long id, Treasure treasure);
 
-    ResponseResult deleteARTreasure(Integer id);
+    ResponseResult deleteARTreasure(Long id);
 
 }

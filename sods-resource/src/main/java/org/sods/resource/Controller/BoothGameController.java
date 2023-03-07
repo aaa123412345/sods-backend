@@ -20,8 +20,8 @@ public class BoothGameController {
 
     @GetMapping
     public ResponseResult getAllBoothGame(
-            @RequestParam(name = "boothId", required = false) Integer boothId,
-            @RequestParam(name = "gameId", required = false) Integer gameId
+            @RequestParam(name = "boothId", required = false) Long boothId,
+            @RequestParam(name = "gameId", required = false) Long gameId
     ){
         if(boothId != null)
             return boothGameService.getBoothGameByBoothId(boothId);
@@ -32,8 +32,8 @@ public class BoothGameController {
 
     @PutMapping
     public ResponseResult updateBoothGame(
-            @RequestParam(name = "boothId", required = true) Integer boothId,
-            @RequestParam(name = "gameId", required = true) Integer gameId,
+            @RequestParam(name = "boothId", required = true) Long boothId,
+            @RequestParam(name = "gameId", required = true) Long gameId,
             @RequestBody BoothGame boothGame
     ){
         return boothGameService.updateBoothGameByGameIdAndBoothId(boothId, gameId, boothGame);
@@ -41,8 +41,8 @@ public class BoothGameController {
 
     @DeleteMapping
     public ResponseResult updateBoothGame(
-            @RequestParam(name = "boothId", required = true) Integer boothId,
-            @RequestParam(name = "gameId", required = true) Integer gameId
+            @RequestParam(name = "boothId", required = true) Long boothId,
+            @RequestParam(name = "gameId", required = true) Long gameId
     ){
         return boothGameService.deleteFloorPlanByBoothIdAndGameId(boothId, gameId);
     }

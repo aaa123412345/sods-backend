@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class TourguideConfig {
 
     @TableId(value = "config_id", type = IdType.AUTO)
-    private Integer configId;
+    private Long configId;
 
     @TableField("theme_color")
     private String themeColor;
