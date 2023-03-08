@@ -9,6 +9,10 @@ Jenkins for auto project build, image build, code deployment (AWS EC2)
 
 Demo: 
 Survey Editor
-Navbar Editor
-Voting System
+https://youtu.be/D2iEAOApt94
+
+Navbar Editor:
+https://youtu.be/5IaZ3w5FmMs
+
+Voting System:
 https://youtu.be/4_yPCeyNE4k
