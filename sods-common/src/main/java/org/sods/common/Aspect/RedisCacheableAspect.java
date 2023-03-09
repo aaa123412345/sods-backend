@@ -46,13 +46,13 @@ public class RedisCacheableAspect {
         String queryString = request.getQueryString();
         String pathAndQuery = (queryString == null) ? request.getRequestURI() : request.getRequestURI() + "?" + queryString;
         String urlWithoutHost = pathAndQuery.replace(request.getContextPath(), "");
-        String redisKey = key+":"+urlWithoutHost;
+        String redisKey = "CACHE:"+key+":"+urlWithoutHost;
         Object value = redisCache.getCacheObject(redisKey);
-        System.out.println(redisKey);
+
         if(value != null){
             if(value instanceof ResponseResult) {
                 ResponseResult tmp = (ResponseResult) value;
-                System.out.println(tmp.getData());
+
                 return new ResponseResult<>(tmp.getCode(), tmp.getMsg(), tmp.getData());
             }else return value;
         }
