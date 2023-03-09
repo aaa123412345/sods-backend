@@ -142,7 +142,7 @@ public class CRUDTest {
         Integer floorPlanID = 1;
 
         Marker marker = new Marker();
-        marker.setFloorPlanID(floorPlanID);
+        marker.setFloorPlanID(Long.valueOf(floorPlanID));
         marker.setX(coordinate.get(0));
         marker.setY(coordinate.get(1));
 

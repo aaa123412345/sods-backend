@@ -1,5 +1,7 @@
 package org.sods.resource.Controller;
 
+
+import org.sods.common.annotation.RedisCacheable;
 import org.sods.common.domain.ResponseResult;
 import org.sods.resource.service.PageResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ public class PublicPageResourceController {
 
     @Autowired
     PageResourceService resourceService;
+    @RedisCacheable(key = "page",expire = "3600")
     @GetMapping("/{language}/{pathVariable}")
     public ResponseResult getPageData(@PathVariable("pathVariable")String pathVariable,
                                @PathVariable("language")String language) {

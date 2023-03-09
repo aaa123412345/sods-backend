@@ -1,9 +1,13 @@
 package org.sods.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
+
 public class ResponseResult<T> {
 
     private Integer code;
