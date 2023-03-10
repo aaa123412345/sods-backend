@@ -11,6 +11,7 @@ import org.sods.resource.domain.Survey;
 import org.sods.resource.mapper.ActiveSurveyMapper;
 import org.sods.resource.mapper.PageDataMapper;
 import org.sods.resource.mapper.SurveyMapper;
+import org.sods.resource.service.CountRequestService;
 import org.sods.security.domain.User;
 import org.sods.security.mapper.MenuMapper;
 import org.sods.security.mapper.UserMapper;
@@ -34,6 +35,14 @@ public class MapperTest {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CountRequestService countRequestService;
+    @Test
+    public void testService(){
+        Integer i = countRequestService.countRequestUpdate();
+        System.out.println(i+" data is updated");
+    }
 
     @Test
     public void TestBCryptPasswordEncoder() {

@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 
 @Aspect
@@ -37,45 +38,22 @@ public class CountUrlAspect {
 
         if(result instanceof ResponseResult){
             ResponseResult tmp = (ResponseResult) result;
-            if(tmp.getCode() == 200){
-                Object value = redisCache.getCacheObject(redisKey);
-                if(Objects.isNull(value)){
-                    redisCache.setCacheObject(redisKey,1);
-                }else {
-                    int count = (int) value;
-                    count++;
-                    redisCache.setCacheObject(redisKey, count);
-                }
+            if(tmp.getCode() >= 400){
+                redisKey = "COUNT:"+tmp.getCode().toString();
             }
+
+            Object value = redisCache.getCacheObject(redisKey);
+            if(Objects.isNull(value)){
+                redisCache.setCacheObject(redisKey,1,30, TimeUnit.MINUTES);
+            }else {
+                int count = (int) value;
+                count++;
+                redisCache.setCacheObject(redisKey, count, 30, TimeUnit.MINUTES);
+            }
+
         }
 
 
     }
-/*
-    @Around("countURLMethods()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        //Get user request URL without host
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String url = request.getRequestURL().toString();
-        String queryString = request.getQueryString();
-        String pathAndQuery = (queryString == null) ? request.getRequestURI() : request.getRequestURI() + "?" + queryString;
-        String urlWithoutHost = pathAndQuery.replace(request.getContextPath(), "");
-        String redisKey = "COUNT:"+":"+urlWithoutHost;
-        Object value = redisCache.getCacheObject(redisKey);
-
-        if(Objects.isNull(value)){
-            redisCache.setCacheObject(redisKey,1);
-        }else {
-            int count = (int) value;
-            count++;
-            redisCache.setCacheObject(redisKey, count);
-        }
-
-        //If cache is not exist, keep going
-        Object proceed = joinPoint.proceed();
-
-        return proceed;
-    }
-*/
 }

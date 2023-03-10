@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.sods.resource.mapper.RequestCountMapper">
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO request_count (record_id, request_item, update_time, count)
+        VALUES
+        <foreach collection="list" item="object" separator=",">
+            (#{object.recordId}, #{object.requestItem}, #{object.updateTime}, #{object.count})
+        </foreach>
+    </insert>
+</mapper>
