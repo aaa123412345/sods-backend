@@ -39,6 +39,9 @@ public class CountRequestServiceImpl implements CountRequestService {
             }
         });
 
+        if(requestCountList.size()==0){
+            return 0;
+        }
         //Batch insert into database
         requestCountMapper.batchInsert(requestCountList);
 
