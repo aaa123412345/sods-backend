@@ -63,32 +63,6 @@ public class RedisCacheableAspect {
         redisCache.setCacheObject(redisKey, proceed, Integer.parseInt(expire), TimeUnit.SECONDS);
         return proceed;
     }
-/*
-    @Around("@annotation(org.sods.common.annotation.RedisCacheable)")
-    public Object around(ProceedingJoinPoint joinPoint, RedisCacheable redisCacheable) throws Throwable {
-        System.out.println("Start RedisCacheableAspect");
-        System.out.println(redisCacheable.key());
-        System.out.println(redisCacheable.expire());
-        //Get user request URL without host
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String url = request.getRequestURL().toString();
-        String queryString = request.getQueryString();
-        String pathAndQuery = (queryString == null) ? request.getRequestURI() : request.getRequestURI() + "?" + queryString;
-        String urlWithoutHost = pathAndQuery.replace(request.getContextPath(), "");
-        System.out.println(urlWithoutHost);
 
-        Object proceed = joinPoint.proceed();
-        System.out.println("End RedisCacheableAspect");
-
-        //Get the return data of the method
-        if(proceed instanceof ResponseResult){
-            ResponseResult responseResult = (ResponseResult) proceed;
-            Object data = responseResult.getData();
-            System.out.println(data);
-        }else {
-            throw new Exception("This annotation is only used on a method that returns ResponseResult");
-        }
-        return proceed;
-    }*/
 }
 
