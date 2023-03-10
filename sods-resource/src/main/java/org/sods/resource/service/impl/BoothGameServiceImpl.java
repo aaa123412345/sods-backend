@@ -18,6 +18,11 @@ public class BoothGameServiceImpl implements BoothGameService {
 
     @Override
     public ResponseResult createBoothGame(BoothGame boothGame) {
+        QueryWrapper query = new QueryWrapper();
+        query.eq("booth_id", boothGame.getBoothId());
+        List<BoothGame> result = boothGameMapper.selectList(query);
+        if(result.size() > 0)
+            boothGameMapper.deleteBoothGameByGameIdAndBoothId(result.get(0).getGameId(), result.get(0).getBoothId());
         boothGameMapper.insert(boothGame);
         return new ResponseResult(201,"Booth Game is created successfully.");
     }

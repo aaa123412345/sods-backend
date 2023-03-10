@@ -2,7 +2,9 @@ package org.sods.resource.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.sods.common.domain.ResponseResult;
+import org.sods.resource.domain.BoothGame;
 import org.sods.resource.domain.Treasure;
+import org.sods.resource.mapper.BoothGameMapper;
 import org.sods.resource.mapper.TourguideConfigMapper;
 import org.sods.resource.mapper.TreasureMapper;
 import org.sods.resource.service.TreasureService;
@@ -18,6 +20,9 @@ public class TreasureServiceImpl implements TreasureService {
 
     @Autowired
     TourguideConfigMapper tourguideConfigMapper;
+
+    @Autowired
+    BoothGameMapper boothGameMapper;
 
     @Autowired
     TreasureMapper treasureMapper;
@@ -68,6 +73,13 @@ public class TreasureServiceImpl implements TreasureService {
         Treasure existingARARTreasure = treasureMapper.selectById(id);
         if(existingARARTreasure == null)
             return new ResponseResult(404, "Failed: AR Treasure Game (id: " + id + ") is not found. ");
+
+        QueryWrapper query = new QueryWrapper<>();
+        query.eq("game_id", id);
+        List<BoothGame> result = boothGameMapper.selectList(query);
+        if(result.size() > 0)
+                boothGameMapper.deleteBoothGameByGameId(id);
+
         treasureMapper.deleteById(id);
         return new ResponseResult(200,"AR Treasure Game (id: " + id + ") with related markers and booths are deleted successfully. ");
     }

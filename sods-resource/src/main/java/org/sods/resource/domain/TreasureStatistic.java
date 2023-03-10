@@ -23,7 +23,7 @@ public class TreasureStatistic {
     private Long userId;
 
     @TableField("treasure_id")
-    private Integer treasureId;
+    private Long treasureId;
 
     @TableField("user_answer")
     private String userAnswer;
@@ -32,9 +32,9 @@ public class TreasureStatistic {
     private String score;
 
     @TableField("start_time")
-    private LocalDateTime startTime;
+    private String startTime;
 
     @TableField("end_time")
-    private LocalDateTime endTime;
+    private String endTime;
 
 }

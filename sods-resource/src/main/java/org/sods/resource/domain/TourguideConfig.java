@@ -23,6 +23,6 @@ public class TourguideConfig {
     private String themeColor;
 
     @TableField("openday_date")
-    private LocalDateTime opendayDate;
+    private String opendayDate;
 
 }

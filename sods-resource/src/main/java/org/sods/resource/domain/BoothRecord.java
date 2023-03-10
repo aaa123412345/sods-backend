@@ -24,7 +24,7 @@ public class BoothRecord {
     private Long boothId;
 
     @TableField("visit_end_time")
-    private LocalDateTime visitEndTime;
+    private String visitEndTime;
 
     @TableField("is_got_stamp")
     private Integer isGotStamp;

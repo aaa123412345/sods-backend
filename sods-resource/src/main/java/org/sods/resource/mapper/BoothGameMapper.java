@@ -15,4 +15,10 @@ public interface BoothGameMapper extends MppBaseMapper<BoothGame> {
     @Select("DELETE FROM `BOOTH_GAME` WHERE game_id = #{gameId} AND booth_id = #{boothId}")
     BoothGame deleteBoothGameByGameIdAndBoothId(Long gameId, Long boothId);
 
+    @Select("DELETE FROM `BOOTH_GAME` WHERE game_id = #{gameId}")
+    BoothGame deleteBoothGameByGameId(Long gameId);
+
+    @Select("DELETE FROM `BOOTH_GAME` WHERE booth_id = #{boothId}")
+    BoothGame deleteBoothGameByBoothId(Long boothId);
+
 }

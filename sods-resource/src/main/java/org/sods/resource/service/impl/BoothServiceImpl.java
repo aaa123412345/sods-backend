@@ -3,7 +3,9 @@ package org.sods.resource.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.Booth;
+import org.sods.resource.domain.BoothGame;
 import org.sods.resource.domain.Marker;
+import org.sods.resource.mapper.BoothGameMapper;
 import org.sods.resource.mapper.BoothMapper;
 import org.sods.resource.mapper.MarkerMapper;
 import org.sods.resource.mapper.TourguideConfigMapper;
@@ -24,6 +26,9 @@ public class BoothServiceImpl implements BoothService {
 
     @Autowired
     BoothMapper boothMapper;
+
+    @Autowired
+    BoothGameMapper boothGameMapper;
 
     @Autowired
     MarkerMapper markerMapper;
@@ -114,13 +119,19 @@ public class BoothServiceImpl implements BoothService {
 
         if(result == 1){
 
-            QueryWrapper query = new QueryWrapper<>();
-            query.eq("fk_booth_id", id);
-            List<Marker> markers = markerMapper.selectList(query);
+            QueryWrapper markerQuery = new QueryWrapper<>();
+            markerQuery.eq("fk_booth_id", id);
+            List<Marker> markers = markerMapper.selectList(markerQuery);
             if(!markers.isEmpty()){
                 Marker marker = markers.get(0);
                 marker.setBoothID(null);
                 markerMapper.insert(marker);
+            }
+            QueryWrapper boothGameQuery = new QueryWrapper<>();
+            boothGameQuery.eq("booth_id", id);
+            List<BoothGame> boothGames = boothGameMapper.selectList(boothGameQuery);
+            if(!boothGames.isEmpty()) {
+                boothGameMapper.deleteBoothGameByBoothId(id);
             }
 
         }
