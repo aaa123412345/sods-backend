@@ -1,11 +1,13 @@
 package org.sods.common.Aspect;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
+
 import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
+
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sods.common.domain.ResponseResult;
 import org.sods.common.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class CountUrlAspect {
 
+    private static final Logger logger = LoggerFactory.getLogger(CountUrlAspect.class);
     @Autowired
     private RedisCache redisCache;
 
@@ -40,6 +43,7 @@ public class CountUrlAspect {
             ResponseResult tmp = (ResponseResult) result;
             if(tmp.getCode() >= 400){
                 redisKey = "COUNT:"+tmp.getCode().toString();
+                logger.warn("Request to "+urlWithoutHost+" failed. Error Code:"+tmp.getCode().toString());
             }
 
             Object value = redisCache.getCacheObject(redisKey);

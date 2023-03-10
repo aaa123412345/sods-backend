@@ -1,6 +1,9 @@
 package org.sods.websocket.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sods.common.Aspect.CountUrlAspect;
 import org.sods.common.domain.ResponseResult;
 import org.sods.common.utils.RedisCache;
 import org.sods.resource.domain.Survey;
@@ -20,6 +23,7 @@ import java.util.*;
 
 @Service
 public class RESTVotingServiceImpl implements RESTVotingService {
+    private static final Logger logger = LoggerFactory.getLogger(RESTVotingService.class);
     @Autowired
     private WebSocketRedisService webSocketRedisService;
 
@@ -36,6 +40,7 @@ public class RESTVotingServiceImpl implements RESTVotingService {
     public ResponseResult createGroup(String rawPassCode,String surveyID) {
         Boolean success = webSocketRedisService.checkIfKeyExist(VotingState.getGlobalVotingDataRedisKeyString(rawPassCode));
         if(success){
+            logger.info("Create voting with code "+rawPassCode+" failed: The group exist.");
             return new ResponseResult<>(400,"Create voting with code "+rawPassCode+" failed: The group exist.");
         }
         Long SurveyIDLong;
@@ -43,6 +48,7 @@ public class RESTVotingServiceImpl implements RESTVotingService {
         try {
            SurveyIDLong = Long.parseLong(JSONObject.parseObject(surveyID).getString("surveyID"));
         }catch (Error error){
+            logger.info("Create voting with code "+rawPassCode+" failed: Wrong Format of the survey id.");
             return new ResponseResult<>(400,"Create voting with code "+rawPassCode+" failed: Wrong Format of the survey id.");
         }
 
@@ -50,6 +56,7 @@ public class RESTVotingServiceImpl implements RESTVotingService {
         Survey survey = surveyMapper.selectById(SurveyIDLong);
 
         if(Objects.isNull(survey)){
+            logger.info("Create voting with code "+rawPassCode+" failed: The survey with id "+surveyID+" is not exist.");
             return new ResponseResult<>(400,"Create voting with code "+rawPassCode+" " +
                     "failed: The survey with id "+surveyID+" is not exist.");
         }
@@ -58,6 +65,7 @@ public class RESTVotingServiceImpl implements RESTVotingService {
         webSocketRedisService.setObjectIfKeyNotExist(VotingState.getGlobalVotingDataRedisKeyString(rawPassCode),
                 votingState);
 
+        logger.info("Create voting with code "+rawPassCode+" success.");
         return new ResponseResult<>(200,"Create voting with code "+rawPassCode+" success.");
     }
 
@@ -65,12 +73,14 @@ public class RESTVotingServiceImpl implements RESTVotingService {
     public ResponseResult removeGroup(String rawPassCode) {
         Boolean success = webSocketRedisService.checkIfKeyExist(VotingState.getGlobalVotingDataRedisKeyString(rawPassCode));
         if(!success){
+            logger.info("Delete voting with code "+rawPassCode+" failed: The group is not exist.");
             return new ResponseResult<>(400,"Delete voting with code "+rawPassCode+" failed: The group is not exist.");
         }
 
         Boolean success2 = webSocketRedisService.deleteVotingGroup(rawPassCode);
 
         if(!success2){
+            logger.info("Delete voting with code "+rawPassCode+" failed: Caching Problem.");
             return new ResponseResult<>(400,"Delete voting with code "+rawPassCode+" failed: Caching Problem.");
         }
 
@@ -80,7 +90,7 @@ public class RESTVotingServiceImpl implements RESTVotingService {
                                 + rawPassCode)));
 
 
-
+        logger.info("Delete voting with code "+rawPassCode+" success.");
         return new ResponseResult<>(200,"Delete voting with code "+rawPassCode+" success.");
     }
 
@@ -88,8 +98,10 @@ public class RESTVotingServiceImpl implements RESTVotingService {
     public ResponseResult checkGroup(String rawPassCode) {
         Boolean success = webSocketRedisService.checkIfKeyExist(VotingState.getGlobalVotingDataRedisKeyString(rawPassCode));
         if(success){
+            logger.info("The voting with code "+rawPassCode+" is exist.");
             return new ResponseResult<>(200,"The voting with code "+rawPassCode+" is exist.");
         }else{
+            logger.info("The voting with code "+rawPassCode+" is not exist.");
             return new ResponseResult<>(404,"The voting with code "+rawPassCode+" is not exist.");
         }
 
@@ -109,12 +121,14 @@ public class RESTVotingServiceImpl implements RESTVotingService {
     public ResponseResult checkUserSubmit(String rawPassCode) {
         Long userid = getUserID();
         if(userid<0){
+            logger.warn("Anonymous User Try Request the Voting Service");
             return new ResponseResult<>(400,"User Request invalid");
         }
         //Get Global Data
         String globalVotingDataKey = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
         VotingState votingState = redisCache.getCacheObject(globalVotingDataKey);
         if(Objects.isNull(votingState)){
+            logger.info("The voting with code "+rawPassCode+" is not exist.");
             return new ResponseResult<>(400,"The voting with code "+rawPassCode+" is not exist.");
         }
 
@@ -143,19 +157,25 @@ public class RESTVotingServiceImpl implements RESTVotingService {
     @Override
     public ResponseResult submitResponse(String rawPassCode,String payload) {
         Long userid = getUserID();
+
         //Get Global Data
         String globalVotingDataKey = VotingState.getGlobalVotingDataRedisKeyString(rawPassCode);
         VotingState votingState = redisCache.getCacheObject(globalVotingDataKey);
         if(Objects.isNull(votingState)){
+            logger.info("The voting with code "+rawPassCode+" is not exist.");
             return new ResponseResult<>(400,"User Request invalid");
         }
 
+
         String questionKey;
+        String loggingPrefix = " Voting Group:" + votingState.getPasscode() + " User: "
+                + userid+" CurrentQuestion: "+votingState.getCurrentQuestion();
         //Check the user action
         if(JSONObject.parseObject(payload).containsKey("key")){
             questionKey = JSONObject.parseObject(payload).getString("key");
         }else{
-            return new ResponseResult<>(400,"User Response format invalid");
+            logger.info("User Response format invalid");
+            return new ResponseResult<>(400,"User Response format invalid.");
         }
 
 
@@ -163,10 +183,10 @@ public class RESTVotingServiceImpl implements RESTVotingService {
 
         //Not allow to submit at SHOWRESULT stage
         if(votingState.getClientRenderMethod().equals(ClientRenderMethod.SHOWRESULT)){
-
-            return new ResponseResult<>(400,"User is not able to submit the data in this stage.");
+            logger.info("User is not able to submit the data in this stage." + loggingPrefix);
+            return new ResponseResult<>(400,"User is not able to submit the data in this stage."+loggingPrefix);
         } else if(!votingState.getCurrentQuestion().toString().equals(questionKey)){
-
+            logger.info("User is not able to submit other question."+loggingPrefix);
             return new ResponseResult<>(400,"User Response format invalid");
         }
 
@@ -176,8 +196,10 @@ public class RESTVotingServiceImpl implements RESTVotingService {
         Integer code = userVotingResponse.addDataToMap(payload);
         // 0 -> Success, 1 -> format error, 2 -> repeat
         if(code.equals(1)){
+            logger.info("User Response format invalid"+loggingPrefix);
             return new ResponseResult<>(400,"User Response format invalid");
         } else if (code.equals(2)) {
+            logger.info("User Repeat Response"+loggingPrefix);
             return new ResponseResult<>(400,"User Repeat Response");
         }
 
@@ -191,7 +213,7 @@ public class RESTVotingServiceImpl implements RESTVotingService {
         simpMessagingTemplate.convertAndSendToUser(rawPassCode,"/private",
                 Message.getSynchronizationMessage(rawPassCode, votingState.getJSONResponse()));
 
-
+        logger.info("User Submit Success"+loggingPrefix);
         return new ResponseResult<>(200,"Success");
     }
 

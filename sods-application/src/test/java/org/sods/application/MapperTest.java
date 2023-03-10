@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sods.common.utils.RedisCache;
 import org.sods.resource.domain.ActiveSurvey;
 import org.sods.resource.domain.PageData;
@@ -42,6 +44,12 @@ public class MapperTest {
     public void testService(){
         Integer i = countRequestService.countRequestUpdate();
         System.out.println(i+" data is updated");
+    }
+
+    @Test
+    public void testLog(){
+        Logger logger = LoggerFactory.getLogger(MapperTest.class);
+        logger.info("test log");
     }
 
     @Test

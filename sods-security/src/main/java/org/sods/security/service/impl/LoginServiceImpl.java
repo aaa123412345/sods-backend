@@ -2,6 +2,8 @@ package org.sods.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.val;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sods.common.domain.ResponseResult;
 import org.sods.common.utils.JwtUtil;
 import org.sods.common.utils.RedisCache;
@@ -28,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class LoginServiceImpl implements LoginService {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
     @Autowired
     private RedisCache redisCache;
     @Autowired
@@ -51,6 +54,7 @@ public class LoginServiceImpl implements LoginService {
 
         //User info is wrong
         if(Objects.isNull(authenticate)){
+            logger.info("Login Failed: User "+user.getUserName()+" try to login but info is wrong.");
             throw new RuntimeException("Login Failed");
         }
 
@@ -69,6 +73,7 @@ public class LoginServiceImpl implements LoginService {
         map.put("rolePermission",list);
         map.put("userType",loginUser.getUser().getUserType());
         map.put("userId",loginUser.getUser().getId());
+        logger.info("Login Success: User "+user.getUserName()+" login success.");
 
         return new ResponseResult(200,"login success",map);
 
@@ -83,6 +88,7 @@ public class LoginServiceImpl implements LoginService {
         Long id = loginUser.getUser().getId();
         //remove the user info key in redis
         redisCache.deleteObject("login:"+id);
+        logger.info("Logout Success: User "+loginUser.getUser().getUserName()+" logout success.");
         return new ResponseResult(200,"Logout Success");
     }
 
@@ -92,6 +98,7 @@ public class LoginServiceImpl implements LoginService {
     public ResponseResult register(User user) {
         //check user syntax
         if(!StringUtils.hasText(user.getUserName())||!StringUtils.hasText(user.getUserName())){
+            logger.info("Registration Failed: Not enough parameter");
             return new ResponseResult(400,"Registration Failed, Not enough parameter");
         }
 
@@ -108,8 +115,10 @@ public class LoginServiceImpl implements LoginService {
             userMapper.insert(user);
             //Role id = 2 => Visitor (Default)
             userRoleMapper.insert(new UserRole(user.getId(), 2L));
+            logger.info("Registration Success: User "+user.getUserName()+" register success.");
             return new ResponseResult(200,"Registration Success");
         }else{
+            logger.info("Registration Failed: The user name exist.");
             return new ResponseResult(400,"Registration Failed, The user name exist.");
         }
 

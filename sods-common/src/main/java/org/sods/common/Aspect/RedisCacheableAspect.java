@@ -6,6 +6,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sods.common.annotation.RedisCacheable;
 import org.sods.common.domain.ResponseResult;
 import org.sods.common.utils.RedisCache;
@@ -23,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisCacheableAspect {
 
+    private static final Logger logger = LoggerFactory.getLogger(RedisCacheableAspect.class);
     @Autowired
     private RedisCache redisCache;
 
@@ -31,7 +34,8 @@ public class RedisCacheableAspect {
 
     @Around("redisCacheableMethods()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-       // System.out.println("Start RedisCacheableAspect");
+
+
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         //Get the key and expire of the annotation
@@ -47,6 +51,7 @@ public class RedisCacheableAspect {
         String pathAndQuery = (queryString == null) ? request.getRequestURI() : request.getRequestURI() + "?" + queryString;
         String urlWithoutHost = pathAndQuery.replace(request.getContextPath(), "");
         String redisKey = "CACHE:"+key+":"+urlWithoutHost;
+
         Object value = redisCache.getCacheObject(redisKey);
 
         if(value != null){
@@ -59,8 +64,10 @@ public class RedisCacheableAspect {
 
         //If cache is not exist, keep going
         Object proceed = joinPoint.proceed();
+        logger.info("Cache with key "+redisKey+" is not exist, set a new cache to redis with expire "+expire+" seconds");
         //Save the cache
         redisCache.setCacheObject(redisKey, proceed, Integer.parseInt(expire), TimeUnit.SECONDS);
+
         return proceed;
     }
 

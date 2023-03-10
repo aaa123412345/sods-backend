@@ -2,6 +2,9 @@ package org.sods.ftp.Service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sods.common.Aspect.RedisCacheableAspect;
 import org.sods.common.domain.ResponseResult;
 import org.sods.ftp.Service.S3Service;
 import org.sods.ftp.domain.FileRecord;
@@ -19,12 +22,14 @@ public class S3ServiceImpl implements S3Service {
     private final String bucketName = "sods-file";
     private final String objectPath = "https://sods-file.s3.ap-northeast-1.amazonaws.com/";
 
+    private static final Logger logger = LoggerFactory.getLogger(S3ServiceImpl.class);
     @Autowired
     private FileRecordMapper fileRecordMapper;
 
     @Override
     public ResponseResult getAllBucket() {
         List<String> buckets = S3Handler.listBucket();
+        logger.info("Get all buckets");
         return new ResponseResult<>(HttpStatus.SC_OK,"ok",buckets);
     }
 
@@ -50,7 +55,7 @@ public class S3ServiceImpl implements S3Service {
 
 
         fileRecordMapper.insert(fileRecord);
-
+        logger.info("Upload file: "+file.getOriginalFilename());
         return new ResponseResult<>(HttpStatus.SC_OK,"Upload Success");
     }
 
@@ -63,19 +68,27 @@ public class S3ServiceImpl implements S3Service {
         }
 
         fileRecordMapper.deleteById(fileName);
-
+        logger.info("Delete file: "+fileName);
         return new ResponseResult<>(HttpStatus.SC_OK,"Delete Success");
     }
 
     @Override
     public ResponseResult getFilesRecord(String type,String extension) {
         QueryWrapper<FileRecord> queryWrapper = new QueryWrapper<>();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Get files record with");
         if(type!=null){
+            sb.append(" type: "+type);
             queryWrapper.eq("type",type);
         }
         if(extension!=null){
+            sb.append(" extension: "+extension);
             queryWrapper.eq("extension",extension);
         }
+        sb.append(" from database");
+
+        logger.info(sb.toString());
+
         queryWrapper.select("file_name","url","type","extension");
         List<FileRecord> fileRecords = fileRecordMapper.selectList(queryWrapper);
         return new ResponseResult<>(HttpStatus.SC_OK,"ok",fileRecords);
