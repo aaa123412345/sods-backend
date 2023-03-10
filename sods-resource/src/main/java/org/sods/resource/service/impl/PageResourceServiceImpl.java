@@ -3,10 +3,12 @@ package org.sods.resource.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.sods.common.domain.ResponseResult;
+import org.sods.common.utils.RedisCache;
 import org.sods.resource.domain.PageData;
 import org.sods.resource.mapper.PageDataMapper;
 import org.sods.resource.service.PageResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -15,6 +17,9 @@ import java.util.Objects;
 public class PageResourceServiceImpl implements PageResourceService {
     @Autowired
     PageDataMapper pageDataMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Override
     public ResponseResult get(String domain, String language, String path) {
         //Set the searching requirement
@@ -45,6 +50,7 @@ public class PageResourceServiceImpl implements PageResourceService {
         if(Objects.isNull(p)){
             return new ResponseResult<>(400,"Delete Error: Page is not exist");
         }
+        removeCache(domain, language, path);
 
         pageDataMapper.deleteById(p.getPageId());
         return new ResponseResult<>(200,"Delete Success: Page is deleted");
@@ -80,6 +86,9 @@ public class PageResourceServiceImpl implements PageResourceService {
         pageDataQueryWrapper.eq("language",language);
         PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
 
+        //remove redis cache if exist
+        removeCache(domain,language,path);
+
         if(Objects.isNull(p)){
             return new ResponseResult<>(400,"Put Error: Page is not exist");
         }
@@ -91,6 +100,13 @@ public class PageResourceServiceImpl implements PageResourceService {
         pageDataMapper.updateById(p);
 
         return new ResponseResult<>(200,"Put Success: Page is updated");
+    }
+
+    public void removeCache(String domain, String language, String path){
+        String cacheKey = "CACHE:"+domain+":/rest/"+domain+"/"+language+"/"+path;
+        if(redisTemplate.hasKey(cacheKey)) {
+            redisTemplate.delete(cacheKey);
+        }
     }
 
     @Override

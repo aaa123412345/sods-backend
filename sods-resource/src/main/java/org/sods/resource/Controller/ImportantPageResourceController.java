@@ -14,7 +14,7 @@ public class ImportantPageResourceController {
 
     @Autowired
     private PageResourceService resourceService;
-    @RedisCacheable(key = "page-important",expire = "3600")
+    @RedisCacheable(key = "pageimportant",expire = "4800")
     @GetMapping("/{language}/{pathVariable}")
     public ResponseResult getPageData(@PathVariable("pathVariable")String pathVariable,
                                @PathVariable("language")String language) {
