@@ -40,6 +40,7 @@ public class TourguideConfigServiceImpl implements TourguideConfigService {
 
         existingConfig.setThemeColor(tourguideConfig.getThemeColor());
         existingConfig.setOpendayDate(tourguideConfig.getOpendayDate());
+        existingConfig.setMinStampNum((tourguideConfig.getMinStampNum()));
         tourguideConfigMapper.updateById(existingConfig);
         return new ResponseResult(200, "Config is updated successfully.");
     }

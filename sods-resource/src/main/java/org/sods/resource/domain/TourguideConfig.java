@@ -25,4 +25,7 @@ public class TourguideConfig {
     @TableField("openday_date")
     private String opendayDate;
 
+    @TableField("min_stamp_num")
+    private Integer minStampNum;
+
 }
