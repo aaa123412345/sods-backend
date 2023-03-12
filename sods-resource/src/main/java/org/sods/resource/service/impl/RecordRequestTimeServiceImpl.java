@@ -41,6 +41,18 @@ public class RecordRequestTimeServiceImpl implements RecordRequestTimeService {
                 RedisUrlTimeRecord redisUrlTimeRecord = (RedisUrlTimeRecord) value;
                 RequestTimeRecord requestTimeRecord = new RequestTimeRecord();
                 requestTimeRecord.setUrl(redisUrlTimeRecord.getUrl());
+                String tmpUser = redisUrlTimeRecord.getUser();
+                if(tmpUser.equals("Anonymous")){
+                    requestTimeRecord.setUserId(-999L);
+                }else{
+                    try{
+                        requestTimeRecord.setUserId(Long.parseLong(tmpUser));
+                    } catch (NumberFormatException ex){
+                        logger.error("User id is not a number: " + tmpUser);
+                        requestTimeRecord.setUserId(-999L);
+                    }
+
+                }
                 requestTimeRecord.setTimeInSecond(redisUrlTimeRecord.getTimeInSecond());
                 requestTimeRecords.add(requestTimeRecord);
             }
