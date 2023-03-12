@@ -50,26 +50,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                // Allow Anonymous Visit
-                .antMatchers("/user/login").anonymous()
-                .antMatchers("/user/register").anonymous()
-                .antMatchers(HttpMethod.GET,"/rest/*/*/*").permitAll()
-                .antMatchers("/test/public/hi").anonymous()
-                .antMatchers(HttpMethod.GET,"/tourguide/*").permitAll()
-                .antMatchers(HttpMethod.GET,"/tourguide/*/*").permitAll()
-                .antMatchers(HttpMethod.GET,"/tourguide/*/*/*").permitAll()
-                .antMatchers(HttpMethod.GET,"/tourguide/*/*/*/*").permitAll()
-                .antMatchers(HttpMethod.GET,"/rest/SurveySystem/active_survey_current").permitAll()
-                .antMatchers(HttpMethod.GET,"/rest/SurveySystem/survey/passcode/*").permitAll()
-                .antMatchers(HttpMethod.POST,"/rest/SurveySystem/survey/submit/*").permitAll()
-                .antMatchers("/ws/**").permitAll()
-
-
-
+                    // Allow Anonymous Visit
+                    .antMatchers("/user/login").anonymous()
+                    .antMatchers("/user/register").anonymous()
+                    .antMatchers(HttpMethod.GET,"/rest/*/*/*").permitAll()
+                    .antMatchers("/test/public/hi").anonymous()
+                    .antMatchers(HttpMethod.GET,"/TourGuide/**").permitAll()
+                    .antMatchers(HttpMethod.GET,"/ARGame/**").permitAll()
+                    .antMatchers(HttpMethod.GET,"/rest/SurveySystem/active_survey_current").permitAll()
+                    .antMatchers(HttpMethod.GET,"/rest/SurveySystem/survey/passcode/*").permitAll()
+                    .antMatchers(HttpMethod.POST,"/rest/SurveySystem/survey/submit/*").permitAll()
+                    .antMatchers("/ws/**").permitAll()
                 //Template Add new page
 //                .antMatchers("/testCors").hasAuthority("system:dept:list222")
                 // Other need to perform authentication
-                .anyRequest().authenticated();
+                    .anyRequest().authenticated();
+
+
                 //.anyRequest().anonymous();
         //add filter
         http.addFilterBefore(jwtAuthenticationTokenFilter,UsernamePasswordAuthenticationFilter.class);
