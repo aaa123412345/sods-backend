@@ -12,6 +12,7 @@ import org.sods.common.annotation.RedisCacheable;
 import org.sods.common.domain.ResponseResult;
 import org.sods.common.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 //write AOP for RedisCacheable annotation to make it work
 @Aspect
 @Component
+@Order(10)
 public class RedisCacheableAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisCacheableAspect.class);

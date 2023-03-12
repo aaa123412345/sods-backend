@@ -2,7 +2,9 @@
     <appender name="customAppender" class="org.sods.common.logging.CustomAppender">
         <layout class="org.sods.common.logging.CustomLayout" />
     </appender>
+
     <root level="info">
         <appender-ref ref="customAppender" />
+
     </root>
 </configuration>

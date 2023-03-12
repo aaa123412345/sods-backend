@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.sods.common.domain.ResponseResult;
 import org.sods.common.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 @Aspect
 @Component
+@Order(2)
 public class CountUrlAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(CountUrlAspect.class);
@@ -48,10 +50,12 @@ public class CountUrlAspect {
 
             Object value = redisCache.getCacheObject(redisKey);
             if(Objects.isNull(value)){
+                logger.info("Request to "+urlWithoutHost+" successed. Count:1");
                 redisCache.setCacheObject(redisKey,1,30, TimeUnit.MINUTES);
             }else {
                 int count = (int) value;
                 count++;
+                logger.info("Request to "+urlWithoutHost+" successed. Count:"+count);
                 redisCache.setCacheObject(redisKey, count, 30, TimeUnit.MINUTES);
             }
 

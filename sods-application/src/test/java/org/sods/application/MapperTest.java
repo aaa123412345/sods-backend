@@ -14,6 +14,7 @@ import org.sods.resource.mapper.ActiveSurveyMapper;
 import org.sods.resource.mapper.PageDataMapper;
 import org.sods.resource.mapper.SurveyMapper;
 import org.sods.resource.service.CountRequestService;
+import org.sods.resource.service.RecordRequestTimeService;
 import org.sods.security.domain.User;
 import org.sods.security.mapper.MenuMapper;
 import org.sods.security.mapper.UserMapper;
@@ -43,6 +44,14 @@ public class MapperTest {
     @Test
     public void testService(){
         Integer i = countRequestService.countRequestUpdate();
+        System.out.println(i+" data is updated");
+    }
+
+    @Autowired
+    private RecordRequestTimeService recordRequestTimeService;
+    @Test
+    public void testService2(){
+        Integer i = recordRequestTimeService.recordRequestTimeUpdate();
         System.out.println(i+" data is updated");
     }
 
