@@ -24,8 +24,8 @@ public class BoothRecordController {
     }
 
     @PutMapping
-    public ResponseResult updateRecordByUserIdAndBoothId(@RequestParam(name = "userId", required = true) Long userId, @RequestParam(name = "boothId", required = true) Long boothId){
-        return boothRecordService.updateRecordByUserIdAndBoothId(userId, boothId);
+    public ResponseResult updateRecordByUserIdAndBoothId(@RequestBody BoothRecord boothRecord){
+        return boothRecordService.updateRecordByUserIdAndBoothId(boothRecord);
     }
 
 }

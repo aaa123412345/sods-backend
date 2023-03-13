@@ -46,25 +46,31 @@ public class BoothRecordServiceImpl implements BoothRecordService {
     }
 
     @Override
-    public ResponseResult updateRecordByUserIdAndBoothId(Long userId, Long boothId) {
+    public ResponseResult updateRecordByUserIdAndBoothId(BoothRecord boothRecord) {
 
         QueryWrapper query = new QueryWrapper<>();
-        query.eq("user_id", userId);
-        query.eq("booth_id", boothId);
+        query.eq("user_id", boothRecord.getUserId());
+        query.eq("booth_id", boothRecord.getBoothId());
 
         List<BoothRecord> result = boothRecordMapper.selectList(query);
 
         if(result.size() == 0)
-            return new ResponseResult(404, "Failed: Booth Record (user id: " + userId + " & booth id: " + boothId + " ) is not found. ");
+            return new ResponseResult(404, "Failed: Booth Record (user id: " + boothRecord.getUserId() + " & booth id: " + boothRecord.getBoothId() + " ) is not found. ");
 
-        BoothRecord record = result.get(0);
+        BoothRecord existingRecord = result.get(0);
 
-        if(record.getIsGotStamp() == 0){
-            record.setIsGotStamp(1);
-            boothRecordMapper.update(record, query);
+        boolean isUpdateStamp = existingRecord.getIsGotStamp() == 0 && boothRecord.getIsGotStamp() != null;
+        boolean isUpdateRating = existingRecord.getRatingScore() == null && boothRecord.getRatingScore() != null;
+
+        if(isUpdateStamp || isUpdateRating){
+            if(isUpdateStamp)
+                existingRecord.setIsGotStamp(boothRecord.getIsGotStamp());
+            if(isUpdateRating)
+                existingRecord.setRatingScore(boothRecord.getRatingScore());
+            boothRecordMapper.update(existingRecord, query);
         }
 
-        return new ResponseResult(200, "Booth Record (user id: " + userId + " & booth id: " + boothId + " ) is updated successfully");
+        return new ResponseResult(200, "Booth Record (user id: " + boothRecord.getUserId() + " & booth id: " + boothRecord.getBoothId() + " ) is updated successfully");
     }
 
 }
