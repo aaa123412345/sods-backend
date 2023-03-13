@@ -29,4 +29,7 @@ public class BoothRecord {
     @TableField("is_got_stamp")
     private Integer isGotStamp;
 
+    @TableField("rating_score")
+    private Integer ratingScore;
+
 }
