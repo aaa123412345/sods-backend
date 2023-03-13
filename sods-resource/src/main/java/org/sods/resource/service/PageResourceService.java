@@ -8,5 +8,7 @@ public interface PageResourceService {
     ResponseResult post(String domain,String language,String path, String payload);
     ResponseResult put(String domain,String language,String path, String payload);
 
+    ResponseResult checkResource(String domain,String language,String path);
+
     Boolean makeBackup(String domain,String language,String path);
 }

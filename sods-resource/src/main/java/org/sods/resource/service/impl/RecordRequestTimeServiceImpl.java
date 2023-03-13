@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sods.common.domain.RedisUrlTimeRecord;
 import org.sods.common.utils.RedisCache;
-import org.sods.resource.Job.TimeRecordSyncTask;
+
 import org.sods.resource.domain.RequestTimeRecord;
 import org.sods.resource.mapper.RequestTimeRecordMapper;
 import org.sods.resource.service.RecordRequestTimeService;

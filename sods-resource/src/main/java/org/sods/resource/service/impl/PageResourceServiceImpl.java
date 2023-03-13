@@ -2,6 +2,7 @@ package org.sods.resource.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.ibatis.annotations.Mapper;
 import org.sods.common.domain.ResponseResult;
 import org.sods.common.utils.RedisCache;
 import org.sods.resource.domain.PageData;
@@ -9,8 +10,11 @@ import org.sods.resource.mapper.PageDataMapper;
 import org.sods.resource.service.PageResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -100,6 +104,24 @@ public class PageResourceServiceImpl implements PageResourceService {
         pageDataMapper.updateById(p);
 
         return new ResponseResult<>(200,"Put Success: Page is updated");
+    }
+
+    @Override
+    public ResponseResult checkResource(String domain, String language, String path) {
+        QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
+        pageDataQueryWrapper.eq("domain",domain);
+        pageDataQueryWrapper.eq("path",path);
+        pageDataQueryWrapper.eq("language",language);
+        PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
+
+        Map<String, Object> map = new HashMap<>();
+
+        if(Objects.isNull(p)){
+            map.put("exist", false);
+            return new ResponseResult<>(HttpStatus.OK.value(),"Check Error: Page is not exist",map);
+        }
+        map.put("exist", true);
+        return new ResponseResult<>(HttpStatus.OK.value(), "Check Success: Page is exist",map);
     }
 
     public void removeCache(String domain, String language, String path){

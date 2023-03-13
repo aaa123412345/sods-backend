@@ -21,6 +21,12 @@ public class ImportantPageResourceController {
         return resourceService.get("pageimportant",language,pathVariable);
     }
 
+    @GetMapping("check/{language}/{pathVariable}")
+    public ResponseResult checkPageData(@PathVariable("pathVariable")String pathVariable,
+                                      @PathVariable("language")String language) {
+        return resourceService.checkResource("pageimportant",language,pathVariable);
+    }
+
     @PreAuthorize("@ex.hasAuthority('system:resource:basicWeb:create')")
     @PostMapping("/{language}/{pathVariable}")
     public ResponseResult createPageData(@PathVariable("pathVariable")String pathVariable,
