@@ -74,4 +74,60 @@ public class LanguageServiceImpl implements LanguageService {
 
 
     }
+
+    @Override
+    public ResponseResult getFullMatrix() {
+        List<LanguageMatrix> languageMatrixList = languageMatrixMapper.selectList(null);
+
+        return new ResponseResult<>(HttpStatus.OK.value(), "success", languageMatrixList);
+    }
+
+    @Override
+    public ResponseResult updateFullMatrix(List<LanguageMatrix> newLanguageMatrix) {
+
+
+        updateLanguageMatrix(newLanguageMatrix);
+
+        return new ResponseResult<>(HttpStatus.OK.value(), "success");
+    }
+
+    @Override
+    public ResponseResult insertLanguages(String language, List<LanguageMatrix> newLanguageMatrix) {
+        //insert item to languageMapper
+        Language language1 = new Language();
+        language1.setLanguageSimpleForm(language);
+        languageMapper.insert(language1);
+        //insert items to languageMatrixMapper
+
+        updateLanguageMatrix(newLanguageMatrix);
+
+        return new ResponseResult<>(HttpStatus.OK.value(), "success");
+    }
+
+    @Override
+    public ResponseResult removeLanguages(String language, List<LanguageMatrix> newLanguageMatrix) {
+        //delete item from languageMapper
+        QueryWrapper<Language> languageQueryWrapper = new QueryWrapper<>();
+        languageQueryWrapper.eq("lsf", language);
+        languageMapper.delete(languageQueryWrapper);
+        //delete items from languageMatrixMapper
+
+        updateLanguageMatrix(newLanguageMatrix);
+        return new ResponseResult<>(HttpStatus.OK.value(), "success");
+    }
+
+
+
+    private void updateLanguageMatrix(List<LanguageMatrix> newLanguageMatrix){
+
+        //delete every item in languageMatrixMapper
+        languageMatrixMapper.delete(null);
+        //insert new items
+        newLanguageMatrix.forEach(e->{
+            languageMatrixMapper.insert(e);
+        });
+
+    }
+
+
 }
