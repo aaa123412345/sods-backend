@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/test/public/hi").anonymous()
                     .antMatchers(HttpMethod.GET,"/TourGuide/**").permitAll()
                     .antMatchers(HttpMethod.GET,"/ARGame/**").permitAll()
+                    .antMatchers(HttpMethod.GET,"/rest/language/**").permitAll()
                     .antMatchers(HttpMethod.GET,"/rest/SurveySystem/active_survey_current").permitAll()
                     .antMatchers(HttpMethod.GET,"/rest/SurveySystem/survey/passcode/*").permitAll()
                     .antMatchers(HttpMethod.POST,"/rest/SurveySystem/survey/submit/*").permitAll()
