@@ -2,6 +2,7 @@ package org.sods.resource.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.slf4j.Logger;
 import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.PageData;
 import org.sods.resource.mapper.PageDataMapper;
@@ -19,6 +20,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class PageResourceServiceImpl implements PageResourceService {
+    private final String baseLang = "eng";
+
     @Autowired
     PageDataMapper pageDataMapper;
     @Autowired
@@ -43,7 +46,7 @@ public class PageResourceServiceImpl implements PageResourceService {
                 target.set(e);
                 pageLangExist.set(true);
             }
-            if(e.getLanguage().equals("eng")){
+            if(e.getLanguage().equals(baseLang)){
                 targetEng.set(e);
             }
         });
