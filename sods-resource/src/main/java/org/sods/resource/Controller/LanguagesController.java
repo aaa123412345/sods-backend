@@ -39,19 +39,13 @@ public class LanguagesController {
         return languageService.getFullMatrix();
     }
 
-    @PostMapping("/fullMatrix")
-    public ResponseResult insertLanguages(@RequestParam("insert")String language, @RequestBody List<LanguageMatrix> newLanguageMatrix) {
-        return languageService.insertLanguages(language, newLanguageMatrix);
-    }
 
-    @DeleteMapping("/fullMatrix")
-    public ResponseResult removeLanguages(@RequestParam("delete")String language, @RequestBody List<LanguageMatrix> newLanguageMatrix) {
-        return languageService.removeLanguages(language, newLanguageMatrix);
-    }
 
-    @PutMapping("/fullMatrix")
-    public ResponseResult updateFullMatrix(@RequestBody List<LanguageMatrix> newLanguageMatrix) {
-        return languageService.updateFullMatrix(newLanguageMatrix);
+
+    @PutMapping("/languagesAndMatrix")
+    public ResponseResult updateLanguages(@RequestParam List<String> languages,
+                                          @RequestBody List<LanguageMatrix> newLanguageMatrix) {
+        return languageService.updateLanguages( languages, newLanguageMatrix);
     }
 
 }

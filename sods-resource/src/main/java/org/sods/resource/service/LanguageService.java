@@ -13,9 +13,6 @@ public interface LanguageService {
 
     ResponseResult getFullMatrix();
 
-    ResponseResult updateFullMatrix(List<LanguageMatrix> newLanguageMatrix);
+    ResponseResult updateLanguages(List<String> languages,List<LanguageMatrix> newLanguageMatrix);
 
-    ResponseResult insertLanguages(String language, List<LanguageMatrix> newLanguageMatrix);
-
-    ResponseResult removeLanguages(String language, List<LanguageMatrix> newLanguageMatrix);
 }

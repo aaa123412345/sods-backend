@@ -3,6 +3,7 @@ package org.sods.resource.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.sods.common.domain.ResponseResult;
+import org.sods.common.utils.RedisCache;
 import org.sods.resource.domain.Language;
 import org.sods.resource.domain.LanguageMatrix;
 import org.sods.resource.mapper.LanguageMapper;
@@ -23,6 +24,9 @@ public class LanguageServiceImpl implements LanguageService {
     private LanguageMapper languageMapper;
     @Autowired
     private LanguageMatrixMapper languageMatrixMapper;
+
+    @Autowired
+    private RedisCache redisCache;
 
     @Override
     public ResponseResult getAllLanguagesSimpleForm() {
@@ -82,41 +86,26 @@ public class LanguageServiceImpl implements LanguageService {
         return new ResponseResult<>(HttpStatus.OK.value(), "success", languageMatrixList);
     }
 
+
     @Override
-    public ResponseResult updateFullMatrix(List<LanguageMatrix> newLanguageMatrix) {
-
-
+    public ResponseResult updateLanguages(List<String> languages, List<LanguageMatrix> newLanguageMatrix) {
+        updateLanguage(languages);
         updateLanguageMatrix(newLanguageMatrix);
+        redisCache.deleteObject("CACHE:language:/rest/language/simpleform");
 
         return new ResponseResult<>(HttpStatus.OK.value(), "success");
     }
 
-    @Override
-    public ResponseResult insertLanguages(String language, List<LanguageMatrix> newLanguageMatrix) {
-        //insert item to languageMapper
-        Language language1 = new Language();
-        language1.setLanguageSimpleForm(language);
-        languageMapper.insert(language1);
-        //insert items to languageMatrixMapper
 
-        updateLanguageMatrix(newLanguageMatrix);
 
-        return new ResponseResult<>(HttpStatus.OK.value(), "success");
+
+    private void updateLanguage(List<String> languages){
+        languageMapper.delete(null);
+        languages.forEach(e->{
+            Language n = new Language(e);
+            languageMapper.insert(n);
+        });
     }
-
-    @Override
-    public ResponseResult removeLanguages(String language, List<LanguageMatrix> newLanguageMatrix) {
-        //delete item from languageMapper
-        QueryWrapper<Language> languageQueryWrapper = new QueryWrapper<>();
-        languageQueryWrapper.eq("lsf", language);
-        languageMapper.delete(languageQueryWrapper);
-        //delete items from languageMatrixMapper
-
-        updateLanguageMatrix(newLanguageMatrix);
-        return new ResponseResult<>(HttpStatus.OK.value(), "success");
-    }
-
-
 
     private void updateLanguageMatrix(List<LanguageMatrix> newLanguageMatrix){
 
