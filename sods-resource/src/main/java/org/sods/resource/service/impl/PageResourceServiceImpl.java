@@ -2,9 +2,7 @@ package org.sods.resource.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.ibatis.annotations.Mapper;
 import org.sods.common.domain.ResponseResult;
-import org.sods.common.utils.RedisCache;
 import org.sods.resource.domain.PageData;
 import org.sods.resource.mapper.PageDataMapper;
 import org.sods.resource.service.PageResourceService;
@@ -14,8 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class PageResourceServiceImpl implements PageResourceService {
@@ -30,17 +30,35 @@ public class PageResourceServiceImpl implements PageResourceService {
         QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
         pageDataQueryWrapper.eq("domain",domain);
         pageDataQueryWrapper.eq("path",path);
-        pageDataQueryWrapper.eq("language",language);
+        //pageDataQueryWrapper.eq("language",language);
 
-        PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
+        List<PageData> p = pageDataMapper.selectList(pageDataQueryWrapper);
+
+        AtomicReference<PageData> target = new AtomicReference<>(new PageData());
+        AtomicReference<PageData> targetEng = new AtomicReference<>(new PageData());
+        AtomicReference<Boolean> pageLangExist = new AtomicReference<>(false);
+
+        p.forEach(e->{
+            if(e.getLanguage().equals(language)){
+                target.set(e);
+                pageLangExist.set(true);
+            }
+            if(e.getLanguage().equals("eng")){
+                targetEng.set(e);
+            }
+        });
 
         //if data not exist, show the error
         if(Objects.isNull(p)){
             return  new ResponseResult<>(404,"Get Error: Page is not exist");
         }
-
-        return  new ResponseResult<>(200,"Get Success: Page data is returned",
-                JSONObject.parseObject(p.getPageData()));
+        if(pageLangExist.get()){
+            return new ResponseResult<>(200,"Get Success: Page data is returned",
+                JSONObject.parseObject(target.get().getPageData()));
+        }else{
+            return new ResponseResult<>(200,"Get Success: Page data is returned. But Language is not exist",
+                    JSONObject.parseObject(targetEng.get().getPageData()));
+        }
     }
 
     @Override
