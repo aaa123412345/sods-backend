@@ -63,8 +63,11 @@ public class RecordRequestTimeServiceImpl implements RecordRequestTimeService {
         if(requestTimeRecords.size()==0){
             return 0;
         }
-        //Batch insert into database
-        requestTimeRecordMapper.batchInsert(requestTimeRecords);
+
+        //split the list into 1000 size and insert into database
+        splittedButchInsert(requestTimeRecords,1000);
+
+
 
         //Delete all keys with prefix "TIMERECORD:RECORD:"
         keyList.forEach((e)->{
@@ -75,4 +78,19 @@ public class RecordRequestTimeServiceImpl implements RecordRequestTimeService {
 
         return keyList.size();
     }
+
+    public boolean splittedButchInsert(List<RequestTimeRecord> requestTimeRecords, int batchSize){
+        int size = requestTimeRecords.size();
+        int batchCount = (size + batchSize - 1) / batchSize;
+        for (int i = 0; i < batchCount; i++) {
+            int fromIndex = i * batchSize;
+            int toIndex = Math.min(size, (i + 1) * batchSize);
+            List<RequestTimeRecord> subList = requestTimeRecords.subList(fromIndex, toIndex);
+            requestTimeRecordMapper.batchInsert(subList);
+        }
+        logger.info("Splitted batch insert finished:"+size+" records");
+        return true;
+    }
+
+
 }

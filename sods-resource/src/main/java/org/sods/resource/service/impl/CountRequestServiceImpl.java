@@ -2,10 +2,14 @@ package org.sods.resource.service.impl;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sods.common.utils.RedisCache;
 import org.sods.resource.domain.RequestCount;
+import org.sods.resource.domain.RequestTimeRecord;
 import org.sods.resource.mapper.RequestCountMapper;
 import org.sods.resource.service.CountRequestService;
+import org.sods.resource.service.RecordRequestTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,8 @@ import java.util.List;
 
 @Service
 public class CountRequestServiceImpl implements CountRequestService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CountRequestService.class);
     @Autowired
     private RedisCache redisCache;
 
@@ -42,8 +48,8 @@ public class CountRequestServiceImpl implements CountRequestService {
         if(requestCountList.size()==0){
             return 0;
         }
-        //Batch insert into database
-        requestCountMapper.batchInsert(requestCountList);
+        //Split data with the size 1000 and Batch insert into database
+        splittedButchInsert(requestCountList, 1000);
 
         //Delete all keys with prefix "COUNT:"
         keyList.forEach((e)->{
@@ -51,6 +57,19 @@ public class CountRequestServiceImpl implements CountRequestService {
         });
 
         return keyList.size();
+    }
+
+    public boolean splittedButchInsert(List<RequestCount> requestCounts, int batchSize){
+        int size = requestCounts.size();
+        int batchCount = (size + batchSize - 1) / batchSize;
+        for (int i = 0; i < batchCount; i++) {
+            int fromIndex = i * batchSize;
+            int toIndex = Math.min(size, (i + 1) * batchSize);
+            List<RequestCount> subList = requestCounts.subList(fromIndex, toIndex);
+            requestCountMapper.batchInsert(subList);
+        }
+        logger.info("Splitted batch insert finished:"+size+" records");
+        return true;
     }
 
 
