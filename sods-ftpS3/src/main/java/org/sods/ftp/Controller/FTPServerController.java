@@ -33,11 +33,12 @@ public class FTPServerController {
 
     @DeleteMapping("/ftp/file/{fileName}")
     public ResponseResult delete(@PathVariable("fileName") String fileName){
+
         return s3Service.delete(fileName);
     }
 
     //get all files record with filter and the query param can nullable
-    @GetMapping("/ftp/file")
+    @GetMapping("/ftp/files")
     public ResponseResult getFilesRecord(@RequestParam(value = "type",required = false) String type,
                                          @RequestParam(value = "extension",required = false) String extension){
         return s3Service.getFilesRecord(type,extension);

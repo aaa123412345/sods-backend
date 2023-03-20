@@ -1,6 +1,7 @@
 package org.sods.ftp.Service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,12 +62,16 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public ResponseResult delete(String fileName) {
+
+
+        //delete file in s3
         try {
             S3Handler.deleteFile(bucketName,fileName);
         }catch (Exception e){
             return new ResponseResult<>(HttpStatus.SC_INTERNAL_SERVER_ERROR,"Delete failed");
         }
 
+        //delete file record in database
         fileRecordMapper.deleteById(fileName);
         logger.info("Delete file: "+fileName);
         return new ResponseResult<>(HttpStatus.SC_OK,"Delete Success");
