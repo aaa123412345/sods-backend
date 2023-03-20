@@ -12,10 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -143,6 +140,42 @@ public class PageResourceServiceImpl implements PageResourceService {
         }
         map.put("exist", true);
         return new ResponseResult<>(HttpStatus.OK.value(), "Check Success: Page is exist",map);
+    }
+
+    @Override
+    public ResponseResult getPages(String domain, String language, String path) {
+        QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
+        if(Objects.nonNull(domain)){
+            pageDataQueryWrapper.eq("domain",domain);
+        }
+        if(Objects.nonNull(language)){
+            pageDataQueryWrapper.eq("language",language);
+        }
+        if(Objects.nonNull(path)){
+            pageDataQueryWrapper.like("path","%"+path+"%");
+        }
+        pageDataQueryWrapper.select("domain","path","language");
+        List<PageData> p = pageDataMapper.selectList(pageDataQueryWrapper);
+
+
+        if(Objects.isNull(p)){
+            return  new ResponseResult<>(404,"Get Error: Page is not exist");
+        }
+
+        //convert to map
+        List<Map> results = new ArrayList<>();
+        p.forEach(e->{
+            Map<String,Object> result = new HashMap<>();
+            result.put("domain",e.getDomain());
+            result.put("path",e.getPath());
+            result.put("language",e.getLanguage());
+            results.add(result);
+        });
+
+        //return the result
+        return new ResponseResult<>(200,"Get Success: Page data is returned",results);
+
+
     }
 
     public void removeCache(String domain, String language, String path){
