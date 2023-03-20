@@ -80,7 +80,7 @@ pipeline {
       steps {
         echo 'SSH'
         retry(count: 3) {
-          withCredentials([awsCredentials(credentialsId: 'backend')]) {
+          withAWS(credentials: 'backend') {
             sshagent(credentials:['ssh']){
               sh '''
                 set -ev
