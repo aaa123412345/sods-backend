@@ -42,6 +42,7 @@ public class S3ServiceImpl implements S3Service {
             S3Handler.uploadFile(bucketName,file);
 
         }catch (Exception e){
+            logger.error("Upload file failed: "+file.getOriginalFilename()+" "+e.getMessage());
             return new ResponseResult<>(HttpStatus.SC_INTERNAL_SERVER_ERROR,"Upload failed");
         }
 
@@ -68,6 +69,7 @@ public class S3ServiceImpl implements S3Service {
         try {
             S3Handler.deleteFile(bucketName,fileName);
         }catch (Exception e){
+            logger.error("Delete file failed: "+fileName+" "+e.getMessage());
             return new ResponseResult<>(HttpStatus.SC_INTERNAL_SERVER_ERROR,"Delete failed");
         }
 
