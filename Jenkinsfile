@@ -80,26 +80,19 @@ pipeline {
       steps {
         echo 'SSH'
         retry(count: 3) {
-          sshagent(credentials:['ssh']){
-            sh '''
-              set -ev
-              ssh -o StrictHostKeyChecking=no -l ec2-user ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com << EOF
-              docker stop backend || true
-              docker rm backend || true
-              docker rmi -f public.ecr.aws/i4f7p8k7/backenddocker || true
-              docker pull public.ecr.aws/i4f7p8k7/backenddocker:latest
-              docker run -t -i -d -p  8888:8888 --name="backend" public.ecr.aws/i4f7p8k7/backenddocker:latest
-              exit
-            '''
-               /*
-               ssh -o StrictHostKeyChecking=no -l ec2-user ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com << EOF
-               docker rm $(docker stop $(docker ps -a -q --filter "expose=8888"))
-               docker rmi public.ecr.aws/i4f7p8k7/backenddocker
-               docker pull public.ecr.aws/i4f7p8k7/backenddocker:latest
-               docker run -t -i -d -p 8888:8888 public.ecr.aws/i4f7p8k7/backenddocker:latest
-               exit*/
-           
-
+          withCredentials([awsCredentials(credentialsId: 'backend')]) {
+            sshagent(credentials:['ssh']){
+              sh '''
+                set -ev
+                ssh -o StrictHostKeyChecking=no -l ec2-user ec2-13-113-55-21.ap-northeast-1.compute.amazonaws.com << EOF
+                docker stop backend || true
+                docker rm backend || true
+                docker rmi -f public.ecr.aws/i4f7p8k7/backenddocker || true
+                docker pull public.ecr.aws/i4f7p8k7/backenddocker:latest
+                docker run -t -i -d -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -p  8888:8888 --name="backend" public.ecr.aws/i4f7p8k7/backenddocker:latest
+                exit
+              '''
+            }
           }
         }
         
