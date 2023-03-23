@@ -19,4 +19,13 @@ public class EditorPageResourceController {
                                       @RequestParam(value = "language",required = false) String language) {
         return resourceService.getPages(domain,language,pathVariable);
     }
+
+    @PreAuthorize("@ex.hasAuthority('system:resource:pages:put')")
+    @PutMapping("/pages")
+    public ResponseResult putPageData(@RequestParam(value = "domain",required = false) String domain,
+                                      @RequestParam(value = "pathVariable",required = false) String pathVariable,
+                                      @RequestParam(value = "language",required = false) String language,
+                                      @RequestBody String payload) {
+        return resourceService.put(domain,language,pathVariable,payload);
+    }
 }
