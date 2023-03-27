@@ -27,42 +27,13 @@ public class Menu implements Serializable {
     @TableId
     private Long id;
 
-    private String menuName;
-    /**
-     * o display 1 hidden
-     */
-    private String visible;
-    /**
-     * 0 normal 1 stop
-     */
-    private String status;
-    /**
-     * right tag
-     */
+    private Boolean status;
+
     private String perms;
 
-    private String icon;
+    private Boolean delFlag;
 
-    @TableField(fill = FieldFill.INSERT)
-    private Long createUserId;
+    private Integer level;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long updateUserId;
 
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    /**
-     *  delfag 0 = false 1=true
-     */
-    private Integer delFlag;
-
-    @Version
-    private Integer version;
-    /**
-     *
-     */
-    private String remark;
 }

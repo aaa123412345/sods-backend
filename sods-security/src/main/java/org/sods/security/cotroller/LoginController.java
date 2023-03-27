@@ -33,10 +33,5 @@ public class LoginController {
         return loginService.logout();
     }
 
-    @PreAuthorize("@ex.isCurrentUser(#userID)")
-    @RequestMapping("/user/check/{userID}")
-    public ResponseResult checkUser(@PathVariable("userID") String userID){
 
-        return new ResponseResult<>(200,"Hi "+userID);
-    }
 }
