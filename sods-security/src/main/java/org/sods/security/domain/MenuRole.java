@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MenuRole {
-    String menuId;
-    String roleId;
+    private Long menuId;
+    private Long roleId;
 }
