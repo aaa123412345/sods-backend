@@ -142,6 +142,7 @@ public class PageResourceServiceImpl implements PageResourceService {
             p.setPath(path);
             p.setLanguage(language);
             p.setPageData(payload);
+            p.setAbleEdit(true);
             pageDataMapper.insert(p);
             return new ResponseResult<>(200,"Put Success: Page is created");
         }
@@ -150,6 +151,7 @@ public class PageResourceServiceImpl implements PageResourceService {
         p.setPath(path);
         p.setLanguage(language);
         p.setPageData(payload);
+        p.setAbleEdit(true);
         pageDataMapper.updateById(p);
 
         return new ResponseResult<>(200,"Put Success: Page is updated");
@@ -174,7 +176,7 @@ public class PageResourceServiceImpl implements PageResourceService {
     }
 
     @Override
-    public ResponseResult getPages(String domain, String language, String path) {
+    public ResponseResult getPages(String domain, String language, String path, Boolean editable) {
         QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
         if(Objects.nonNull(domain)){
             pageDataQueryWrapper.eq("domain",domain);
@@ -184,6 +186,9 @@ public class PageResourceServiceImpl implements PageResourceService {
         }
         if(Objects.nonNull(path)){
             pageDataQueryWrapper.like("path","%"+path+"%");
+        }
+        if(Objects.nonNull(editable)){
+            pageDataQueryWrapper.eq("able_edit",editable);
         }
         pageDataQueryWrapper.select("domain","path","language");
         List<PageData> p = pageDataMapper.selectList(pageDataQueryWrapper);

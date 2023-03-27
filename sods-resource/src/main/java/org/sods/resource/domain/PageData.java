@@ -26,6 +26,8 @@ public class PageData {
 
     private String pageData;
 
+    private Boolean ableEdit;
+
     @TableField(fill = FieldFill.INSERT)
     private Long createUserId;
 

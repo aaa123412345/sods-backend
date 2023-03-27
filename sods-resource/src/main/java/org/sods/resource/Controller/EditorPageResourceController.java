@@ -16,8 +16,9 @@ public class EditorPageResourceController {
     @GetMapping("/pages")
     public ResponseResult getPageData(@RequestParam(value = "domain",required = false) String domain,
                                       @RequestParam(value = "pathVariable",required = false) String pathVariable,
-                                      @RequestParam(value = "language",required = false) String language) {
-        return resourceService.getPages(domain,language,pathVariable);
+                                      @RequestParam(value = "language",required = false) String language,
+                                      @RequestParam(value = "editable",required = false) Boolean editable) {
+        return resourceService.getPages(domain,language,pathVariable,editable);
     }
 
     @PreAuthorize("@ex.hasAuthority('system:resource:pages:put')")
@@ -26,6 +27,14 @@ public class EditorPageResourceController {
                                       @RequestParam(value = "pathVariable",required = false) String pathVariable,
                                       @RequestParam(value = "language",required = false) String language,
                                       @RequestBody String payload) {
-        return resourceService.put(domain,language,pathVariable,payload);
+        return resourceService.forceUpdate(domain,language,pathVariable,payload);
+    }
+
+    @PreAuthorize("@ex.hasAuthority('system:resource:pages:delete')")
+    @DeleteMapping("/pages")
+    public ResponseResult removePageData(@RequestParam(value = "domain",required = false) String domain,
+                                      @RequestParam(value = "pathVariable",required = false) String pathVariable,
+                                      @RequestParam(value = "language",required = false) String language) {
+        return resourceService.delete(domain,language,pathVariable);
     }
 }

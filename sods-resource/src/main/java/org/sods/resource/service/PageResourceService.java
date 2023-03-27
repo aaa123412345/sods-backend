@@ -12,7 +12,7 @@ public interface PageResourceService {
 
     ResponseResult checkResource(String domain,String language,String path);
 
-    ResponseResult getPages(String domain,String language,String path);
+    ResponseResult getPages(String domain,String language,String path,Boolean editable);
 
     Boolean makeBackup(String domain,String language,String path);
 }
