@@ -125,6 +125,37 @@ public class PageResourceServiceImpl implements PageResourceService {
     }
 
     @Override
+    public ResponseResult forceUpdate(String domain, String language, String path, String payload) {
+        QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
+        pageDataQueryWrapper.eq("domain",domain);
+        pageDataQueryWrapper.eq("path",path);
+        pageDataQueryWrapper.eq("language",language);
+        PageData p = pageDataMapper.selectOne(pageDataQueryWrapper);
+
+        //remove redis cache if exist
+        removeCache(domain,language,path);
+
+        if(Objects.isNull(p)){
+            //create mode
+            p = new PageData();
+            p.setDomain(domain);
+            p.setPath(path);
+            p.setLanguage(language);
+            p.setPageData(payload);
+            pageDataMapper.insert(p);
+            return new ResponseResult<>(200,"Put Success: Page is created");
+        }
+        //update mode
+        p.setDomain(domain);
+        p.setPath(path);
+        p.setLanguage(language);
+        p.setPageData(payload);
+        pageDataMapper.updateById(p);
+
+        return new ResponseResult<>(200,"Put Success: Page is updated");
+    }
+
+    @Override
     public ResponseResult checkResource(String domain, String language, String path) {
         QueryWrapper<PageData> pageDataQueryWrapper = new QueryWrapper<>();
         pageDataQueryWrapper.eq("domain",domain);
