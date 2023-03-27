@@ -146,7 +146,7 @@ public class PageResourceServiceImpl implements PageResourceService {
             pageDataMapper.insert(p);
             return new ResponseResult<>(200,"Put Success: Page is created");
         }
-        //update mode
+        //update mode 1
         p.setDomain(domain);
         p.setPath(path);
         p.setLanguage(language);
