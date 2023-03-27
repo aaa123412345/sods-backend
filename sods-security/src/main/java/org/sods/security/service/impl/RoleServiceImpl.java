@@ -6,18 +6,34 @@ import org.sods.security.service.RoleService;
 import java.util.List;
 
 public class RoleServiceImpl implements RoleService {
+
     @Override
-    public ResponseResult getRoles() {
+    public ResponseResult getAllRoles() {
         return null;
     }
 
     @Override
-    public ResponseResult getPermissions() {
+    public ResponseResult getAllPermissions() {
         return null;
     }
 
     @Override
-    public ResponseResult setPermissionToRole(String roleID, List<String> permissionNames) {
+    public ResponseResult getAllRoleWithPermissions() {
+        return null;
+    }
+
+    @Override
+    public ResponseResult setPermissionToRole(Long roleID, List<Long> permissionID) {
+        return null;
+    }
+
+    @Override
+    public ResponseResult addRole(Long roleID, List<Long> permissionID) {
+        return null;
+    }
+
+    @Override
+    public ResponseResult removeRole(Long roleID) {
         return null;
     }
 }

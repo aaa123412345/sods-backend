@@ -5,7 +5,12 @@ import org.sods.common.domain.ResponseResult;
 import java.util.List;
 
 public interface RoleService {
-    ResponseResult getRoles();
-    ResponseResult getPermissions();
-    ResponseResult setPermissionToRole(String roleID, List<String> permissionNames);
+    ResponseResult getAllRoles();
+    ResponseResult getAllPermissions();
+    ResponseResult getAllRoleWithPermissions();
+    ResponseResult setPermissionToRole(Long roleID, List<Long> permissionID);
+
+
+    ResponseResult addRole(Long roleID, List<Long> permissionID);
+    ResponseResult removeRole(Long roleID);
 }
