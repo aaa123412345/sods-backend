@@ -23,13 +23,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseResult getAllUsers() {
-        List<User> users = userMapper.selectList(null);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id", "username", "create_time", "update_time");
+        List<User> users = userMapper.selectList(queryWrapper);
         return new ResponseResult<>(HttpStatus.OK.value(), "Get all users successfully", users);
     }
 
     @Override
     public ResponseResult getUser(Long userID) {
-        User user = userMapper.selectById(userID);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id", "username", "create_time", "update_time");
+        queryWrapper.eq("id", userID);
+        User user = userMapper.selectOne(queryWrapper);
         return new ResponseResult<>(HttpStatus.OK.value(), "Get user successfully", user);
 
     }
