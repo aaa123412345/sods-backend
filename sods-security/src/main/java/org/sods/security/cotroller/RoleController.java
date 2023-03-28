@@ -53,7 +53,7 @@ public class RoleController {
 
     @DeleteMapping("security/role/{roleID}")
     @PreAuthorize("@ex.hasAuthority('system:security:delete')")
-    public ResponseResult removeRole(@RequestParam Long roleID){
+    public ResponseResult removeRole(@PathVariable Long roleID){
         return roleService.removeRole(roleID);
     }
 

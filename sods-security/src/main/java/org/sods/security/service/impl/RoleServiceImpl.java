@@ -69,9 +69,9 @@ public class RoleServiceImpl implements RoleService {
             roleResult.put("roles",role);
             List<String> permissionName = new ArrayList<>();
             for (MenuRole menuRole : menuRoles) {
-                if (role.getId().equals(menuRole.getRoleId())) {
+                if (role.getRoleId().equals(menuRole.getRoleId())) {
                     for (Menu menu : menus) {
-                        if (menuRole.getMenuId().equals(menu.getId())) {
+                        if (menuRole.getMenuId().equals(menu.getMenuId())) {
                             permissionName.add(menu.getPerms());
                         }
                     }
@@ -118,7 +118,7 @@ public class RoleServiceImpl implements RoleService {
             for (Long permission : permissionID) {
                 MenuRole menuRole = new MenuRole();
                 menuRole.setMenuId(permission);
-                menuRole.setRoleId(role.getId());
+                menuRole.setRoleId(role.getRoleId());
                 menuRoleMapper.insert(menuRole);
             }
 
@@ -137,13 +137,13 @@ public class RoleServiceImpl implements RoleService {
             roleMapper.updateById(role);
             //Delete all permissions of this role
             QueryWrapper<MenuRole> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("role_id",role.getId());
+            queryWrapper.eq("role_id",role.getRoleId());
             menuRoleMapper.delete(queryWrapper);
             //Add new permissions to this role
             for (Long permission : permissionID) {
                 MenuRole menuRole = new MenuRole();
                 menuRole.setMenuId(permission);
-                menuRole.setRoleId(role.getId());
+                menuRole.setRoleId(role.getRoleId());
                 menuRoleMapper.insert(menuRole);
             }
         }catch (Exception e) {

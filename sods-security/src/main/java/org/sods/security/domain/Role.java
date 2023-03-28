@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Role {
     @TableId
-    Long id;
+    Long RoleId;
     String name;
     Boolean status;
     String remark;
