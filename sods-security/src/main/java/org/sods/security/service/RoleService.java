@@ -15,6 +15,6 @@ public interface RoleService {
     ResponseResult addRole(Role role, List<Long> permissionID);
     ResponseResult removeRole(Long roleID);
 
-    ResponseResult addRoleToUser(Long roleID, Long userID);
-    ResponseResult removeRoleFromUser(Long roleID, Long userID);
+    ResponseResult changeUserRole(List<Long> roleID, Long userID);
+
 }

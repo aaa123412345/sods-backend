@@ -32,35 +32,31 @@ public class RoleController {
         return roleService.getAllRoleWithPermissions();
     }
 
-    @PutMapping
+    @PutMapping("security/role/{roleID}")
     @PreAuthorize("@ex.hasAuthority('system:security:put')")
     public ResponseResult setPermissionToRole(@RequestParam Long roleID,
                                               @RequestParam List<Long> permissionID){
         return roleService.setPermissionToRole(roleID, permissionID);
     }
 
-    @PostMapping
+    @PostMapping("security/role")
     @PreAuthorize("@ex.hasAuthority('system:security:post')")
     public ResponseResult addRole(@RequestParam List<Long> permissionID,@RequestBody Role role){
         return roleService.addRole(role, permissionID);
     }
 
-    @DeleteMapping
+    @DeleteMapping("security/role/{roleID}")
     @PreAuthorize("@ex.hasAuthority('system:security:delete')")
     public ResponseResult removeRole(@RequestParam Long roleID){
         return roleService.removeRole(roleID);
     }
 
-    @PutMapping
+    @PutMapping("security/user/role_edit")
     @PreAuthorize("@ex.hasAuthority('system:security:root')")
-    public ResponseResult addRoleToUser(@RequestParam Long roleID, @RequestParam Long userID){
-        return roleService.addRoleToUser(roleID, userID);
+    public ResponseResult addRoleToUser(@RequestParam List<Long> roleID, @RequestParam Long userID){
+        return roleService.changeUserRole(roleID, userID);
     }
 
-    @PutMapping
-    @PreAuthorize("@ex.hasAuthority('system:security:root')")
-    public ResponseResult removeRoleFromUser(@RequestParam Long roleID, @RequestParam Long userID){
-        return roleService.removeRoleFromUser(roleID, userID);
-    }
+
 
 }
