@@ -23,7 +23,9 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         ResponseResult result = new ResponseResult(HttpStatus.UNAUTHORIZED.value(),"Validation failed");
         String json = JSON.toJSONString(result);
-        logger.warn("Validation failed. Request to "+request.getRequestURI()+" failed. Error Code:"+result.getCode().toString());
+        logger.warn("Validation failed. Request to "+request.getRequestURI()+
+                " failed. Error Code:"+result.getCode().toString()
+                +" Device ID:"+ request.getHeader("deviceID") + "Device IP:" + request.getRemoteAddr());
         //处理异常
         WebUtils.renderString(response,json);
     }

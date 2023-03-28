@@ -25,7 +25,9 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         ResponseResult result = new ResponseResult(HttpStatus.FORBIDDEN.value(),"Permission denied");
         String json = JSON.toJSONString(result);
-        logger.warn("Permission denied. Request to "+request.getRequestURI()+" failed. Error Code:"+result.getCode().toString());
+        logger.warn("Permission denied. Request to "+request.getRequestURI()+
+                " failed. Error Code:"+result.getCode().toString()
+                +" Device ID:"+ request.getHeader("deviceID") + "Device IP:" + request.getRemoteAddr());
         //处理异常
         WebUtils.renderString(response,json);
     }
