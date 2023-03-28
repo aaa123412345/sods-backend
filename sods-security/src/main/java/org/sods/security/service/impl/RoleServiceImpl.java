@@ -1,7 +1,6 @@
 package org.sods.security.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.ibatis.annotations.Mapper;
 import org.sods.common.domain.ResponseResult;
 import org.sods.security.domain.Menu;
 import org.sods.security.domain.MenuRole;
@@ -53,7 +52,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public ResponseResult getAllPermissions() {
-        List<Menu> menus = menuMapper.selectList(null);
+        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().orderByAsc("level","perms"));
         return new ResponseResult<>(HttpStatus.OK.value(), "Get all permissions successfully", menus);
     }
 
