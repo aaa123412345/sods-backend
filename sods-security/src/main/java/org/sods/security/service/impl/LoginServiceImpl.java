@@ -60,7 +60,7 @@ public class LoginServiceImpl implements LoginService {
 
         //User Info is correct
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        String userid = loginUser.getUser().getId().toString();
+        String userid = loginUser.getUser().getUserId().toString();
         String jwt = JwtUtil.createJWT(userid);
 
         //save complete info of user to redis
@@ -72,7 +72,7 @@ public class LoginServiceImpl implements LoginService {
         map.put("token",jwt);
         map.put("rolePermission",list);
         map.put("userType",loginUser.getUser().getUserType());
-        map.put("userId",loginUser.getUser().getId());
+        map.put("userId",loginUser.getUser().getUserId().toString());
         logger.info("Login Success: User "+user.getUserName()+" login success.");
 
         return new ResponseResult(200,"login success",map);
@@ -85,7 +85,7 @@ public class LoginServiceImpl implements LoginService {
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        Long id = loginUser.getUser().getId();
+        Long id = loginUser.getUser().getUserId();
         //remove the user info key in redis
         redisCache.deleteObject("login:"+id);
         logger.info("Logout Success: User "+loginUser.getUser().getUserName()+" logout success.");
@@ -114,7 +114,7 @@ public class LoginServiceImpl implements LoginService {
             //Insert database
             userMapper.insert(user);
             //Role id = 2 => Visitor (Default)
-            userRoleMapper.insert(new UserRole(user.getId(), 2L));
+            userRoleMapper.insert(new UserRole(user.getUserId(), 2L));
             logger.info("Registration Success: User "+user.getUserName()+" register success.");
             return new ResponseResult(200,"Registration Success");
         }else{

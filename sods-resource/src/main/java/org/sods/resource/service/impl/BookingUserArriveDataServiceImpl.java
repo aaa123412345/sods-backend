@@ -161,7 +161,7 @@ public class BookingUserArriveDataServiceImpl implements BookingUserArriveDataSe
             //Get User ID => if (No login, userid:-1)
             if(principal instanceof LoginUser){
                 LoginUser loginUser = ((LoginUser)principal);
-                userid = loginUser.getUser().getId();
+                userid = loginUser.getUser().getUserId();
             }else{
                 userid = -1L;
             }

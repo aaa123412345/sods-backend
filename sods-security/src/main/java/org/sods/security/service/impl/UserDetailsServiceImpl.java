@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         //Get the right of user
         //List<String> list= new ArrayList<>(Arrays.asList("test","admin"));
-        List<String> list = menuMapper.selectPermsByUserId(user.getId());
+        List<String> list = menuMapper.selectPermsByUserId(user.getUserId());
         //Return UserDetails
         return new LoginUser(user,list);
     }

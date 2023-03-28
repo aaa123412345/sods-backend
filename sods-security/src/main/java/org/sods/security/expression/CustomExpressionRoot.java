@@ -44,7 +44,7 @@ public class CustomExpressionRoot {
             return true;
         }else {
             logger.warn("User try to access the service without permission. " +
-                    "User ID: "+loginUser.getUser().getId()+
+                    "User ID: "+loginUser.getUser().getUserId()+
                     ", Required Authority: "+authority);
             return false;
         }
@@ -53,7 +53,7 @@ public class CustomExpressionRoot {
     public Boolean isCurrentUser(String userID){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        if(loginUser.getUser().getId() == Long.parseLong(userID)){
+        if(loginUser.getUser().getUserId() == Long.parseLong(userID)){
             return true;
         } else if (loginUser.getPermissions().contains("system:root")) {
             return true;

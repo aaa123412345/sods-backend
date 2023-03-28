@@ -24,7 +24,7 @@ public class User implements Serializable {
     * Key
     */
     @TableId
-    private Long id;
+    private Long userId;
 
     private String userName;
 

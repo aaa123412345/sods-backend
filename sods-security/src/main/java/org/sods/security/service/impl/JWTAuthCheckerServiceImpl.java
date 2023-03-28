@@ -20,7 +20,7 @@ public class JWTAuthCheckerServiceImpl implements JWTAuthCheckerService {
     public LoginUser checkWithJWT(String token) {
         LoginUser anonymous = new LoginUser();
         User anonymousUser = new User();
-        anonymousUser.setId(-1L);
+        anonymousUser.setUserId(-1L);
         anonymous.setUser(anonymousUser);
 
         //Get token

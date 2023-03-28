@@ -69,7 +69,7 @@ public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
         Map<String,Object> userData = new HashMap<>();
         userData.put("Permission",loginUser.getPermissions());
-        userData.put("UserID",loginUser.getUser().getId().toString());
+        userData.put("UserID",loginUser.getUser().getUserId().toString());
 
         if(Objects.isNull(loginUser.getUsername())){
             System.out.println("Connect Fail");

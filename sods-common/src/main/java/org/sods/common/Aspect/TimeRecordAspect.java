@@ -110,7 +110,8 @@ public class TimeRecordAspect {
             try {
                 String json = mapper.writeValueAsString(principal);
                 JsonNode jsonNode = mapper.readTree(json);
-                tmpId = jsonNode.get("user").get("id").asText();
+
+                tmpId = jsonNode.get("user").get("userId").asText();
 
             }catch (Exception e){
                 e.printStackTrace();

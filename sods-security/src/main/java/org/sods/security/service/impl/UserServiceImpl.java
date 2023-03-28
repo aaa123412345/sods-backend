@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseResult getAllUsers() {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("id", "username", "create_time", "update_time");
+        queryWrapper.select("user_id", "user_name", "create_time", "update_time");
         List<User> users = userMapper.selectList(queryWrapper);
         return new ResponseResult<>(HttpStatus.OK.value(), "Get all users successfully", users);
     }
@@ -32,8 +32,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseResult getUser(Long userID) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("id", "username", "create_time", "update_time");
-        queryWrapper.eq("id", userID);
+        queryWrapper.select("user_id", "user_name", "create_time", "update_time");
+        queryWrapper.eq("user_id", userID);
         User user = userMapper.selectOne(queryWrapper);
         return new ResponseResult<>(HttpStatus.OK.value(), "Get user successfully", user);
 
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         try{
             userMapper.insert(user);
             for (Long role : roleID) {
-                userRoleMapper.insert(new UserRole(user.getId(), role));
+                userRoleMapper.insert(new UserRole(user.getUserId(), role));
             }
             return new ResponseResult<>(HttpStatus.OK.value(), "Add user successfully", user);
         }catch (Exception e) {
@@ -56,9 +56,9 @@ public class UserServiceImpl implements UserService {
     public ResponseResult editUser(User user, List<Long> roleID) {
         try{
             userMapper.updateById(user);
-            userRoleMapper.delete(new QueryWrapper<UserRole>().eq("user_id", user.getId()));
+            userRoleMapper.delete(new QueryWrapper<UserRole>().eq("user_id", user.getUserId()));
             for (Long role : roleID) {
-                userRoleMapper.insert(new UserRole(user.getId(), role));
+                userRoleMapper.insert(new UserRole(user.getUserId(), role));
             }
             return new ResponseResult<>(HttpStatus.OK.value(), "Edit user successfully", user);
         }catch (Exception e) {
