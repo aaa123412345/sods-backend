@@ -1,15 +1,12 @@
 package org.sods.resource.service.impl;
 
-import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sods.common.utils.RedisCache;
 import org.sods.resource.domain.RequestCount;
-import org.sods.resource.domain.RequestTimeRecord;
 import org.sods.resource.mapper.RequestCountMapper;
 import org.sods.resource.service.CountRequestService;
-import org.sods.resource.service.RecordRequestTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +46,7 @@ public class CountRequestServiceImpl implements CountRequestService {
             return 0;
         }
         //Split data with the size 1000 and Batch insert into database
-        splittedButchInsert(requestCountList, 1000);
+        splitButchInsert(requestCountList, 1000);
 
         //Delete all keys with prefix "COUNT:"
         keyList.forEach((e)->{
@@ -59,7 +56,7 @@ public class CountRequestServiceImpl implements CountRequestService {
         return keyList.size();
     }
 
-    public boolean splittedButchInsert(List<RequestCount> requestCounts, int batchSize){
+    public boolean splitButchInsert(List<RequestCount> requestCounts, int batchSize){
         int size = requestCounts.size();
         int batchCount = (size + batchSize - 1) / batchSize;
         for (int i = 0; i < batchCount; i++) {

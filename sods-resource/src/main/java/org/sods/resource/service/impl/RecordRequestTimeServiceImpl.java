@@ -65,7 +65,7 @@ public class RecordRequestTimeServiceImpl implements RecordRequestTimeService {
         }
 
         //split the list into 1000 size and insert into database
-        splittedButchInsert(requestTimeRecords,1000);
+        splitButchInsert(requestTimeRecords,1000);
 
 
 
@@ -79,7 +79,7 @@ public class RecordRequestTimeServiceImpl implements RecordRequestTimeService {
         return keyList.size();
     }
 
-    public boolean splittedButchInsert(List<RequestTimeRecord> requestTimeRecords, int batchSize){
+    public boolean splitButchInsert(List<RequestTimeRecord> requestTimeRecords, int batchSize){
         int size = requestTimeRecords.size();
         int batchCount = (size + batchSize - 1) / batchSize;
         for (int i = 0; i < batchCount; i++) {
