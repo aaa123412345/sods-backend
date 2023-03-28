@@ -4,6 +4,7 @@ import org.sods.common.domain.ResponseResult;
 import org.sods.security.domain.Role;
 import org.sods.security.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,42 +15,50 @@ public class RoleController {
     private RoleService roleService;
 
     @GetMapping("security/roles")
+    @PreAuthorize("@ex.hasAuthority('system:security:get')")
     public ResponseResult getRole(){
         return roleService.getAllRoles();
     }
 
     @GetMapping("security/permissions")
+    @PreAuthorize("@ex.hasAuthority('system:security:get')")
     public ResponseResult getPermission(){
         return roleService.getAllPermissions();
     }
 
     @GetMapping("security/roleWithpermissions")
+    @PreAuthorize("@ex.hasAuthority('system:security:get')")
     public ResponseResult getRoleWithPermission(){
         return roleService.getAllRoleWithPermissions();
     }
 
     @PutMapping
+    @PreAuthorize("@ex.hasAuthority('system:security:put')")
     public ResponseResult setPermissionToRole(@RequestParam Long roleID,
                                               @RequestParam List<Long> permissionID){
         return roleService.setPermissionToRole(roleID, permissionID);
     }
 
     @PostMapping
+    @PreAuthorize("@ex.hasAuthority('system:security:post')")
     public ResponseResult addRole(@RequestParam List<Long> permissionID,@RequestBody Role role){
         return roleService.addRole(role, permissionID);
     }
 
     @DeleteMapping
+    @PreAuthorize("@ex.hasAuthority('system:security:delete')")
     public ResponseResult removeRole(@RequestParam Long roleID){
         return roleService.removeRole(roleID);
     }
 
     @PutMapping
+    @PreAuthorize("@ex.hasAuthority('system:security:root')")
     public ResponseResult addRoleToUser(@RequestParam Long roleID, @RequestParam Long userID){
         return roleService.addRoleToUser(roleID, userID);
     }
 
     @PutMapping
+    @PreAuthorize("@ex.hasAuthority('system:security:root')")
     public ResponseResult removeRoleFromUser(@RequestParam Long roleID, @RequestParam Long userID){
         return roleService.removeRoleFromUser(roleID, userID);
     }
