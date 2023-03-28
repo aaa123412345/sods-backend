@@ -97,8 +97,11 @@ public class TimeRecordAspect {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-
-            return "Anonymous@" + request.getRemoteHost();
+            if(Objects.isNull(request.getHeader("deviceID"))) {
+                return "Anonymous@"+request.getRemoteHost();
+            }else {
+                return "Anonymous@" + request.getHeader("deviceID");
+            }
         } else {
             Object principal = authentication.getPrincipal();
             ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
