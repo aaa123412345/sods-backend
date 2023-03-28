@@ -20,7 +20,8 @@ import java.io.IOException;
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationEntryPointImpl.class);
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+            throws IOException, ServletException {
         ResponseResult result = new ResponseResult(HttpStatus.UNAUTHORIZED.value(),"Validation failed");
         String json = JSON.toJSONString(result);
         logger.warn("Validation failed. Request to "+request.getRequestURI()+

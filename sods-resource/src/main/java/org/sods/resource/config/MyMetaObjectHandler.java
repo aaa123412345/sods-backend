@@ -16,7 +16,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-
         Long userid;
         //Get user info
         SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -34,10 +33,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
                 userid = -1L;
             }
         }
-
-
-
-
         this.setFieldValByName("updateUserId", userid, metaObject);
         this.setFieldValByName("createUserId", userid, metaObject);
         this.setFieldValByName("createTime", LocalDateTime.now(),metaObject);
@@ -60,8 +55,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         }else{
             userid = -1L;
         }
-
-
 
         this.setFieldValByName("updateTime", LocalDateTime.now(),metaObject);
         this.setFieldValByName("updateUserId", userid, metaObject);

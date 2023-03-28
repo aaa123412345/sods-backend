@@ -22,7 +22,8 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(AccessDeniedHandlerImpl.class);
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
+            throws IOException, ServletException {
         ResponseResult result = new ResponseResult(HttpStatus.FORBIDDEN.value(),"Permission denied");
         String json = JSON.toJSONString(result);
         logger.warn("Permission denied. Request to "+request.getRequestURI()+

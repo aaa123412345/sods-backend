@@ -12,21 +12,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @TableName("survey_surveyResponse")
 public class SurveyResponse {
-
     private Long activeSurveyId;
-
     private Long userId;
-
     private String responseData;
-
     @TableField(fill = FieldFill.INSERT)
     private Long createUserId;
-
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-
     @Version
     private Integer version;
-
     private Integer delFlag;
 }
