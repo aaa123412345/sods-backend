@@ -45,6 +45,12 @@ public class RoleController {
         return roleService.addRole(role, permissionID);
     }
 
+    @PutMapping("security/role")
+    @PreAuthorize("@ex.hasAuthority('system:security:put')")
+    public ResponseResult editRole(@RequestParam List<Long> permissionID,@RequestBody Role role){
+        return roleService.editRole(role, permissionID);
+    }
+
     @DeleteMapping("security/role/{roleID}")
     @PreAuthorize("@ex.hasAuthority('system:security:delete')")
     public ResponseResult removeRole(@RequestParam Long roleID){

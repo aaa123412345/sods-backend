@@ -46,6 +46,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public ResponseResult getRole(Long roleID) {
+        Role role = roleMapper.selectById(roleID);
+        return new ResponseResult<>(HttpStatus.OK.value(), "Get role successfully", role);
+    }
+
+    @Override
     public ResponseResult getAllPermissions() {
         List<Menu> menus = menuMapper.selectList(null);
         return new ResponseResult<>(HttpStatus.OK.value(), "Get all permissions successfully", menus);
@@ -59,20 +65,21 @@ public class RoleServiceImpl implements RoleService {
 
         List<Map> finalResult = new ArrayList<>();
 
-        List<String> rolePermissionsName = new ArrayList<>();
         for (Role role : roles) {
             Map<String,Object> roleResult = new HashMap<>();
-            roleResult.put("roles",roles);
+            roleResult.put("roles",role);
+            List<String> permissionName = new ArrayList<>();
             for (MenuRole menuRole : menuRoles) {
                 if (role.getId().equals(menuRole.getRoleId())) {
                     for (Menu menu : menus) {
-                        if (menu.getId().equals(menuRole.getMenuId())) {
-                            rolePermissionsName.add(menu.getPerms());
+                        if (menuRole.getMenuId().equals(menu.getId())) {
+                            permissionName.add(menu.getPerms());
                         }
                     }
                 }
             }
-            roleResult.put("permission",rolePermissionsName);
+            roleResult.put("permissions",permissionName);
+
             finalResult.add(roleResult);
         }
 
@@ -122,6 +129,29 @@ public class RoleServiceImpl implements RoleService {
             return new ResponseResult<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Add role failed");
         }
         return new ResponseResult<>(HttpStatus.OK.value(), "Add role successfully");
+    }
+
+    @Override
+    public ResponseResult editRole(Role role, List<Long> permissionID) {
+        try {
+            //Edit role
+            roleMapper.updateById(role);
+            //Delete all permissions of this role
+            QueryWrapper<MenuRole> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("role_id",role.getId());
+            menuRoleMapper.delete(queryWrapper);
+            //Add new permissions to this role
+            for (Long permission : permissionID) {
+                MenuRole menuRole = new MenuRole();
+                menuRole.setMenuId(permission);
+                menuRole.setRoleId(role.getId());
+                menuRoleMapper.insert(menuRole);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseResult<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Edit role failed");
+        }
+        return new ResponseResult<>(HttpStatus.OK.value(), "Edit role successfully");
     }
 
     @Override

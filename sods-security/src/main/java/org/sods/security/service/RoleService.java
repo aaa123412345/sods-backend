@@ -7,12 +7,15 @@ import java.util.List;
 
 public interface RoleService {
     ResponseResult getAllRoles();
+
+    ResponseResult getRole(Long roleID);
     ResponseResult getAllPermissions();
     ResponseResult getAllRoleWithPermissions();
     ResponseResult setPermissionToRole(Long roleID, List<Long> permissionID);
 
 
     ResponseResult addRole(Role role, List<Long> permissionID);
+    ResponseResult editRole(Role role, List<Long> permissionID);
     ResponseResult removeRole(Long roleID);
 
     ResponseResult changeUserRole(List<Long> roleID, Long userID);
