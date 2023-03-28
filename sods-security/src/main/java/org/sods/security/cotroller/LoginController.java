@@ -17,7 +17,6 @@ public class LoginController {
 
     @RequestMapping("/user/login")
     public ResponseResult login(@RequestBody User user){
-
         return loginService.login(user);
     }
 
