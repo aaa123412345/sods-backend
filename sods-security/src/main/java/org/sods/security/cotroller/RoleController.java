@@ -57,12 +57,6 @@ public class RoleController {
         return roleService.removeRole(roleID);
     }
 
-    @PutMapping("security/user/role_edit")
-    @PreAuthorize("@ex.hasAuthority('system:security:root')")
-    public ResponseResult addRoleToUser(@RequestParam List<Long> roleID, @RequestParam Long userID){
-        return roleService.changeUserRole(roleID, userID);
-    }
-
 
 
 }

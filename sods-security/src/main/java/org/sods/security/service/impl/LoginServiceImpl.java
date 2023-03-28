@@ -125,8 +125,4 @@ public class LoginServiceImpl implements LoginService {
 
     }
 
-    @Override
-    public ResponseResult setRoleToUser(String userID, List<String> roleNames) {
-        return null;
-    }
 }

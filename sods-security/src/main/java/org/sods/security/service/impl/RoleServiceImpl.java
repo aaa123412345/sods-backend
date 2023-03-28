@@ -175,19 +175,5 @@ public class RoleServiceImpl implements RoleService {
         return new ResponseResult<>(HttpStatus.OK.value(), "Remove role successfully");
     }
 
-    @Override
-    public ResponseResult changeUserRole(List<Long> roleID, Long userID) {
-        //Remove all roles of this user
-        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",userID);
-        userRoleMapper.delete(queryWrapper);
-        //Add role to user
-        for (Long role : roleID) {
-            UserRole userRole = new UserRole();
-            userRole.setRoleId(role);
-            userRole.setUserId(userID);
-            userRoleMapper.insert(userRole);
-        }
-        return new ResponseResult<>(HttpStatus.OK.value(), "Change role from user successfully");
-    }
+
 }

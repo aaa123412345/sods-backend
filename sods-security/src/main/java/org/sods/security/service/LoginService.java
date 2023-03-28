@@ -12,5 +12,4 @@ public interface LoginService {
 
     ResponseResult register(User user);
 
-    ResponseResult setRoleToUser(String userID, List<String> roleNames);
 }

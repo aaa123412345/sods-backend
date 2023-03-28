@@ -18,6 +18,6 @@ public interface RoleService {
     ResponseResult editRole(Role role, List<Long> permissionID);
     ResponseResult removeRole(Long roleID);
 
-    ResponseResult changeUserRole(List<Long> roleID, Long userID);
+
 
 }
