@@ -16,12 +16,12 @@ public class VoteRestController {
         return restVotingService.checkGroup(passcode);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:voting:read')")
+    @PreAuthorize("@ex.hasAuthority('system:voting:get')")
     @GetMapping("/getExist")
     public ResponseResult getExistGroup(){
         return restVotingService.getExistGroups();
     }
-    @PreAuthorize("@ex.hasAuthority('system:voting:create')")
+    @PreAuthorize("@ex.hasAuthority('system:voting:post')")
     @PostMapping("/passcode/{passcode}")
     public ResponseResult createVoting(@PathVariable("passcode")String passcode,@RequestBody String surveyID){
         return restVotingService.createGroup(passcode, surveyID);
