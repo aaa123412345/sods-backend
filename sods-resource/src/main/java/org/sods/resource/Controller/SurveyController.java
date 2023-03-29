@@ -12,7 +12,7 @@ public class SurveyController {
     @Autowired
     SurveyService surveyService;
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:editor:read')")
+    @PreAuthorize("@ex.hasAuthority('system:survey:get')")
     @GetMapping("/survey")
     public ResponseResult getSurveys(@RequestParam String withFormat,@RequestParam String type){
         return surveyService.getSurveysWithCondition(withFormat, type);

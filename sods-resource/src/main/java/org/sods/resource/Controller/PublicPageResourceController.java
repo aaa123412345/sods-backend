@@ -26,7 +26,7 @@ public class PublicPageResourceController {
         return resourceService.get("public",language,pathVariable);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:public:create')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:create')")
     @PostMapping("/{language}/{pathVariable}")
     public ResponseResult createPageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
@@ -34,7 +34,7 @@ public class PublicPageResourceController {
         return resourceService.post("public",language,pathVariable,payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:public:update')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:update')")
     @PutMapping("/{language}/{pathVariable}")
     public ResponseResult updatePageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
@@ -42,7 +42,7 @@ public class PublicPageResourceController {
         return resourceService.put("public",language,pathVariable,payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:public:delete')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:delete')")
     @DeleteMapping("/{language}/{pathVariable}")
     public ResponseResult removePageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language) {

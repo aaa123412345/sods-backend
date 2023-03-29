@@ -27,19 +27,19 @@ public class UserController {
     }
 
     @PutMapping("security/user")
-    @PreAuthorize("@ex.hasAuthority('system:security:put')")
+    @PreAuthorize("@ex.hasAuthority('system:root')")
     public ResponseResult editUser(@RequestBody User user, @RequestParam List<Long> roleID){
         return userService.editUser(user,roleID);
     }
 
     @PostMapping("security/user")
-    @PreAuthorize("@ex.hasAuthority('system:security:post')")
+    @PreAuthorize("@ex.hasAuthority('system:root')")
     public ResponseResult addUser(@RequestBody User user, @RequestParam List<Long> roleID){
         return userService.addUser(user,roleID);
     }
 
     @DeleteMapping("security/user/{userID}")
-    @PreAuthorize("@ex.hasAuthority('system:security:delete')")
+    @PreAuthorize("@ex.hasAuthority('system:root')")
     public ResponseResult removeUser(@PathVariable Long userID){
         return userService.removeUser(userID);
     }

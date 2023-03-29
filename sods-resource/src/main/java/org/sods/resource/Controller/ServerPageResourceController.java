@@ -14,14 +14,14 @@ public class ServerPageResourceController {
     @Autowired
     private PageResourceService resourceService;
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:server:get')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:get')")
     @GetMapping("/{language}/{pathVariable}")
     public ResponseResult getPageData(@PathVariable("pathVariable")String pathVariable,
                                @PathVariable("language")String language) {
         return resourceService.get("server",language,pathVariable);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:server:create')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:create')")
     @PostMapping("/{language}/{pathVariable}")
     public ResponseResult createPageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
@@ -29,7 +29,7 @@ public class ServerPageResourceController {
         return resourceService.post("server",language,pathVariable,payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:server:update')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:update')")
     @PutMapping("/{language}/{pathVariable}")
     public ResponseResult updatePageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
@@ -37,7 +37,7 @@ public class ServerPageResourceController {
         return resourceService.put("server",language,pathVariable,payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:server:delete')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:delete')")
     @DeleteMapping("/{language}/{pathVariable}")
     public ResponseResult removePageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language) {

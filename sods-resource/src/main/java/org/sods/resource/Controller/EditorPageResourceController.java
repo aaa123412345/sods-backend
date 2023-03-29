@@ -12,7 +12,7 @@ public class EditorPageResourceController {
     @Autowired
     private PageResourceService resourceService;
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:pages:get')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:get')")
     @GetMapping("/pages")
     public ResponseResult getPageData(@RequestParam(value = "domain",required = false) String domain,
                                       @RequestParam(value = "pathVariable",required = false) String pathVariable,
@@ -21,7 +21,7 @@ public class EditorPageResourceController {
         return resourceService.getPages(domain,language,pathVariable,editable);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:pages:put')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:put')")
     @PutMapping("/pages")
     public ResponseResult putPageData(@RequestParam(value = "domain",required = false) String domain,
                                       @RequestParam(value = "pathVariable",required = false) String pathVariable,
@@ -30,7 +30,7 @@ public class EditorPageResourceController {
         return resourceService.forceUpdate(domain,language,pathVariable,payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:pages:delete')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:delete')")
     @DeleteMapping("/pages")
     public ResponseResult removePageData(@RequestParam(value = "domain",required = false) String domain,
                                       @RequestParam(value = "pathVariable",required = false) String pathVariable,

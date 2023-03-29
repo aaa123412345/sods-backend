@@ -9,6 +9,7 @@ import org.sods.security.mapper.UserRoleMapper;
 import org.sods.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRoleMapper userRoleMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public ResponseResult getAllUsers() {
@@ -41,6 +45,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseResult addUser(User user, List<Long> roleID) {
+        String encode1 = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encode1);
+        //System.out.println(user);
+        //System.out.println(roleID);
         try{
             userMapper.insert(user);
             for (Long role : roleID) {
