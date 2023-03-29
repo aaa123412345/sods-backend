@@ -13,33 +13,33 @@ public class ActiveSurveyController {
     @Autowired
     private ActiveSurveyService activeSurveyService;
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:active:read')")
+    @PreAuthorize("@ex.hasAuthority('system:survey:get')")
     @GetMapping("/active_survey")
     public ResponseResult getAllSurvey(){
         return activeSurveyService.getAllActiveSurveyID();
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:active:read')")
+    @PreAuthorize("@ex.hasAuthority('system:survey:get')")
     @GetMapping("/active_survey/{active_survey_id}")
     public ResponseResult getOneActiveSurvey(@PathVariable("active_survey_id")String active_survey_id){
 
         return activeSurveyService.getDataWithActiveSurveyID(Long.parseLong(active_survey_id));
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:active:create')")
+    @PreAuthorize("@ex.hasAuthority('system:survey:post')")
     @PostMapping("/active_survey")
     public ResponseResult postSurvey(@RequestBody ActiveSurvey activeSurvey){
 
         return activeSurveyService.createNewActiveSurvey(activeSurvey);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:active:update')")
+    @PreAuthorize("@ex.hasAuthority('system:survey:put')")
     @PutMapping("/active_survey/{active_survey_id}")
     public ResponseResult updateOneSurvey(@PathVariable("active_survey_id")String active_survey_id,@RequestBody ActiveSurvey activeSurvey){
         return activeSurveyService.updateDataWithActiveSurveyID(Long.parseLong(active_survey_id),activeSurvey);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:active:delete')")
+    @PreAuthorize("@ex.hasAuthority('system:survey:delete')")
     @DeleteMapping("/active_survey/{active_survey_id}")
     public ResponseResult removeOneSurvey(@PathVariable("active_survey_id")String active_survey_id){
         return activeSurveyService.deleteDataWithActiveSurveyID(Long.parseLong(active_survey_id));

@@ -26,7 +26,7 @@ public class BookingUserArriveController {
                 Long.parseLong(booking_activity_id));
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:booking:buad:create')")
+    @PreAuthorize("@ex.hasAuthority('system:booking:post')")
     @PostMapping("/user_arrive_data/{booking_activity_id}")
     public ResponseResult postUserArriveData(
                                              @PathVariable("booking_activity_id")String booking_activity_id,
@@ -34,7 +34,7 @@ public class BookingUserArriveController {
         return bookingUserArriveDataService.createUserArriveData(
                 Long.parseLong(user_id),Long.parseLong(booking_activity_id));
     }
-    @PreAuthorize("@ex.hasAuthority('system:booking:buad:update')")
+    @PreAuthorize("@ex.hasAuthority('system:booking:put')")
     @PutMapping("/user_arrive_data/{booking_activity_id}/{user_id}")
     public ResponseResult putUserArriveData(
                                             @PathVariable("booking_activity_id")String booking_activity_id,
@@ -42,7 +42,7 @@ public class BookingUserArriveController {
         return bookingUserArriveDataService.UserArriveDataSetIsArrive(
                 Long.parseLong(user_id),Long.parseLong(booking_activity_id));
     }
-    @PreAuthorize("@ex.hasAuthority('system:booking:buad:delete')")
+    @PreAuthorize("@ex.hasAuthority('system:booking:delete')")
     @DeleteMapping("/user_arrive_data/{booking_activity_id}/{user_id}")
     public ResponseResult deleteUserArriveData(@PathVariable("booking_activity_id")String booking_activity_id,
                                                @PathVariable("user_id")String user_id){

@@ -25,20 +25,20 @@ public class SurveyController {
         return surveyService.get(Long.parseLong(survey_id));
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:editor:create')")
+    @PreAuthorize("@ex.hasAuthority('system:survey:post')")
     @PostMapping("/survey")
     public ResponseResult postSurvey(@RequestBody String payload){
 
         return surveyService.post(payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:editor:update')")
+    @PreAuthorize("@ex.hasAuthority('system:survey:put')")
     @PutMapping("/survey/{survey_id}")
     public ResponseResult updateOneSurvey(@PathVariable("survey_id")String survey_id,@RequestBody String payload){
         return surveyService.put(Long.parseLong(survey_id),payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:survey:editor:delete')")
+    @PreAuthorize("@ex.hasAuthority('system:survey:delete')")
     @DeleteMapping("/survey/{survey_id}")
     public ResponseResult removeOneSurvey(@PathVariable("survey_id")String survey_id){
         return surveyService.delete(Long.parseLong(survey_id));
