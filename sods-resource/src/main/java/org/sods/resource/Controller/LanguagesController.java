@@ -5,6 +5,7 @@ import org.sods.common.domain.ResponseResult;
 import org.sods.resource.domain.LanguageMatrix;
 import org.sods.resource.service.LanguageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class LanguagesController {
 
 
 
-
+    @PreAuthorize("@ex.hasAuthority('system:cms:put')")
     @PutMapping("/languagesAndMatrix")
     public ResponseResult updateLanguages(@RequestParam List<String> languages,
                                           @RequestBody List<LanguageMatrix> newLanguageMatrix) {

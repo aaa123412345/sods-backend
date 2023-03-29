@@ -27,7 +27,7 @@ public class ImportantPageResourceController {
         return resourceService.checkResource("pageimportant",language,pathVariable);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:basicWeb:create')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:post')")
     @PostMapping("/{language}/{pathVariable}")
     public ResponseResult createPageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
@@ -35,7 +35,7 @@ public class ImportantPageResourceController {
         return resourceService.post("pageimportant",language,pathVariable,payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:basicWeb:update')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:put')")
     @PutMapping("/{language}/{pathVariable}")
     public ResponseResult updatePageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
@@ -44,7 +44,7 @@ public class ImportantPageResourceController {
         return resourceService.put("pageimportant",language,pathVariable,payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:resource:basicWeb:delete')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:delete')")
     @DeleteMapping("/{language}/{pathVariable}")
     public ResponseResult removePageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language) {

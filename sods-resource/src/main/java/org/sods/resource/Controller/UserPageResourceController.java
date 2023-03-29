@@ -19,7 +19,7 @@ public class UserPageResourceController {
         return resourceService.get("user",language,pathVariable);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:cms:create')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:post')")
     @PostMapping("/{language}/{pathVariable}")
     public ResponseResult createPageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
@@ -27,7 +27,7 @@ public class UserPageResourceController {
         return resourceService.post("user",language,pathVariable,payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:cms:update')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:put')")
     @PutMapping("/{language}/{pathVariable}")
     public ResponseResult updatePageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,

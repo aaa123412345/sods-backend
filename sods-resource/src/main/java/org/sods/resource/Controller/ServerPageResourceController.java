@@ -14,14 +14,14 @@ public class ServerPageResourceController {
     @Autowired
     private PageResourceService resourceService;
 
-    @PreAuthorize("@ex.hasAuthority('system:cms:get')")
+    @PreAuthorize("@ex.hasAuthority('system:server:access')")
     @GetMapping("/{language}/{pathVariable}")
     public ResponseResult getPageData(@PathVariable("pathVariable")String pathVariable,
                                @PathVariable("language")String language) {
         return resourceService.get("server",language,pathVariable);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:cms:create')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:post')")
     @PostMapping("/{language}/{pathVariable}")
     public ResponseResult createPageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
@@ -29,7 +29,7 @@ public class ServerPageResourceController {
         return resourceService.post("server",language,pathVariable,payload);
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:cms:update')")
+    @PreAuthorize("@ex.hasAuthority('system:cms:put')")
     @PutMapping("/{language}/{pathVariable}")
     public ResponseResult updatePageData(@PathVariable("pathVariable")String pathVariable,
                                       @PathVariable("language")String language,
