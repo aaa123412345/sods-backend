@@ -26,7 +26,7 @@ public class BookingUserArriveController {
                 Long.parseLong(booking_activity_id));
     }
 
-    @PreAuthorize("@ex.hasAuthority('system:booking:post')")
+    @PreAuthorize("@ex.hasAuthority('system:booking:checker')")
     @PostMapping("/user_arrive_data/{booking_activity_id}")
     public ResponseResult postUserArriveData(
                                              @PathVariable("booking_activity_id")String booking_activity_id,

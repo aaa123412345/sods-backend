@@ -190,7 +190,7 @@ public class PageResourceServiceImpl implements PageResourceService {
         if(Objects.nonNull(editable)){
             pageDataQueryWrapper.eq("able_edit",editable);
         }
-        pageDataQueryWrapper.select("domain","path","language");
+        pageDataQueryWrapper.select("domain","path","language","able_edit");
         List<PageData> p = pageDataMapper.selectList(pageDataQueryWrapper);
 
 
@@ -205,6 +205,7 @@ public class PageResourceServiceImpl implements PageResourceService {
             result.put("domain",e.getDomain());
             result.put("path",e.getPath());
             result.put("language",e.getLanguage());
+            result.put("editable",e.getAbleEdit());
             results.add(result);
         });
 
